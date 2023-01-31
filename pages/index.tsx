@@ -1,11 +1,9 @@
-import { GetServerSideProps, InferGetStaticPropsType } from "next";
-import { Header } from "../components/header";
+import { GetServerSideProps, InferGetStaticPropsType } from 'next';
+import { Header } from '../components/header';
 
 type PageProps = {};
 
-export default function PageHome({}: PageProps): InferGetStaticPropsType<
-  typeof getServerSideProps
-> {
+export default function PageHome({}: PageProps): InferGetStaticPropsType<typeof getServerSideProps> {
   return (
     <>
       <Header title="Mumble">
@@ -15,5 +13,5 @@ export default function PageHome({}: PageProps): InferGetStaticPropsType<
   );
 }
 export const getServerSideProps: GetServerSideProps = async () => ({
-  props: { posts: require("../data/posts.json") },
+  props: { posts: require('../data/posts.json') },
 });

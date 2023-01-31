@@ -1,4 +1,4 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 type Props = {
   profile: {
@@ -6,9 +6,7 @@ type Props = {
   };
 };
 
-export default function ProfilePage({
-  profile,
-}: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
+export default function ProfilePage({ profile }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
   return (
     <>
       <h1>{profile.alias}</h1>
@@ -16,9 +14,7 @@ export default function ProfilePage({
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query: { alias },
-}) => {
+export const getServerSideProps: GetServerSideProps = async ({ query: { alias } }) => {
   return {
     props: {
       profile: { alias },

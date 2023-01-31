@@ -1,4 +1,4 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 type Props = {
   mumble: {
@@ -6,9 +6,7 @@ type Props = {
   };
 };
 
-export default function MumblePage({
-  mumble,
-}: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
+export default function MumblePage({ mumble }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
   return (
     <>
       <h1>{mumble.id}</h1>
@@ -16,9 +14,7 @@ export default function MumblePage({
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query: { id },
-}) => {
+export const getServerSideProps: GetServerSideProps = async ({ query: { id } }) => {
   return {
     props: {
       mumble: { id },
