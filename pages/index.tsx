@@ -1,14 +1,10 @@
 import { GetServerSideProps, InferGetStaticPropsType } from 'next';
-import { Header } from '../components/header';
+import { Header } from '@smartive-education/design-system-component-library-musketeers';
 
-type PageProps = {};
-
-export default function PageHome({}: PageProps): InferGetStaticPropsType<typeof getServerSideProps> {
+export default function PageHome(): InferGetStaticPropsType<typeof getServerSideProps> {
   return (
     <>
-      <Header title="Mumble">
-        <span>Your custom network</span>
-      </Header>
+      <Header onClickLogo={(e) => e} />
     </>
   );
 }
