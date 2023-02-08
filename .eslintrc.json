@@ -1,3 +1,9 @@
 {
-  "extends": ["next/core-web-vitals", "@smartive/eslint-config/react"]
+  "extends": [
+    "next/core-web-vitals",
+    "@smartive/eslint-config/react"
+  ],
+  "rules": {
+    "no-empty-function": ["error", { "allow": ["arrowFunctions"] } ]
+  }
 }
