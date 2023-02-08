@@ -15,7 +15,7 @@ export const LoginRegistrationContainer: FC<LoginRegistrationContainerProps> = (
           }
         >
           <div className={'max-w-md flex flex-col items-center'}>
-            <Image className={'w-80 mb-m'} src={'/mumble-logo.svg'} width={340} height={170} alt={''} />
+            <Image src={'/mumble-logo.svg'} width={340} height={170} alt={''} />
             <span className={'heading-2 text-pink-300 align-middle text-center'}>
               Find out whats new in <span className={'text-white'}>#fashion.</span>
             </span>
