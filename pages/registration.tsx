@@ -8,24 +8,40 @@ import {
   Mumble,
 } from '@smartive-education/design-system-component-library-musketeers';
 import Head from 'next/head';
-import { LoginRegistrationContainer } from '../components/login-registration-container';
 import Link from 'next/link';
+import { LoginRegistrationContainer } from '../components/login-registration-container';
 import { useState } from 'react';
 
-export default function Login() {
+export default function Registration() {
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Registration</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <LoginRegistrationContainer>
-        <h2 className={'heading-2 text-slate-900 mb-m'}>Anmelden</h2>
+        <h2 className={'heading-2 text-slate-900 mb-m'}>Registrieren</h2>
         <form className={'mb-m'}>
+          <Input
+            label="Vorname Name"
+            onChange={(e) => setName(e.target.value)}
+            placeholder=""
+            type={InputType.TEXT}
+            value={name}
+          />
+          <Input
+            label="Username"
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder=""
+            type={InputType.TEXT}
+            value={username}
+          />
           <Input
             label="E-Mail"
             onChange={(e) => setEmail(e.target.value)}
@@ -47,8 +63,8 @@ export default function Login() {
           <Mumble />
         </Button>
         <span className={'label-s text-center block mt-s'}>
-          Noch kein Account?
-          <Link href={'/registration'}>Jetzt registrieren</Link>
+          Bereits registriert?
+          <Link href={'/login'}>Jetzt anmelden</Link>
         </span>
       </LoginRegistrationContainer>
     </>
