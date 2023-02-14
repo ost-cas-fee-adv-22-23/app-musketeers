@@ -5,12 +5,12 @@ export default function PageHome() {
   return (
     <>
       <Head>
-        <title>Index</title>
+        <title>Settings</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Container>
-        <h1 className="heading-1 mt-xl">Index page</h1>
+        <h1 className="heading-1 mt-xl">Settings page</h1>
       </Container>
     </>
   );

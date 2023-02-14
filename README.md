@@ -1,3 +1,14 @@
+# Musketeer's Mumble App
+
+## Development
+
+### Node/NPM Version
+
+There is a .nvmrc file included, in case you use NVM for local node version management.
+Just type `$nvm use` in the projects folder, and NVM determines the correct Node version based on the configuration.
+
+## Next.js Infos
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
