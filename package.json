@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@smartive-education/design-system-component-library-musketeers": "^1.23.1",
+    "@smartive-education/design-system-component-library-musketeers": "^1.23.2",
     "@smartive/eslint-config": "^3.1.1",
     "@smartive/prettier-config": "^3.0.0",
     "@types/node": "18.11.9",
