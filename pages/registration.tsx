@@ -10,9 +10,9 @@ import {
 import Head from 'next/head';
 import Link from 'next/link';
 import { LoginRegistrationContainer } from '../components/login-registration-container';
-import { useState } from 'react';
+import { useState, ReactElement } from 'react';
 
-export default function Registration() {
+function Registration() {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -69,3 +69,7 @@ export default function Registration() {
     </>
   );
 }
+
+Registration.getLayout = (page: ReactElement) => page;
+
+export default Registration;
