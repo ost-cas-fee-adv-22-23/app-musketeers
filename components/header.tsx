@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 
 import {
   Header as HeaderFromDesignSystem,
@@ -12,11 +12,11 @@ import {
 } from '@smartive-education/design-system-component-library-musketeers';
 
 export default function Header() {
-  const router = useRouter();
+  // const router = useRouter();
 
   return (
     <>
-      <HeaderFromDesignSystem onClickLogo={() => router.push('/')}>
+      <HeaderFromDesignSystem iconLinkUrl="/">
         <Navigation>
           <Link href="/profile/myProfileHandle">
             <NavigationItem onClick={(e) => e}>
