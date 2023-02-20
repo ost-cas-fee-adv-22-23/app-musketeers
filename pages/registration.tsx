@@ -22,7 +22,6 @@ export default function Registration() {
     <>
       <Head>
         <title>Registration</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <LoginRegistrationContainer>
