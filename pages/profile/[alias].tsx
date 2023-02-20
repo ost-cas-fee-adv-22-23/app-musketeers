@@ -9,11 +9,12 @@ type Props = {
 };
 
 export default function ProfilePage({ profile }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
+  const title = `Profile | ${profile.alias}`;
+
   return (
     <>
       <Head>
-        <title>Profile | {profile.alias}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>{title}</title>
       </Head>
 
       <Container>
