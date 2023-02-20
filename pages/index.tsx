@@ -6,7 +6,6 @@ export default function PageHome() {
     <>
       <Head>
         <title>Index</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Container>

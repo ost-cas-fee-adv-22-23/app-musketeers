@@ -6,7 +6,6 @@ export default function PageHome() {
     <>
       <Head>
         <title>Settings</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Container>
