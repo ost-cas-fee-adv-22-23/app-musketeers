@@ -1,15 +1,21 @@
+import type { ReactElement, ReactNode } from 'react';
+import type { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
 import Layout from '../components/layout';
 
-export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  return (
-    <SessionProvider session={session}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </SessionProvider>
-  );
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
+
+  return <SessionProvider session={session}>{getLayout(<Component {...pageProps} />)}</SessionProvider>;
 }
