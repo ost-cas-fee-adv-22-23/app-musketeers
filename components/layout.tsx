@@ -5,7 +5,7 @@ export default function Layout(props: PropsWithChildren) {
   return (
     <>
       <Header />
-      <main>{props.children}</main>
+      <main className="bg-slate-100 min-h-screen py-xl">{props.children}</main>
     </>
   );
 }
