@@ -1,6 +1,4 @@
 import Link from 'next/link';
-// import { useRouter } from 'next/router';
-
 import {
   Header as HeaderFromDesignSystem,
   Navigation,
@@ -12,8 +10,6 @@ import {
 } from '@smartive-education/design-system-component-library-musketeers';
 
 export default function Header() {
-  // const router = useRouter();
-
   return (
     <>
       <HeaderFromDesignSystem elementType={Link} iconLinkUrl={'/'}>
