@@ -42,14 +42,14 @@ function Timeline() {
             }
             displayName="Hans Muster"
             footer={
-              <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-xs">
                 <CommentInteraction />
                 <LikeInteraction />
                 <Interaction onClick={(event) => event} type={InteractionType.DEFAULT}>
                   <Share />
                   Copy link
                 </Interaction>
-              </>
+              </div>
             }
             onClickTimestamp={onClickTimestampHandler}
             onClickUserName={onClickUserNameHandler}

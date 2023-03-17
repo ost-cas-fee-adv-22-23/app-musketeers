@@ -20,13 +20,13 @@ function MumbleAdd(props: MumbleAddProps) {
   return (
     <Card size={CardSize.XL} hasRoundBorders={true}>
       <div className="relative">
-        <div className="absolute -top-s -left-[80px]">{props.avatar}</div>
+        <div className="absolute -top-s -left-[80px] hidden sm:block">{props.avatar}</div>
 
         <div className="label-xl text-slate-900 mb-s">{props.title}</div>
 
         <Textarea onChange={(event) => event} placeholder="Deine Meinung zählt!" rows={8} value="" />
 
-        <div className="flex gap-xs mt-xs">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-xs mt-xs">
           <Button
             label="Bild hochladen"
             onClick={props.onImageUpload}
