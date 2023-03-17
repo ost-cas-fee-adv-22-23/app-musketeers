@@ -9,7 +9,7 @@ export default function PageHome() {
       </Head>
 
       <Container>
-        <h1 className="heading-1 mt-xl">Settings page</h1>
+        <h1 className="heading-2">Settings page</h1>
       </Container>
     </>
   );
