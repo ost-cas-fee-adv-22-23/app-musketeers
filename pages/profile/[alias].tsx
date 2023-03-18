@@ -18,7 +18,7 @@ export default function ProfilePage({ profile }: Props): InferGetServerSideProps
       </Head>
 
       <Container>
-        <h1 className="heading-1 mt-xl">Profile page</h1>
+        <h1 className="heading-2">Profile page</h1>
         <h3>{profile.alias}</h3>
       </Container>
     </>
