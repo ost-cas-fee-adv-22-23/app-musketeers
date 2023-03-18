@@ -23,7 +23,7 @@ function Mumble(props: MumbleProps) {
   return (
     <Card size={CardSize.XL} hasRoundBorders={true}>
       <div className="relative">
-        <div className="absolute -top-s -left-[80px]">{props.avatar}</div>
+        <div className="absolute -top-s -left-[80px] hidden sm:block">{props.avatar}</div>
 
         <div className="label-l text-slate-900 mb-xxs">{props.displayName}</div>
 
