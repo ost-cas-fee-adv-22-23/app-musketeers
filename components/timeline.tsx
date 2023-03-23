@@ -20,9 +20,9 @@ const onClickUserNameHandler = () => {
   console.log('onClickUserNameHandler');
 };
 
-interface TimeLineProps {
+type TimeLineProps = {
   posts: QwackModel[];
-}
+};
 
 function Timeline(props: TimeLineProps) {
   return (

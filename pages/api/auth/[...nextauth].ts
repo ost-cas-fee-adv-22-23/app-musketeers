@@ -88,4 +88,10 @@ export default NextAuth({
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: '/login',
+    signOut: '/login',
+    error: '/login', // TODO: CREATE ERROR PAGE
+    newUser: '/login',
+  },
 });

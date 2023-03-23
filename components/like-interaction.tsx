@@ -6,9 +6,9 @@ import {
   HeartFilled,
 } from '@smartive-education/design-system-component-library-musketeers';
 
-interface LikeInteractionProps {
+type LikeInteractionProps = {
   initialCount: number;
-}
+};
 
 function LikeInteraction(props: LikeInteractionProps) {
   const [likes, setLikes] = useState(props.initialCount ?? 0);

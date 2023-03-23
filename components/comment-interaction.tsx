@@ -6,9 +6,9 @@ import {
   ReplyFilled,
 } from '@smartive-education/design-system-component-library-musketeers';
 
-interface CommentInteractionProps {
+type CommentInteractionProps = {
   initialCount: number;
-}
+};
 
 function CommentInteraction(props: CommentInteractionProps) {
   const [comments, setComments] = useState(props.initialCount ?? 0);

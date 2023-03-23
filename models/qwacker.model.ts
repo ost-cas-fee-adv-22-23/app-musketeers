@@ -1,4 +1,4 @@
-export interface QwackModel {
+export type QwackModel = {
   id: string;
   creator: string;
   text: string;
@@ -8,4 +8,4 @@ export interface QwackModel {
   likedByUser: boolean;
   type: string;
   replyCount: number;
-}
+};
