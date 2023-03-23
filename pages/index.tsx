@@ -3,8 +3,20 @@ import Image from 'next/image';
 import { Container, Avatar, AvatarSize } from '@smartive-education/design-system-component-library-musketeers';
 import MumbleAdd from '../components/mumble-add';
 import Timeline from '../components/timeline';
+import { getSession } from 'next-auth/react';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { getToken } from 'next-auth/jwt';
+import { qwackerRequest } from '../services/qwacker.service';
+import { QJWT } from './api/auth/[...nextauth]';
+import { QwackModel } from '../models/qwacker.model';
+import { Session } from 'next-auth';
 
-export default function PageHome() {
+interface PageHomeProps {
+  session: Session;
+  posts: QwackModel[];
+}
+
+export default function PageHome(props: PageHomeProps) {
   return (
     <>
       <Head>
@@ -33,8 +45,33 @@ export default function PageHome() {
             onSend={() => console.log('onSend')}
           />
         </div>
-        <Timeline />
+        <Timeline posts={props.posts} />
       </Container>
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const session = await getSession(ctx);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  const token = (await getToken(ctx)) as QJWT;
+  let posts: QwackModel[] = [];
+
+  if (token) {
+    const { data } = await qwackerRequest('posts', token.accessToken, { method: 'GET' });
+    posts = data;
+  }
+
+  return {
+    props: { session, posts },
+  };
+};

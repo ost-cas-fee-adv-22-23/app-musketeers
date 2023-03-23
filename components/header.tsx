@@ -8,6 +8,7 @@ import {
   Settings as SvgSettings,
   LogOut as SvgLogOut,
 } from '@smartive-education/design-system-component-library-musketeers';
+import { signOut } from 'next-auth/react';
 
 export default function Header() {
   return (
@@ -26,7 +27,7 @@ export default function Header() {
               <SvgSettings height="16" width="16" />
             </span>
           </NavigationItem>
-          <NavigationItem label="Logout" elementType={Link} href={'/logout'}>
+          <NavigationItem label="Logout" onClick={() => signOut()}>
             <span className="animation-svg-logout">
               <SvgLogOut height="16" width="16" />
             </span>
