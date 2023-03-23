@@ -1,21 +1,20 @@
-import {
-  Button,
-  ButtonSize,
-  ButtonType,
-  Eye,
-  Input,
-  InputType,
-  Mumble,
-} from '@smartive-education/design-system-component-library-musketeers';
+import { Button, ButtonSize, ButtonType, Mumble } from '@smartive-education/design-system-component-library-musketeers';
 import Head from 'next/head';
 import { LoginRegistrationContainer } from '../components/login-registration-container';
-import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import type { ReactElement } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.push('/');
+    }
+  }, [session, router]);
 
   return (
     <>
@@ -24,32 +23,20 @@ function Login() {
       </Head>
 
       <LoginRegistrationContainer>
-        <h2 className={'heading-2 text-slate-900 mb-m'}>Anmelden</h2>
-        <form className={'mb-m'}>
-          <Input
-            label="E-Mail"
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder=""
-            type={InputType.TEXT}
-            value={email}
-          />
-          <Input
-            label="Passwort"
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder=""
-            type={InputType.PASSWORD}
-            value={password}
+        <h2 className={'heading-2 text-slate-900 mb-m'}>{!session ? 'Anmelden' : 'Erfolgreich eingelogt'}</h2>
+        {!session ? (
+          <Button
+            label="Let's mumble"
+            onClick={() => signIn('zitadel')}
+            size={ButtonSize.M}
+            type={ButtonType.GRADIENT}
+            isFullWidth
           >
-            <Eye />
-          </Input>
-        </form>
-        <Button label="Let's mumble" onClick={() => undefined} size={ButtonSize.M} type={ButtonType.GRADIENT} isFullWidth>
-          <Mumble />
-        </Button>
-        <span className={'label-s text-center block mt-s'}>
-          Noch kein Account?
-          <Link href={'/registration'}>Jetzt registrieren</Link>
-        </span>
+            <Mumble />
+          </Button>
+        ) : (
+          ''
+        )}
       </LoginRegistrationContainer>
     </>
   );
