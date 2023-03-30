@@ -6,14 +6,15 @@ import Timeline from '../components/timeline';
 import { getSession } from 'next-auth/react';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { qwackerRequest } from '../services/qwacker.service';
+import { fetchPosts, fetchUser } from '../services/qwacker.service';
 import { QJWT } from './api/auth/[...nextauth]';
-import { QwackModel } from '../models/qwacker.model';
+import { QwackModel, QwackModelDecorated } from '../models/qwacker.model';
+import { UserModel } from '../models/user.model';
 import { Session } from 'next-auth';
 
 interface PageHomeProps {
   session: Session;
-  posts: QwackModel[];
+  postsDecorated: QwackModelDecorated[];
 }
 
 export default function PageHome(props: PageHomeProps) {
@@ -45,7 +46,7 @@ export default function PageHome(props: PageHomeProps) {
             onSend={() => console.log('onSend')}
           />
         </div>
-        <Timeline posts={props.posts} />
+        <Timeline posts={props.postsDecorated} />
       </Container>
     </>
   );
@@ -64,14 +65,22 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   }
 
   const token = (await getToken(ctx)) as QJWT;
-  let posts: QwackModel[] = [];
+  let postsDecorated: QwackModelDecorated[] = [];
+
+  const fetchUserData = async (creator: string): Promise<UserModel> =>
+    await fetchUser({ token: token.accessToken, userId: creator });
 
   if (token) {
-    const { data } = await qwackerRequest('posts', token.accessToken, { method: 'GET' });
-    posts = data;
+    const { data } = await fetchPosts({ token: token.accessToken });
+    postsDecorated = await Promise.all(
+      data.map(async (post: QwackModel) => {
+        const userData = await fetchUserData(post.creator);
+        return { ...post, creatorData: userData };
+      })
+    );
   }
 
   return {
-    props: { session, posts },
+    props: { session, postsDecorated },
   };
 };

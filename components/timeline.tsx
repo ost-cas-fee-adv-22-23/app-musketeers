@@ -11,7 +11,8 @@ import Mumble from './mumble';
 import Image from 'next/image';
 import CommentInteraction from './comment-interaction';
 import LikeInteraction from './like-interaction';
-import { QwackModel } from '../models/qwacker.model';
+import { QwackModelDecorated } from '../models/qwacker.model';
+import { parseHashtags } from '../helpers/common.helpers';
 
 const onClickTimestampHandler = () => {
   console.log('onClickTimestampHandler');
@@ -21,7 +22,7 @@ const onClickUserNameHandler = () => {
 };
 
 type TimeLineProps = {
-  posts: QwackModel[];
+  posts: QwackModelDecorated[];
 };
 
 function Timeline(props: TimeLineProps) {
@@ -41,7 +42,7 @@ function Timeline(props: TimeLineProps) {
                   src="https://randompicturegenerator.com/img/people-generator/gd121f56d8674f28d00ce9f1c44686e7a9bee58b8d33a3c57daaada1fa493c214290f9490833d1ff18f4ee16cd5298e1f_640.jpg"
                 />
               }
-              displayName={'Hans Muster'}
+              displayName={`${mumble.creatorData.firstName} ${mumble.creatorData.lastName}`}
               footer={
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-xs">
                   <CommentInteraction initialCount={mumble.replyCount} />
@@ -55,13 +56,14 @@ function Timeline(props: TimeLineProps) {
               onClickTimestamp={onClickTimestampHandler}
               onClickUserName={onClickUserNameHandler}
               timestamp="timestamp"
-              userName="hansmuster"
+              userName={mumble.creatorData.userName}
             >
               <>
                 <div>{mumble.text}</div>
                 <div className="flex gap-xs">
-                  <Hashtag size={HashtagSize.M} label="myhashtag" onClick={(event) => event} />
-                  <Hashtag size={HashtagSize.M} label="myhashtag2" onClick={(event) => event} />
+                  {parseHashtags(mumble.text).map((hashtag: string) => (
+                    <Hashtag key={hashtag} size={HashtagSize.M} label={hashtag} onClick={(event) => event} />
+                  ))}
                 </div>
                 {mumble.mediaUrl && (
                   <Image width={640} height={480} alt="" className="block rounded-default" src={mumble.mediaUrl} />

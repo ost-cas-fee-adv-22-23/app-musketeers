@@ -1,3 +1,5 @@
+import { UserModel } from './user.model';
+
 export type QwackModel = {
   id: string;
   creator: string;
@@ -8,4 +10,8 @@ export type QwackModel = {
   likedByUser: boolean;
   type: string;
   replyCount: number;
+};
+
+export type QwackModelDecorated = QwackModel & {
+  creatorData: UserModel;
 };
