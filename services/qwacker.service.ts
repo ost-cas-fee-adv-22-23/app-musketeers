@@ -1,4 +1,4 @@
-const BASE_URL = process.env.API_BASE_URL;
+const BASE_URL = 'https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app';
 
 async function qwackerRequest(endpoint: string, jwtToken: string, options: { [key: string]: string }) {
   const url = BASE_URL + '/' + endpoint;
@@ -46,4 +46,24 @@ export function fetchPosts({
 
 export function fetchUser({ token, userId }: { token: string; userId: string }) {
   return qwackerRequest(`users/${userId}`, token, { method: 'GET' });
+}
+type SearchModel = {
+  text?: string;
+  tags?: string[];
+  likedBy?: string[];
+  mentions?: string[];
+  isReply?: boolean;
+  offset?: number;
+  limit?: number;
+};
+export function searchPosts(token = '', searchParams: SearchModel = {}) {
+  return qwackerRequest(`posts/search`, token, { method: 'POST', body: JSON.stringify(searchParams) });
+}
+
+type PostParams = {
+  text?: string;
+  image?: string;
+};
+export function createPost(token = '', postParams: PostParams = {}) {
+  return qwackerRequest('posts', token, { method: 'POST', body: JSON.stringify(postParams) });
 }

@@ -8,15 +8,17 @@ import {
   Upload,
   Send,
 } from '@smartive-education/design-system-component-library-musketeers';
+import { useState } from 'react';
 
 type MumbleAddProps = {
   avatar: JSX.Element;
   title: string;
   onImageUpload: () => void;
-  onSend: () => void;
+  onSend: (text: string) => void;
 };
 
 function MumbleAdd(props: MumbleAddProps) {
+  const [text, setText] = useState('');
   return (
     <Card size={CardSize.XL} hasRoundBorders={true}>
       <div className="relative">
@@ -24,7 +26,12 @@ function MumbleAdd(props: MumbleAddProps) {
 
         <div className="label-xl text-slate-900 mb-s">{props.title}</div>
 
-        <Textarea onChange={(event) => event} placeholder="Deine Meinung zählt!" rows={8} value="" />
+        <Textarea
+          onChange={(event) => setText(event.target.value)}
+          placeholder="Deine Meinung zählt!"
+          rows={8}
+          value={text}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-xs mt-xs">
           <Button
@@ -39,7 +46,7 @@ function MumbleAdd(props: MumbleAddProps) {
           </Button>
           <Button
             label="Absenden"
-            onClick={props.onSend}
+            onClick={() => props.onSend(text)}
             type={ButtonType.VIOLET}
             size={ButtonSize.M}
             isFullWidth={true}

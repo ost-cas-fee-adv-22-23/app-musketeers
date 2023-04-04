@@ -3,10 +3,10 @@ import Image from 'next/image';
 import { Container, Avatar, AvatarSize } from '@smartive-education/design-system-component-library-musketeers';
 import MumbleAdd from '../components/mumble-add';
 import Timeline from '../components/timeline';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { fetchPosts, fetchUser } from '../services/qwacker.service';
+import { createPost, fetchPosts, fetchUser } from '../services/qwacker.service';
 import { QJWT } from './api/auth/[...nextauth]';
 import { QwackModel, QwackModelDecorated } from '../models/qwacker.model';
 import { UserModel } from '../models/user.model';
@@ -18,6 +18,7 @@ interface PageHomeProps {
 }
 
 export default function PageHome(props: PageHomeProps) {
+  const session = useSession();
   return (
     <>
       <Head>
@@ -43,7 +44,10 @@ export default function PageHome(props: PageHomeProps) {
               />
             }
             onImageUpload={() => console.log('onImageUpload')}
-            onSend={() => console.log('onSend')}
+            onSend={async (text) => {
+              const token = session.data.accessToken;
+              await createPost(token, { text });
+            }}
           />
         </div>
         <Timeline posts={props.postsDecorated} />

@@ -83,8 +83,8 @@ export default NextAuth({
       // Access token has expired, try to update it
       return refreshAccessToken(token);
     },
-    async session({ session }) {
-      return session;
+    async session({ session, token }) {
+      return { ...session, accessToken: token.accessToken };
     },
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs

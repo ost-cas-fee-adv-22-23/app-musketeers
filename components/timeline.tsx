@@ -13,12 +13,10 @@ import CommentInteraction from './comment-interaction';
 import LikeInteraction from './like-interaction';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { parseHashtags } from '../helpers/common.helpers';
+import { useRouter } from 'next/router';
 
 const onClickTimestampHandler = () => {
   console.log('onClickTimestampHandler');
-};
-const onClickUserNameHandler = () => {
-  console.log('onClickUserNameHandler');
 };
 
 type TimeLineProps = {
@@ -26,6 +24,7 @@ type TimeLineProps = {
 };
 
 function Timeline(props: TimeLineProps) {
+  const router = useRouter();
   return (
     <>
       {props.posts &&
@@ -54,7 +53,9 @@ function Timeline(props: TimeLineProps) {
                 </div>
               }
               onClickTimestamp={onClickTimestampHandler}
-              onClickUserName={onClickUserNameHandler}
+              onClickUserName={() => {
+                router.push(`/profile/${mumble.creator}`);
+              }}
               timestamp="timestamp"
               userName={mumble.creatorData.userName}
             >
