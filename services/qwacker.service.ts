@@ -70,3 +70,15 @@ export async function fetchPostsWithUsers({
 export function fetchUser({ token, userId }: { token: string; userId: string }) {
   return qwackerRequest(`users/${userId}`, token, { method: 'GET' });
 }
+
+export function updateLikes({ token, postId }: { token: string; postId: string }) {
+  return qwackerRequest(`posts/${postId}/likes`, token, {
+    method: 'PUT',
+  });
+}
+
+export function destroyLikes({ token, postId }: { token: string; postId: string }) {
+  return qwackerRequest(`posts/${postId}/likes`, token, {
+    method: 'DELETE',
+  });
+}
