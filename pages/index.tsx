@@ -11,6 +11,7 @@ import { QJWT } from './api/auth/[...nextauth]';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import LoadingIndicator from '../components/loading-indicator';
+import { getClientToken } from '../helpers/getClientToken';
 
 const POSTS_LIMIT = 7;
 
@@ -24,7 +25,7 @@ export default function PageHome(props: PageHomeProps) {
   const currentOffset = posts.length;
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
   const { data: session } = useSession();
-  const token = session?.token?.accessToken;
+  const token = getClientToken(session);
   const bottomBoundaryRef = useRef(null);
 
   const scrollObserver = useCallback((node: Element) => {
