@@ -46,7 +46,7 @@ function Timeline(props: TimeLineProps) {
               footer={
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-xs">
                   <CommentInteraction initialCount={mumble.replyCount} />
-                  <LikeInteraction initialCount={mumble.likeCount} />
+                  <LikeInteraction initialCount={mumble.likeCount} likedByUser={mumble.likedByUser} postId={mumble.id} />
                   <Interaction onClick={(event) => event} type={InteractionType.DEFAULT}>
                     <Share />
                     Copy link
