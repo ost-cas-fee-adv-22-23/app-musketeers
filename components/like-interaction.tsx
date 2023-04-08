@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import {
   Interaction,
   InteractionType,
@@ -18,12 +18,29 @@ type LikeInteractionProps = {
 function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionProps) {
   const { data: session } = useSession();
   const token = getClientToken(session);
-  const [likes, setLikes] = useState(initialCount ?? 0);
-  const [liked, setLiked] = useState(likedByUser ?? false);
+  const reducer = (state: { likes: number; liked: boolean }, action: { type: 'addLike' | 'removeLike' }) => {
+    switch (action.type) {
+      case 'addLike': {
+        return {
+          likes: state.likes + 1,
+          liked: true,
+        };
+      }
+      case 'removeLike': {
+        return {
+          likes: state.likes - 1,
+          liked: false,
+        };
+      }
+    }
+    throw Error('Unknown action: ' + action.type);
+  };
+  const [state, dispatch] = useReducer(reducer, { likes: initialCount || 0, liked: likedByUser || false });
 
-  const addLike = async () => {
-    setLikes((likes) => likes + 1);
-    setLiked(true);
+  const handleAddLike = async () => {
+    dispatch({
+      type: 'addLike',
+    });
     try {
       await updateLikes({
         token,
@@ -31,13 +48,16 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
       });
     } catch (error) {
       console.log(error);
-      setLikes((likes) => likes - 1);
-      setLiked(false);
+      dispatch({
+        type: 'removeLike',
+      });
     }
   };
-  const removeLike = async () => {
-    setLikes((likes) => likes - 1);
-    setLiked(false);
+
+  const handleRemoveLike = async () => {
+    dispatch({
+      type: 'removeLike',
+    });
     try {
       await destroyLikes({
         token,
@@ -45,23 +65,24 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
       });
     } catch (error) {
       console.log(error);
-      setLikes((likes) => likes + 1);
-      setLiked(true);
+      dispatch({
+        type: 'addLike',
+      });
     }
   };
 
   const likeHandler = async () => {
-    if (likedByUser) {
-      removeLike();
+    if (state.liked) {
+      handleRemoveLike();
     } else {
-      addLike();
+      handleAddLike();
     }
   };
 
   return (
-    <Interaction type={InteractionType.PINK} active={likes > 0} onClick={likeHandler}>
-      {liked ? <HeartFilled /> : <Heart />}
-      {likes > 0 ? `${likes} Likes` : 'Like'}
+    <Interaction type={InteractionType.PINK} active={state.likes > 0} onClick={likeHandler}>
+      {state.liked ? <HeartFilled /> : <Heart />}
+      {state.likes > 0 ? `${state.likes} Likes` : 'Like'}
     </Interaction>
   );
 }
