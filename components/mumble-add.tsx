@@ -30,7 +30,8 @@ function MumbleAdd(props: MumbleAddProps) {
 
         <Textarea
           onChange={(event) => {
-            if (text.length < CHAR_COUNT || event.nativeEvent.inputType === 'deleteContentBackward') {
+            const inputEvent = event.nativeEvent as InputEvent;
+            if (text.length < CHAR_COUNT || inputEvent.inputType === 'deleteContentBackward') {
               setText(event.target.value);
             }
           }}
