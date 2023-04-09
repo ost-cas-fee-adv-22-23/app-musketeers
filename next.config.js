@@ -7,19 +7,19 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'randompicturegenerator.com',
-        port: '0',
+        port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
-        port: '0',
+        port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'picsum.photos',
-        port: '0',
+        port: '',
         pathname: '/**',
       },
     ],
