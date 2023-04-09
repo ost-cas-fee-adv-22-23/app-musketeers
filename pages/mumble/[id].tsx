@@ -1,9 +1,9 @@
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import { REDIRECT_LOGIN } from '../../constants/qwacker.constants';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
-import { fetchRepliesWithUser, fetchSinglePost, fetchUser } from '../../services/qwacker.service';
+import { createReply, fetchRepliesWithUser, fetchSinglePost, fetchUser } from '../../services/qwacker.service';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import Head from 'next/head';
 import {
@@ -26,6 +26,7 @@ import { parseHashtags } from '../../helpers/common.helpers';
 import { useRouter } from 'next/router';
 import MumbleAdd from '../../components/mumble-add';
 import { ProfileQuery, UserModel } from '../../models/user.model';
+import { getClientToken } from '../../helpers/getClientToken';
 
 type Props = {
   mumble: QwackModelDecorated;
@@ -39,6 +40,9 @@ export default function MumblePage({
   replies,
 }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
   const router = useRouter();
+  const { data: session } = useSession();
+  const token = getClientToken(session);
+
   return (
     <>
       <Head>
@@ -112,7 +116,9 @@ export default function MumblePage({
                   />
                 }
                 onImageUpload={() => undefined}
-                onSend={() => undefined}
+                onSend={async (text) => {
+                  await createReply(token, mumble.id, { text: text });
+                }}
               />
 
               {replies.map((mumble, index) => {
