@@ -15,12 +15,13 @@ import {
 } from '@smartive-education/design-system-component-library-musketeers';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
-import { fetchPosts, fetchUser, searchPosts } from '../../services/qwacker.service';
+import { fetchLikedPostsWithUsers, fetchPostsWithUsers, fetchUser } from '../../services/qwacker.service';
 import { UserModel } from '../../models/user.model';
 import { getSession } from 'next-auth/react';
 import { useState } from 'react';
 import Timeline from '../../components/timeline';
-import { QwackModel, QwackModelDecorated } from '../../models/qwacker.model';
+import { QwackModelDecorated } from '../../models/qwacker.model';
+import { REDIRECT_LOGIN, REDIRECT_NOT_FOUND } from '../../constants/qwacker.constants';
 
 type Props = {
   user: UserModel;
@@ -113,45 +114,22 @@ export default function ProfilePage({
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const session = await getSession(ctx);
   if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
+    return REDIRECT_LOGIN;
   }
 
   const userId = ctx.query.alias as string;
   const token = (await getToken(ctx)) as QJWT;
-  const userData = await fetchUser({ token: token.accessToken, userId });
+  const userData = await fetchUser({ token: token.accessToken, id: userId });
 
   if (!userData) {
-    return {
-      redirect: {
-        destination: '/not-found',
-        permanent: false,
-      },
-    };
+    return REDIRECT_NOT_FOUND;
   }
 
-  const { data } = await fetchPosts({ token: token.accessToken, creator: userData.id });
-
-  const postsDecorated = data.map((post: QwackModel) => {
-    return {
-      ...post,
-      creatorData: userData,
-    };
-  });
+  const postsDecorated = await fetchPostsWithUsers({ token: token.accessToken, creator: userData.id });
 
   let postsLikedDecorated = null;
   if (userId === ProfileQuery.me && token.sub) {
-    const { data } = await searchPosts(token.accessToken, { likedBy: [token.sub] });
-    postsLikedDecorated = data.map((post: QwackModel) => {
-      return {
-        ...post,
-        creatorData: userData,
-      };
-    });
+    postsLikedDecorated = await fetchLikedPostsWithUsers({ token: token.accessToken, id: token.sub });
   }
 
   return {

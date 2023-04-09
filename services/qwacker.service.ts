@@ -1,4 +1,10 @@
-import { QwackModel } from '../models/qwacker.model';
+import {
+  QwackerCreateParamsModel,
+  QwackerPostsParamModel,
+  QwackerSearchParamsModel,
+  QwackerTokenParamsModel,
+  QwackModel,
+} from '../models/qwacker.model';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -27,14 +33,7 @@ export function fetchPosts({
   newerThan = '',
   olderThan = '',
   creator = '',
-}: {
-  token: string;
-  limit?: number;
-  offset?: number;
-  newerThan?: string;
-  olderThan?: string;
-  creator?: string;
-}) {
+}: QwackerPostsParamModel) {
   const searchParams = new URLSearchParams({
     limit: limit.toString(),
     offset: offset.toString(),
@@ -45,40 +44,45 @@ export function fetchPosts({
   return qwackerRequest(`posts?${searchParams.toString()}`, token, { method: 'GET' });
 }
 
-export async function fetchPostsWithUsers({
-  token,
-  limit = 10,
-  offset = 0,
-}: {
-  token: string;
-  limit?: number;
-  offset?: number;
-  newerThan?: string;
-  olderThan?: string;
-  creator?: string;
-}) {
-  const { data } = await fetchPosts({ token, offset, limit });
-  const newPosts = await Promise.all(
-    data.map(async (post: QwackModel) => {
-      const userData = await fetchUser({ token, userId: post.creator });
-      return { ...post, creatorData: userData };
-    })
-  );
-  return newPosts;
+export async function fetchPostsWithUsers({ token, limit = 10, offset = 0, creator = '' }: QwackerPostsParamModel) {
+  const { data } = await fetchPosts({ token, offset, limit, creator });
+  return await fetchPopulatedPosts(data, token);
 }
 
-export function fetchUser({ token, userId }: { token: string; userId: string }) {
-  return qwackerRequest(`users/${userId}`, token, { method: 'GET' });
+export async function fetchLikedPostsWithUsers({ token, id }: QwackerTokenParamsModel) {
+  const { data } = await searchPosts(token, { likedBy: [id] });
+  return await fetchPopulatedPosts(data, token);
 }
 
-export function updateLikes({ token, postId }: { token: string; postId: string }) {
-  return qwackerRequest(`posts/${postId}/likes`, token, {
+export function fetchUser({ token, id }: QwackerTokenParamsModel) {
+  return qwackerRequest(`users/${id}`, token, { method: 'GET' });
+}
+
+export function updateLikes({ token, id }: QwackerTokenParamsModel) {
+  return qwackerRequest(`posts/${id}/likes`, token, {
     method: 'PUT',
   });
 }
 
-export function destroyLikes({ token, postId }: { token: string; postId: string }) {
-  return qwackerRequest(`posts/${postId}/likes`, token, {
+export function destroyLikes({ token, id }: QwackerTokenParamsModel) {
+  return qwackerRequest(`posts/${id}/likes`, token, {
     method: 'DELETE',
   });
+}
+
+export function searchPosts(token = '', searchParams: QwackerSearchParamsModel = {}) {
+  return qwackerRequest(`posts/search`, token, { method: 'POST', body: JSON.stringify(searchParams) });
+}
+
+export function createPost(token = '', postParams: QwackerCreateParamsModel = {}) {
+  return qwackerRequest('posts', token, { method: 'POST', body: JSON.stringify(postParams) });
+}
+
+async function fetchPopulatedPosts(data: QwackModel[], token: string) {
+  return await Promise.all(
+    data.map(async (post: QwackModel) => {
+      const userData = await fetchUser({ token, id: post.creator });
+      return { ...post, creatorData: userData };
+    })
+  );
 }

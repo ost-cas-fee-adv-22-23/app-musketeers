@@ -6,12 +6,13 @@ import Timeline from '../components/timeline';
 import { getSession, useSession } from 'next-auth/react';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { fetchPostsWithUsers } from '../services/qwacker.service';
+import { createPost, fetchPostsWithUsers } from '../services/qwacker.service';
 import { QJWT } from './api/auth/[...nextauth]';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import LoadingIndicator from '../components/loading-indicator';
 import { getClientToken } from '../helpers/getClientToken';
+import { REDIRECT_LOGIN } from '../constants/qwacker.constants';
 
 const POSTS_LIMIT = 7;
 
@@ -92,7 +93,9 @@ export default function PageHome(props: PageHomeProps) {
               />
             }
             onImageUpload={() => console.log('onImageUpload')}
-            onSend={() => console.log('onSend')}
+            onSend={async (text) => {
+              await createPost(token, { text });
+            }}
           />
         </div>
         <Timeline posts={posts} />
@@ -107,12 +110,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const session = await getSession(ctx);
 
   if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
+    return REDIRECT_LOGIN;
   }
 
   const token = (await getToken(ctx)) as QJWT;
