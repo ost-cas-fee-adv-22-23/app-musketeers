@@ -44,7 +44,7 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
     try {
       await updateLikes({
         token,
-        postId,
+        id: postId,
       });
     } catch (error) {
       console.log(error);
@@ -61,7 +61,7 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
     try {
       await destroyLikes({
         token,
-        postId,
+        id: postId,
       });
     } catch (error) {
       console.log(error);

@@ -15,7 +15,7 @@ export default function Header() {
     <>
       <HeaderFromDesignSystem elementType={Link} iconLinkUrl={'/'}>
         <Navigation>
-          <NavigationItem elementType={Link} href={'/profile/myProfileHandle'}>
+          <NavigationItem elementType={Link} href={'/profile/me'}>
             <Avatar
               alt="Avatar"
               size={AvatarSize.S}
