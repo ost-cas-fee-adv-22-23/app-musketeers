@@ -1,22 +1,88 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import {
   Interaction,
   InteractionType,
   Heart,
   HeartFilled,
 } from '@smartive-education/design-system-component-library-musketeers';
+import { updateLikes, destroyLikes } from '../services/qwacker.service';
+import { useSession } from 'next-auth/react';
+import { getClientToken } from '../helpers/getClientToken';
 
 type LikeInteractionProps = {
   initialCount: number;
+  likedByUser: boolean;
+  postId: string;
 };
 
-function LikeInteraction(props: LikeInteractionProps) {
-  const [likes, setLikes] = useState(props.initialCount ?? 0);
+function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionProps) {
+  const { data: session } = useSession();
+  const token = getClientToken(session);
+  const reducer = (state: { likes: number; liked: boolean }, action: { type: 'addLike' | 'removeLike' }) => {
+    switch (action.type) {
+      case 'addLike': {
+        return {
+          likes: state.likes + 1,
+          liked: true,
+        };
+      }
+      case 'removeLike': {
+        return {
+          likes: state.likes - 1,
+          liked: false,
+        };
+      }
+    }
+    throw Error('Unknown action: ' + action.type);
+  };
+  const [state, dispatch] = useReducer(reducer, { likes: initialCount || 0, liked: likedByUser || false });
+
+  const handleAddLike = async () => {
+    dispatch({
+      type: 'addLike',
+    });
+    try {
+      await updateLikes({
+        token,
+        postId,
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: 'removeLike',
+      });
+    }
+  };
+
+  const handleRemoveLike = async () => {
+    dispatch({
+      type: 'removeLike',
+    });
+    try {
+      await destroyLikes({
+        token,
+        postId,
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: 'addLike',
+      });
+    }
+  };
+
+  const likeHandler = async () => {
+    if (state.liked) {
+      handleRemoveLike();
+    } else {
+      handleAddLike();
+    }
+  };
 
   return (
-    <Interaction type={InteractionType.PINK} active={likes > 0} onClick={() => setLikes((likes) => likes + 1)}>
-      {likes > 0 ? <HeartFilled /> : <Heart />}
-      {likes > 0 ? `${likes} Likes` : 'Like'}
+    <Interaction type={InteractionType.PINK} active={state.likes > 0} onClick={likeHandler}>
+      {state.liked ? <HeartFilled /> : <Heart />}
+      {state.likes > 0 ? `${state.likes} Likes` : 'Like'}
     </Interaction>
   );
 }

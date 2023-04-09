@@ -84,7 +84,8 @@ export default NextAuth({
       return refreshAccessToken(token);
     },
     async session({ session, token }) {
-      return { ...session, accessToken: token.accessToken };
+      session.token = token;
+      return session;
     },
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs

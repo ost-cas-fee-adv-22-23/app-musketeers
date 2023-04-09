@@ -6,19 +6,67 @@ import Timeline from '../components/timeline';
 import { getSession, useSession } from 'next-auth/react';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { createPost, fetchPosts, fetchUser } from '../services/qwacker.service';
+import { fetchPostsWithUsers } from '../services/qwacker.service';
 import { QJWT } from './api/auth/[...nextauth]';
-import { QwackModel, QwackModelDecorated } from '../models/qwacker.model';
-import { UserModel } from '../models/user.model';
-import { Session } from 'next-auth';
+import { QwackModelDecorated } from '../models/qwacker.model';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import LoadingIndicator from '../components/loading-indicator';
+import { getClientToken } from '../helpers/getClientToken';
+
+const POSTS_LIMIT = 7;
 
 interface PageHomeProps {
-  session: Session;
-  postsDecorated: QwackModelDecorated[];
+  posts: QwackModelDecorated[];
 }
 
 export default function PageHome(props: PageHomeProps) {
-  const session = useSession();
+  const [posts, setPosts] = useState<QwackModelDecorated[]>(props.posts);
+  const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>(false);
+  const currentOffset = posts.length;
+  const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
+  const { data: session } = useSession();
+  const token = getClientToken(session);
+  const bottomBoundaryRef = useRef(null);
+
+  const scrollObserver = useCallback((node: Element) => {
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.intersectionRatio > 0) {
+          setIsIntersecting(true);
+        } else {
+          setIsIntersecting(false);
+        }
+      });
+    }).observe(node);
+  }, []);
+
+  useEffect(() => {
+    if (bottomBoundaryRef.current) {
+      scrollObserver(bottomBoundaryRef.current);
+    }
+  }, [scrollObserver]);
+
+  useEffect(() => {
+    if (isIntersecting) {
+      fetchMorePosts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isIntersecting]);
+
+  const fetchMorePosts = async () => {
+    setIsLoadingPosts(true);
+    if (token) {
+      const newPosts = await fetchPostsWithUsers({
+        token,
+        limit: POSTS_LIMIT,
+        offset: currentOffset,
+      });
+      const newPostsAggregated = [...posts, ...newPosts];
+      setPosts(newPostsAggregated);
+    }
+    setIsLoadingPosts(false);
+  };
+
   return (
     <>
       <Head>
@@ -44,13 +92,12 @@ export default function PageHome(props: PageHomeProps) {
               />
             }
             onImageUpload={() => console.log('onImageUpload')}
-            onSend={async (text) => {
-              const token = session.data.accessToken;
-              await createPost(token, { text });
-            }}
+            onSend={() => console.log('onSend')}
           />
         </div>
-        <Timeline posts={props.postsDecorated} />
+        <Timeline posts={posts} />
+        <div id="page-bottom-boundary" ref={bottomBoundaryRef}></div>
+        <LoadingIndicator isLoading={isLoadingPosts} />
       </Container>
     </>
   );
@@ -69,22 +116,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   }
 
   const token = (await getToken(ctx)) as QJWT;
-  let postsDecorated: QwackModelDecorated[] = [];
-
-  const fetchUserData = async (creator: string): Promise<UserModel> =>
-    await fetchUser({ token: token.accessToken, userId: creator });
+  let posts: QwackModelDecorated[] = [];
 
   if (token) {
-    const { data } = await fetchPosts({ token: token.accessToken });
-    postsDecorated = await Promise.all(
-      data.map(async (post: QwackModel) => {
-        const userData = await fetchUserData(post.creator);
-        return { ...post, creatorData: userData };
-      })
-    );
+    posts = await fetchPostsWithUsers({
+      token: token.accessToken,
+      limit: POSTS_LIMIT,
+      offset: 0,
+    });
   }
 
   return {
-    props: { session, postsDecorated },
+    props: { session, posts },
   };
 };
