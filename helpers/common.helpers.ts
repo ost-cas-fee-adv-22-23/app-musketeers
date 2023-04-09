@@ -17,7 +17,7 @@ const getTimestampFromId = (id: string) => {
     .reverse()
     .reduce((carry, char, index) => {
       const encodingIndex = ENCODING.indexOf(char);
-      return encodingIndex * Math.pow(ENCODING_LEN, index);
+      return carry + encodingIndex * Math.pow(ENCODING_LEN, index);
     }, 0);
 };
 
