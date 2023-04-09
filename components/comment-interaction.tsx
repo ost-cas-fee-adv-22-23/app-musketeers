@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Interaction,
   InteractionType,
@@ -8,13 +8,14 @@ import {
 
 type CommentInteractionProps = {
   initialCount: number;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
 function CommentInteraction(props: CommentInteractionProps) {
-  const [comments, setComments] = useState(props.initialCount ?? 0);
+  const comments = props.initialCount;
 
   return (
-    <Interaction type={InteractionType.VIOLET} active={comments > 0} onClick={() => setComments((comments) => comments + 1)}>
+    <Interaction type={InteractionType.VIOLET} active={comments > 0} onClick={props.onClick}>
       {comments > 0 ? <ReplyFilled /> : <Reply />}
       {comments > 0 ? `${comments} Comments` : 'Comment'}
     </Interaction>

@@ -54,6 +54,15 @@ export async function fetchLikedPostsWithUsers({ token, id }: QwackerTokenParams
   return await fetchPopulatedPosts(data, token);
 }
 
+export async function fetchRepliesWithUser({ token, id }: QwackerTokenParamsModel) {
+  const replies = await fetchReplies({ token, id });
+  return await fetchPopulatedPosts(replies, token);
+}
+
+export function fetchSinglePost({ token, id }: QwackerTokenParamsModel) {
+  return qwackerRequest(`posts/${id}`, token, { method: 'GET' });
+}
+
 export function fetchUser({ token, id }: QwackerTokenParamsModel) {
   return qwackerRequest(`users/${id}`, token, { method: 'GET' });
 }
@@ -76,6 +85,10 @@ export function searchPosts(token = '', searchParams: QwackerSearchParamsModel =
 
 export function createPost(token = '', postParams: QwackerCreateParamsModel = {}) {
   return qwackerRequest('posts', token, { method: 'POST', body: JSON.stringify(postParams) });
+}
+
+export function fetchReplies({ token, id }: QwackerTokenParamsModel) {
+  return qwackerRequest(`posts/${id}/replies`, token, { method: 'GET' });
 }
 
 async function fetchPopulatedPosts(data: QwackModel[], token: string) {

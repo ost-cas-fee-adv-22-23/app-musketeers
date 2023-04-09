@@ -16,7 +16,7 @@ import {
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
 import { fetchLikedPostsWithUsers, fetchPostsWithUsers, fetchUser } from '../../services/qwacker.service';
-import { UserModel } from '../../models/user.model';
+import { ProfileQuery, UserModel } from '../../models/user.model';
 import { getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import Timeline from '../../components/timeline';
@@ -30,10 +30,6 @@ type Props = {
   postsLiked: QwackModelDecorated[];
   isPersonal: boolean;
 };
-
-enum ProfileQuery {
-  me = 'me',
-}
 
 export default function ProfilePage({
   user,
