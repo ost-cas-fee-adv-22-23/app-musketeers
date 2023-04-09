@@ -14,7 +14,7 @@ import Image from 'next/image';
 import CommentInteraction from './comment-interaction';
 import LikeInteraction from './like-interaction';
 import { QwackModelDecorated } from '../models/qwacker.model';
-import { parseHashtags } from '../helpers/common.helpers';
+import { getFormattedTimestamp, parseHashtags } from '../helpers/common.helpers';
 import { useRouter } from 'next/router';
 
 const onClickTimestampHandler = () => {
@@ -27,6 +27,7 @@ type TimeLineProps = {
 
 function Timeline(props: TimeLineProps) {
   const router = useRouter();
+
   return (
     <>
       {props.posts &&
@@ -66,7 +67,7 @@ function Timeline(props: TimeLineProps) {
                   e.preventDefault();
                   router.push(`/profile/${mumble.creator}`);
                 }}
-                timestamp="timestamp"
+                timestamp={getFormattedTimestamp(mumble.id)}
                 userName={mumble.creatorData.userName}
                 mumble={
                   <div className={'pt-s'}>
