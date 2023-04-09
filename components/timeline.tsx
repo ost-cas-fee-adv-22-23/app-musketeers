@@ -53,7 +53,8 @@ function Timeline(props: TimeLineProps) {
                 </div>
               }
               onClickTimestamp={onClickTimestampHandler}
-              onClickUserName={() => {
+              onClickUserName={(e) => {
+                e.preventDefault();
                 router.push(`/profile/${mumble.creator}`);
               }}
               timestamp="timestamp"
