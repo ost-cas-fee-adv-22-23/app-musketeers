@@ -22,7 +22,7 @@ import Mumble from '../../components/mumble';
 import Image from 'next/image';
 import CommentInteraction from '../../components/comment-interaction';
 import LikeInteraction from '../../components/like-interaction';
-import { parseHashtags } from '../../helpers/common.helpers';
+import { getFormattedTimestamp, parseHashtags } from '../../helpers/common.helpers';
 import { useRouter } from 'next/router';
 import MumbleAdd from '../../components/mumble-add';
 import { ProfileQuery, UserModel } from '../../models/user.model';
@@ -83,7 +83,7 @@ export default function MumblePage({
               e.preventDefault();
               router.push(`/profile/${mumble.creator}`);
             }}
-            timestamp="timestamp"
+            timestamp={getFormattedTimestamp(mumble.id)}
             userName={mumble.creatorData.userName}
             mumble={
               <div className={'pt-m'}>
@@ -162,7 +162,7 @@ export default function MumblePage({
                         e.preventDefault();
                         router.push(`/profile/${mumble.creator}`);
                       }}
-                      timestamp="timestamp"
+                      timestamp={getFormattedTimestamp(mumble.id)}
                       userName={mumble.creatorData.userName}
                       mumble={
                         <>
