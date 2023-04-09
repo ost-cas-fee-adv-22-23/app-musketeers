@@ -18,7 +18,7 @@ import { QJWT } from '../api/auth/[...nextauth]';
 import { fetchLikedPostsWithUsers, fetchPostsWithUsers, fetchUser } from '../../services/qwacker.service';
 import { UserModel } from '../../models/user.model';
 import { getSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Timeline from '../../components/timeline';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import { REDIRECT_LOGIN, REDIRECT_NOT_FOUND } from '../../constants/qwacker.constants';
@@ -43,6 +43,10 @@ export default function ProfilePage({
 }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
   const [activeTab, setActiveTab] = useState('mumbles');
   const [activePosts, setActivePosts] = useState(posts);
+
+  useEffect(() => {
+    setActivePosts(posts);
+  }, [posts]);
 
   return (
     <>
