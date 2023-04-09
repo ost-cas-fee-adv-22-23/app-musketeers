@@ -38,7 +38,7 @@ function Mumble(props: MumbleProps) {
 
         <div className="paragraph-m text-slate-900 grid pt-m gap-m">{props.children}</div>
 
-        <div className="py-m flex gap-s">{props.footer}</div>
+        <div className="pt-m flex gap-s">{props.footer}</div>
       </div>
     </Card>
   );

@@ -17,6 +17,8 @@ type MumbleAddProps = {
   onSend: (text: string) => void;
 };
 
+const CHAR_COUNT = 280;
+
 function MumbleAdd(props: MumbleAddProps) {
   const [text, setText] = useState('');
   return (
@@ -27,11 +29,19 @@ function MumbleAdd(props: MumbleAddProps) {
         <div className="label-xl text-slate-900 mb-s">{props.title}</div>
 
         <Textarea
-          onChange={(event) => setText(event.target.value)}
+          onChange={(event) => {
+            if (text.length < CHAR_COUNT || event.nativeEvent.inputType === 'deleteContentBackward') {
+              setText(event.target.value);
+            }
+          }}
           placeholder="Deine Meinung zählt!"
-          rows={8}
+          rows={5}
           value={text}
         />
+
+        <span className={'text-right w-full block'}>
+          {text.length} / {CHAR_COUNT}
+        </span>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-xs mt-xs">
           <Button

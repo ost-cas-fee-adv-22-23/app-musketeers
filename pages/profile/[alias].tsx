@@ -22,6 +22,7 @@ import { useState } from 'react';
 import Timeline from '../../components/timeline';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import { REDIRECT_LOGIN, REDIRECT_NOT_FOUND } from '../../constants/qwacker.constants';
+import Image from 'next/image';
 
 type Props = {
   user: UserModel;
@@ -50,12 +51,32 @@ export default function ProfilePage({
       </Head>
 
       <Container>
-        <div className={'flex justify-between items-baseline mb-l'}>
+        <div className={'relative mb-l'}>
+          <Image className={'rounded-16'} src={'https://picsum.photos/680/320'} width={680} height={320} alt={''}></Image>
+          <div className={'absolute bottom-[-80px] right-[32px]'}>
+            {isPersonal ? (
+              <ProfileImage
+                alt="Profile Image alt attribute text"
+                onClick={() => undefined}
+                src={'https://picsum.photos/160/160?random=' + user.id}
+              />
+            ) : (
+              <Avatar
+                showBorder={true}
+                alt="Avatar"
+                size={AvatarSize.XL}
+                src={'https://picsum.photos/160/160?random=' + user.id}
+              />
+            )}
+          </div>
+        </div>
+
+        <div className={'mb-l'}>
           <div>
             <h1 className="heading-3 text-slate-900">
               {user?.firstName} {user?.lastName}
             </h1>
-            <div className="flex gap-s">
+            <div className="flex gap-s mb-xs">
               <IconLink type={IconLinkType.VIOLET} label={user?.userName} onClick={() => undefined}>
                 <Profile />
               </IconLink>
@@ -66,20 +87,11 @@ export default function ProfilePage({
                 <Calendar />
               </IconLink>
             </div>
+            <p className={'text-slate-400 text-18'}>
+              Donec tellus diam, vestibulum sit amet vehicula quis, sagittis sit amet nunc. Pellentesque habitant morbi
+              tristique senectus et netus et malesuada fames ac turpis egestas.
+            </p>
           </div>
-          {isPersonal ? (
-            <ProfileImage
-              alt="Profile Image alt attribute text"
-              onClick={() => undefined}
-              src="https://randompicturegenerator.com/img/people-generator/gd121f56d8674f28d00ce9f1c44686e7a9bee58b8d33a3c57daaada1fa493c214290f9490833d1ff18f4ee16cd5298e1f_640.jpg"
-            />
-          ) : (
-            <Avatar
-              alt="Avatar"
-              size={AvatarSize.XL}
-              src="https://randompicturegenerator.com/img/people-generator/gd121f56d8674f28d00ce9f1c44686e7a9bee58b8d33a3c57daaada1fa493c214290f9490833d1ff18f4ee16cd5298e1f_640.jpg"
-            />
-          )}
         </div>
         <div>
           {isPersonal ? (
