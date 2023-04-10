@@ -1,3 +1,5 @@
+import humanizeDuration from 'humanize-duration';
+
 const ENCODING = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'; // Crockford's Base32
 const ENCODING_LEN = ENCODING.length;
 const TIME_LEN = 10;
@@ -23,12 +25,11 @@ const getTimestampFromId = (id: string) => {
 
 export const getFormattedTimestamp = (id: string): string => {
   const date = new Date(getTimestampFromId(id));
-  return date.toLocaleDateString('de-DE', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
+  const dateAgeHumanized = humanizeDuration(new Date().getTime() - date.getTime(), {
+    language: 'de',
+    round: true,
+    units: ['y', 'd', 'h', 'm'],
+    largest: 1,
   });
+  return 'vor' + ' ' + dateAgeHumanized;
 };
