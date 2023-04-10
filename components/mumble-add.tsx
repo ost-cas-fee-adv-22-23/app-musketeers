@@ -8,14 +8,17 @@ import {
   IconLinkType,
   Profile,
   IconLink,
+  Avatar,
+  AvatarSize,
 } from '@smartive-education/design-system-component-library-musketeers';
 import { useState } from 'react';
 import { UserModel } from '../models/user.model';
+import Image from 'next/image';
 
 type MumbleAddProps = {
   user?: UserModel;
-  avatar: JSX.Element;
   title: string;
+  avatarUrl: string;
   onImageUpload: () => void;
   onSend: (text: string) => void;
   isInline?: boolean;
@@ -29,7 +32,15 @@ function MumbleAdd(props: MumbleAddProps) {
     <div className="relative">
       {props.isInline ? (
         <div className={'flex items-center mb-s'}>
-          <div>{props.avatar}</div>
+          <div>
+            <Avatar
+              alt="Display Name @displayName"
+              size={AvatarSize.S}
+              imageElementType={Image}
+              imageComponentProps={{ width: '480', height: '480' }}
+              src={props.avatarUrl}
+            />
+          </div>
           <div className={'flex flex-col ml-xs'}>
             <span>
               {props.user?.firstName} {props.user?.lastName}
@@ -42,7 +53,15 @@ function MumbleAdd(props: MumbleAddProps) {
         </div>
       ) : (
         <>
-          <div className="absolute -top-s -left-[80px] hidden sm:block">{props.avatar}</div>
+          <div className="absolute -top-s -left-[80px] hidden sm:block">
+            <Avatar
+              alt="Display Name @displayName"
+              size={AvatarSize.M}
+              imageElementType={Image}
+              imageComponentProps={{ width: '480', height: '480' }}
+              src={props.avatarUrl}
+            />
+          </div>
 
           <div className="label-xl text-slate-900 mb-s">{props.title}</div>
         </>

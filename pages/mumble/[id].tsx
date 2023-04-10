@@ -6,23 +6,8 @@ import { QJWT } from '../api/auth/[...nextauth]';
 import { createReply, fetchRepliesWithUser, fetchSinglePost, fetchUser } from '../../services/qwacker.service';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import Head from 'next/head';
-import {
-  Avatar,
-  AvatarSize,
-  Card,
-  CardSize,
-  Container,
-  Hashtag,
-  HashtagSize,
-  Interaction,
-  InteractionType,
-  Share,
-} from '@smartive-education/design-system-component-library-musketeers';
+import { Card, CardSize, Container } from '@smartive-education/design-system-component-library-musketeers';
 import Mumble from '../../components/mumble';
-import Image from 'next/image';
-import CommentInteraction from '../../components/comment-interaction';
-import LikeInteraction from '../../components/like-interaction';
-import { getFormattedTimestamp, parseHashtags } from '../../helpers/common.helpers';
 import { useRouter } from 'next/router';
 import MumbleAdd from '../../components/mumble-add';
 import { ProfileQuery, UserModel } from '../../models/user.model';
@@ -51,70 +36,20 @@ export default function MumblePage({
       <Container>
         <Card size={CardSize.XL} hasRoundBorders={true}>
           <Mumble
-            avatar={
-              <Avatar
-                alt="Display Name @displayName"
-                showBorder
-                size={AvatarSize.M}
-                imageElementType={Image}
-                imageComponentProps={{ width: '480', height: '480' }}
-                src={'https://picsum.photos/160/160?random=' + mumble.creator}
-              />
-            }
-            displayName={`${mumble.creatorData.firstName} ${mumble.creatorData.lastName}`}
-            footer={
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-xs">
-                <CommentInteraction
-                  onClick={(event) => {
-                    event.preventDefault();
-                    router.push('/mumble/' + mumble.id);
-                  }}
-                  initialCount={mumble.replyCount}
-                />
-                <LikeInteraction initialCount={mumble.likeCount} likedByUser={mumble.likedByUser} postId={mumble.id} />
-                <Interaction onClick={(event) => event} type={InteractionType.DEFAULT}>
-                  <Share />
-                  Copy link
-                </Interaction>
-              </div>
-            }
+            mumbleData={mumble}
+            avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
             onClickTimestamp={() => undefined}
             onClickUserName={(e) => {
               e.preventDefault();
               router.push(`/profile/${mumble.creator}`);
             }}
-            timestamp={getFormattedTimestamp(mumble.id)}
-            userName={mumble.creatorData.userName}
-            mumble={
-              <div className={'pt-m'}>
-                <div>{mumble.text}</div>
-                <div className="flex gap-xs">
-                  {parseHashtags(mumble.text).map((hashtag: string) => (
-                    <Hashtag key={hashtag} size={HashtagSize.M} label={hashtag} onClick={(event) => event} />
-                  ))}
-                </div>
-                {mumble.mediaUrl && (
-                  <div className={'mt-s'}>
-                    <Image width={640} height={480} alt="" className="block rounded-default" src={mumble.mediaUrl} />
-                  </div>
-                )}
-              </div>
-            }
           >
             <div className={'mt-l'}>
               <MumbleAdd
                 isInline={true}
                 user={personalData}
+                avatarUrl={'https://picsum.photos/160/160?random=' + personalData.id}
                 title={'Hey, was gibt’s neues?'}
-                avatar={
-                  <Avatar
-                    alt="Display Name @displayName"
-                    size={AvatarSize.S}
-                    imageElementType={Image}
-                    imageComponentProps={{ width: '480', height: '480' }}
-                    src={'https://picsum.photos/160/160?random=' + personalData.id}
-                  />
-                }
                 onImageUpload={() => undefined}
                 onSend={async (text) => {
                   await createReply(token, mumble.id, { text: text });
@@ -126,65 +61,13 @@ export default function MumblePage({
                   <div key={index} className={'pb-l mt-l border-b-2 last:border-b-0 border-slate-100'}>
                     <Mumble
                       isInline={true}
-                      avatar={
-                        <Avatar
-                          alt="Display Name @displayName"
-                          showBorder
-                          size={AvatarSize.S}
-                          imageElementType={Image}
-                          imageComponentProps={{ width: '480', height: '480' }}
-                          src={'https://picsum.photos/160/160?random=' + mumble.creator}
-                        />
-                      }
-                      displayName={`${mumble.creatorData.firstName} ${mumble.creatorData.lastName}`}
-                      footer={
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-xs">
-                          <CommentInteraction
-                            onClick={(event) => {
-                              event.preventDefault();
-                              router.push('/mumble/' + mumble.id);
-                            }}
-                            initialCount={mumble.replyCount}
-                          />
-                          <LikeInteraction
-                            initialCount={mumble.likeCount}
-                            likedByUser={mumble.likedByUser}
-                            postId={mumble.id}
-                          />
-                          <Interaction onClick={(event) => event} type={InteractionType.DEFAULT}>
-                            <Share />
-                            Copy link
-                          </Interaction>
-                        </div>
-                      }
+                      mumbleData={mumble}
+                      avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
                       onClickTimestamp={() => undefined}
                       onClickUserName={(e) => {
                         e.preventDefault();
                         router.push(`/profile/${mumble.creator}`);
                       }}
-                      timestamp={getFormattedTimestamp(mumble.id)}
-                      userName={mumble.creatorData.userName}
-                      mumble={
-                        <>
-                          <div>{mumble.text}</div>
-                          <div className="flex gap-xs">
-                            {parseHashtags(mumble.text).map((hashtag: string) => (
-                              <Hashtag key={hashtag} size={HashtagSize.M} label={hashtag} onClick={(event) => event} />
-                            ))}
-                          </div>
-                          {mumble.mediaUrl && (
-                            <div className={'mt-s'}>
-                              <Image
-                                width={640}
-                                height={480}
-                                alt=""
-                                className="block rounded-default"
-                                src={mumble.mediaUrl}
-                              />
-                            </div>
-                          )}
-                        </>
-                      }
                     ></Mumble>
                   </div>
                 );
