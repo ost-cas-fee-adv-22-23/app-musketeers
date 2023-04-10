@@ -87,6 +87,10 @@ export function createPost(token = '', postParams: QwackerCreateParamsModel = {}
   return qwackerRequest('posts', token, { method: 'POST', body: JSON.stringify(postParams) });
 }
 
+export function destroyPost({ token = '', id = '' }: QwackerTokenParamsModel) {
+  return qwackerRequest(`posts/${id}`, token, { method: 'DELETE' });
+}
+
 export function createReply(token = '', id = '', postParams: QwackerCreateParamsModel = {}) {
   return qwackerRequest(`posts/${id}`, token, { method: 'POST', body: JSON.stringify(postParams) });
 }

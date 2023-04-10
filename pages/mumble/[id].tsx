@@ -11,7 +11,7 @@ import Mumble from '../../components/mumble';
 import { useRouter } from 'next/router';
 import MumbleAdd from '../../components/mumble-add';
 import { ProfileQuery, UserModel } from '../../models/user.model';
-import { getClientToken } from '../../helpers/getClientToken';
+import { getClientToken } from '../../helpers/session.helpers';
 
 type Props = {
   mumble: QwackModelDecorated;

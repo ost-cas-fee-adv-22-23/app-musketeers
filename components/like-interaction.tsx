@@ -7,7 +7,7 @@ import {
 } from '@smartive-education/design-system-component-library-musketeers';
 import { updateLikes, destroyLikes } from '../services/qwacker.service';
 import { useSession } from 'next-auth/react';
-import { getClientToken } from '../helpers/getClientToken';
+import { getClientToken } from '../helpers/session.helpers';
 
 type LikeInteractionProps = {
   initialCount: number;
