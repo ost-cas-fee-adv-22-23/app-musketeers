@@ -5,3 +5,7 @@ export type UserModel = {
   lastName: string;
   avatarUrl: string;
 };
+
+export enum ProfileQuery {
+  me = 'me',
+}

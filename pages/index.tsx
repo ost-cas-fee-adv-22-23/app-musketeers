@@ -1,17 +1,17 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import { Container, Avatar, AvatarSize } from '@smartive-education/design-system-component-library-musketeers';
+import { Card, CardSize, Container } from '@smartive-education/design-system-component-library-musketeers';
 import MumbleAdd from '../components/mumble-add';
 import Timeline from '../components/timeline';
 import { getSession, useSession } from 'next-auth/react';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { fetchPostsWithUsers } from '../services/qwacker.service';
+import { createPost, fetchPostsWithUsers } from '../services/qwacker.service';
 import { QJWT } from './api/auth/[...nextauth]';
 import { QwackModelDecorated } from '../models/qwacker.model';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import LoadingIndicator from '../components/loading-indicator';
 import { getClientToken } from '../helpers/getClientToken';
+import { REDIRECT_LOGIN } from '../constants/qwacker.constants';
 
 const POSTS_LIMIT = 7;
 
@@ -22,11 +22,11 @@ interface PageHomeProps {
 export default function PageHome(props: PageHomeProps) {
   const [posts, setPosts] = useState<QwackModelDecorated[]>(props.posts);
   const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>(false);
-  const currentOffset = posts.length;
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
   const { data: session } = useSession();
   const token = getClientToken(session);
   const bottomBoundaryRef = useRef(null);
+  const currentOffset = posts.length;
 
   const scrollObserver = useCallback((node: Element) => {
     new IntersectionObserver((entries) => {
@@ -79,21 +79,16 @@ export default function PageHome(props: PageHomeProps) {
           Voluptatem qui cumque voluptatem quia tempora dolores distinctio vel repellat dicta.
         </h2>
         <div className="mb-s">
-          <MumbleAdd
-            title={'Hey, was gibt’s neues?'}
-            avatar={
-              <Avatar
-                alt="Display Name @displayName"
-                showBorder
-                size={AvatarSize.M}
-                imageElementType={Image}
-                imageComponentProps={{ width: '480', height: '480' }}
-                src="https://randompicturegenerator.com/img/people-generator/gd121f56d8674f28d00ce9f1c44686e7a9bee58b8d33a3c57daaada1fa493c214290f9490833d1ff18f4ee16cd5298e1f_640.jpg"
-              />
-            }
-            onImageUpload={() => console.log('onImageUpload')}
-            onSend={() => console.log('onSend')}
-          />
+          <Card size={CardSize.XL} hasRoundBorders={true}>
+            <MumbleAdd
+              title={'Hey, was gibt’s neues?'}
+              avatarUrl={'https://picsum.photos/160/160?random=' + session?.token.sub}
+              onImageUpload={() => console.log('onImageUpload')}
+              onSend={async (text) => {
+                await createPost(token, { text });
+              }}
+            />
+          </Card>
         </div>
         <Timeline posts={posts} />
         <div id="page-bottom-boundary" ref={bottomBoundaryRef}></div>
@@ -107,12 +102,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const session = await getSession(ctx);
 
   if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
+    return REDIRECT_LOGIN;
   }
 
   const token = (await getToken(ctx)) as QJWT;
