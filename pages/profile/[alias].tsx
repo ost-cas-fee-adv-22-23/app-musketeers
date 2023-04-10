@@ -17,11 +17,9 @@ import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
 import { fetchLikedPostsWithUsers, fetchPostsWithUsers, fetchUser } from '../../services/qwacker.service';
 import { ProfileQuery, UserModel } from '../../models/user.model';
-import { getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import Timeline from '../../components/timeline';
 import { QwackModelDecorated } from '../../models/qwacker.model';
-import { REDIRECT_LOGIN, REDIRECT_NOT_FOUND } from '../../constants/qwacker.constants';
 import Image from 'next/image';
 
 type Props = {
@@ -124,17 +122,14 @@ export default function ProfilePage({
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const session = await getSession(ctx);
-  if (!session) {
-    return REDIRECT_LOGIN;
-  }
-
   const userId = ctx.query.alias as string;
   const token = (await getToken(ctx)) as QJWT;
   const userData = await fetchUser({ token: token.accessToken, id: userId });
 
   if (!userData) {
-    return REDIRECT_NOT_FOUND;
+    return {
+      notFound: true,
+    };
   }
 
   const postsDecorated = await fetchPostsWithUsers({ token: token.accessToken, creator: userData.id });

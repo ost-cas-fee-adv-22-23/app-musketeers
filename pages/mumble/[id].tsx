@@ -1,6 +1,4 @@
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { getSession, useSession } from 'next-auth/react';
-import { REDIRECT_LOGIN } from '../../constants/qwacker.constants';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
 import { createReply, fetchRepliesWithUser, fetchSinglePost, fetchUser } from '../../services/qwacker.service';
@@ -9,6 +7,7 @@ import Head from 'next/head';
 import { Card, CardSize, Container } from '@smartive-education/design-system-component-library-musketeers';
 import Mumble from '../../components/mumble';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import MumbleAdd from '../../components/mumble-add';
 import { ProfileQuery, UserModel } from '../../models/user.model';
 import { getClientToken } from '../../helpers/session.helpers';
@@ -81,11 +80,6 @@ export default function MumblePage({
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const session = await getSession(ctx);
-  if (!session) {
-    return REDIRECT_LOGIN;
-  }
-
   const mumbleId = ctx.query.id as string;
   const token = (await getToken(ctx)) as QJWT;
 
