@@ -12,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import LoadingIndicator from '../components/loading-indicator';
 import { getClientToken } from '../helpers/session.helpers';
 import { REDIRECT_LOGIN } from '../constants/qwacker.constants';
+import { toast } from 'react-toastify';
 
 const POSTS_LIMIT = 7;
 
@@ -85,7 +86,13 @@ export default function PageHome(props: PageHomeProps) {
               avatarUrl={'https://picsum.photos/160/160?random=' + session?.token.sub}
               onImageUpload={() => console.log('onImageUpload')}
               onSend={async (text) => {
-                await createPost(token, { text });
+                const createPostPromise = createPost(token, { text });
+
+                await toast.promise(createPostPromise, {
+                  pending: 'Qwack wird versendet...',
+                  error: 'Etwas ist schief gelaufen, versuch es nochmals!',
+                  success: 'Dein Qwack wurde erfolgreich versendet',
+                });
               }}
             />
           </Card>
