@@ -13,21 +13,38 @@ import LoadingIndicator from '../components/loading-indicator';
 import { getClientToken } from '../helpers/session.helpers';
 import { REDIRECT_LOGIN } from '../constants/qwacker.constants';
 import { toast } from 'react-toastify';
+import useSWRInfinite from 'swr/infinite';
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const POSTS_LIMIT = 7;
 
 interface PageHomeProps {
   posts: QwackModelDecorated[];
 }
 
+const getKey = (pageIndex, previousPageData) => {
+  console.log('getKey', pageIndex);
+  if (previousPageData && !previousPageData.length) return null; // reached the end
+  return `${BASE_URL}/posts?offset=${pageIndex * POSTS_LIMIT}&limit=${POSTS_LIMIT}`; // SWR key
+};
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
 export default function PageHome(props: PageHomeProps) {
-  const [posts, setPosts] = useState<QwackModelDecorated[]>(props.posts);
-  const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>(false);
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
   const { data: session } = useSession();
   const token = getClientToken(session);
   const bottomBoundaryRef = useRef(null);
-  const currentOffset = posts.length;
+  const { data, size, setSize, isLoading } = useSWRInfinite(getKey, fetcher);
+  // const { data, size, setSize, isLoading } = useSWRInfinite(getKey, () =>
+  //   fetchPostsWithUsers({ token, limit: POSTS_LIMIT, offset: pageIndex * POSTS_LIMIT })
+  // );
+
+  const dataFlattened = data?.reduce(function (a, b) {
+    return a.concat(b.data);
+  }, []);
+
+  console.log('data', data);
+  console.log('data flatted', dataFlattened);
 
   const scrollObserver = useCallback((node: Element) => {
     new IntersectionObserver((entries) => {
@@ -49,24 +66,12 @@ export default function PageHome(props: PageHomeProps) {
 
   useEffect(() => {
     if (isIntersecting) {
-      fetchMorePosts();
+      setSize(size + POSTS_LIMIT);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIntersecting]);
 
-  const fetchMorePosts = async () => {
-    setIsLoadingPosts(true);
-    if (token) {
-      const newPosts = await fetchPostsWithUsers({
-        token,
-        limit: POSTS_LIMIT,
-        offset: currentOffset,
-      });
-      const newPostsAggregated = [...posts, ...newPosts];
-      setPosts(newPostsAggregated);
-    }
-    setIsLoadingPosts(false);
-  };
+  if (!data) return 'loading';
 
   return (
     <>
@@ -97,9 +102,14 @@ export default function PageHome(props: PageHomeProps) {
             />
           </Card>
         </div>
-        <Timeline posts={posts} />
+        <Timeline
+          posts={data?.reduce(function (a, b) {
+            return a.concat(b.data);
+          }, [])}
+        />
         <div id="page-bottom-boundary" ref={bottomBoundaryRef}></div>
-        <LoadingIndicator isLoading={isLoadingPosts} />
+        <LoadingIndicator isLoading={isLoading} />
+        size: {size}
       </Container>
     </>
   );

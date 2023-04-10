@@ -50,12 +50,12 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
           </div>
           <div className={'flex flex-col ml-xs'}>
             <div className="label-m text-slate-900 mb-xxs">
-              {mumbleData.creatorData.firstName} {mumbleData.creatorData.lastName}
+              {mumbleData.creatorData?.firstName} {mumbleData.creatorData?.lastName}
             </div>
             <div className="flex gap-s">
               <IconLink
                 type={IconLinkType.VIOLET}
-                label={mumbleData.creatorData.userName}
+                label={mumbleData.creatorData?.userName}
                 href=""
                 target=""
                 onClick={onClickUserName}
@@ -88,13 +88,13 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
           </div>
 
           <div className="label-l text-slate-900 mb-xxs">
-            {mumbleData.creatorData.firstName} {mumbleData.creatorData.lastName}
+            {mumbleData.creatorData?.firstName} {mumbleData.creatorData?.lastName}
           </div>
 
           <div className="flex gap-s">
             <IconLink
               type={IconLinkType.VIOLET}
-              label={mumbleData.creatorData.userName}
+              label={mumbleData.creatorData?.userName}
               href=""
               target=""
               onClick={onClickUserName}
