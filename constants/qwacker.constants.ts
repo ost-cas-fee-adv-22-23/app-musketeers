@@ -4,10 +4,3 @@ export const REDIRECT_LOGIN = {
     permanent: false,
   },
 };
-
-export const REDIRECT_NOT_FOUND = {
-  redirect: {
-    destination: '/not-found',
-    permanent: false,
-  },
-};

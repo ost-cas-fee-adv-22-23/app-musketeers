@@ -10,7 +10,7 @@ import { QJWT } from './api/auth/[...nextauth]';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import LoadingIndicator from '../components/loading-indicator';
-import { getClientToken } from '../helpers/getClientToken';
+import { getClientToken } from '../helpers/session.helpers';
 import { REDIRECT_LOGIN } from '../constants/qwacker.constants';
 
 const POSTS_LIMIT = 7;

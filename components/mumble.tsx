@@ -5,19 +5,20 @@ import {
   HashtagSize,
   IconLink,
   IconLinkType,
-  Interaction,
-  InteractionType,
   Profile,
-  Share,
   Time,
 } from '@smartive-education/design-system-component-library-musketeers';
 import { MouseEvent } from 'react';
 import Image from 'next/image';
 import CommentInteraction from './comment-interaction';
 import LikeInteraction from './like-interaction';
+import CopyInteraction from './copy-interaction';
+import DeleteInteraction from './delete-interaction';
 import { useRouter } from 'next/router';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { getFormattedTimestamp, parseHashtags } from '../helpers/common.helpers';
+import { useSession } from 'next-auth/react';
+import { getUserId } from '../helpers/session.helpers';
 
 type MumbleProps = {
   mumbleData: QwackModelDecorated;
@@ -30,6 +31,8 @@ type MumbleProps = {
 
 function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isInline, children }: MumbleProps) {
   const router = useRouter();
+  const { data: session } = useSession();
+  const userId = getUserId(session);
 
   return (
     <div className="relative">
@@ -128,7 +131,7 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
       </div>
 
       <div className="pt-s flex gap-s">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-xs">
+        <div className="block md:flex gap-xs">
           <CommentInteraction
             onClick={(event) => {
               event.preventDefault();
@@ -137,10 +140,8 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
             initialCount={mumbleData.replyCount}
           />
           <LikeInteraction initialCount={mumbleData.likeCount} likedByUser={mumbleData.likedByUser} postId={mumbleData.id} />
-          <Interaction onClick={(event) => event} type={InteractionType.DEFAULT}>
-            <Share />
-            Copy link
-          </Interaction>
+          <CopyInteraction postId={mumbleData.id} />
+          {userId === mumbleData.creator && <DeleteInteraction postId={mumbleData.id} />}
         </div>
       </div>
 
