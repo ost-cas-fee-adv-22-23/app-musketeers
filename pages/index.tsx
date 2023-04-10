@@ -1,12 +1,5 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import {
-  Avatar,
-  AvatarSize,
-  Card,
-  CardSize,
-  Container,
-} from '@smartive-education/design-system-component-library-musketeers';
+import { Card, CardSize, Container } from '@smartive-education/design-system-component-library-musketeers';
 import MumbleAdd from '../components/mumble-add';
 import Timeline from '../components/timeline';
 import { getSession, useSession } from 'next-auth/react';
@@ -89,16 +82,7 @@ export default function PageHome(props: PageHomeProps) {
           <Card size={CardSize.XL} hasRoundBorders={true}>
             <MumbleAdd
               title={'Hey, was gibt’s neues?'}
-              avatar={
-                <Avatar
-                  alt="Display Name @displayName"
-                  showBorder
-                  size={AvatarSize.M}
-                  imageElementType={Image}
-                  imageComponentProps={{ width: '480', height: '480' }}
-                  src={'https://picsum.photos/160/160?random=' + session?.token.sub}
-                />
-              }
+              avatarUrl={'https://picsum.photos/160/160?random=' + session?.token.sub}
               onImageUpload={() => console.log('onImageUpload')}
               onSend={async (text) => {
                 await createPost(token, { text });
