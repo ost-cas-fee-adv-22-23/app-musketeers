@@ -5,16 +5,14 @@ import {
   HashtagSize,
   IconLink,
   IconLinkType,
-  Interaction,
-  InteractionType,
   Profile,
-  Share,
   Time,
 } from '@smartive-education/design-system-component-library-musketeers';
 import { MouseEvent } from 'react';
 import Image from 'next/image';
 import CommentInteraction from './comment-interaction';
 import LikeInteraction from './like-interaction';
+import CopyInteraction from './copy-interaction';
 import { useRouter } from 'next/router';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { getFormattedTimestamp, parseHashtags } from '../helpers/common.helpers';
@@ -128,7 +126,7 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
       </div>
 
       <div className="pt-s flex gap-s">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-xs">
+        <div className="block md:flex gap-xs">
           <CommentInteraction
             onClick={(event) => {
               event.preventDefault();
@@ -137,10 +135,7 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
             initialCount={mumbleData.replyCount}
           />
           <LikeInteraction initialCount={mumbleData.likeCount} likedByUser={mumbleData.likedByUser} postId={mumbleData.id} />
-          <Interaction onClick={(event) => event} type={InteractionType.DEFAULT}>
-            <Share />
-            Copy link
-          </Interaction>
+          <CopyInteraction postId={mumbleData.id} />
         </div>
       </div>
 

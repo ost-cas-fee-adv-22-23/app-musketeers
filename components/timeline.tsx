@@ -24,8 +24,8 @@ function Timeline(props: TimeLineProps) {
                 mumbleData={mumble}
                 avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
                 onClickTimestamp={onClickTimestampHandler}
-                onClickUserName={(e) => {
-                  e.preventDefault();
+                onClickUserName={(event) => {
+                  event.preventDefault();
                   router.push(`/profile/${mumble.creator}`);
                 }}
               ></Mumble>
