@@ -2,6 +2,8 @@ import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
+import { ToastContainer } from 'react-toastify';
+
 import '../styles/globals.css';
 
 import Layout from '../components/layout';
@@ -17,5 +19,10 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
 
-  return <SessionProvider session={session}>{getLayout(<Component {...pageProps} />)}</SessionProvider>;
+  return (
+    <SessionProvider session={session}>
+      <ToastContainer position={'top-center'} theme="colored" />
+      {getLayout(<Component {...pageProps} />)}
+    </SessionProvider>
+  );
 }
