@@ -27,9 +27,18 @@ type MumbleProps = {
   onClickTimestamp: (e: MouseEvent<Element>) => void;
   children?: JSX.Element;
   isInline?: boolean;
+  onDeleteCallback?: () => void;
 };
 
-function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isInline, children }: MumbleProps) {
+function Mumble({
+  mumbleData,
+  avatarUrl,
+  onClickUserName,
+  onClickTimestamp,
+  isInline,
+  children,
+  onDeleteCallback,
+}: MumbleProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const userId = getUserId(session);
@@ -141,7 +150,7 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
           />
           <LikeInteraction initialCount={mumbleData.likeCount} likedByUser={mumbleData.likedByUser} postId={mumbleData.id} />
           <CopyInteraction postId={mumbleData.id} />
-          {userId === mumbleData.creator && <DeleteInteraction postId={mumbleData.id} />}
+          {userId === mumbleData.creator && <DeleteInteraction postId={mumbleData.id} onDeleteCallback={onDeleteCallback} />}
         </div>
       </div>
 

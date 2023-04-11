@@ -10,9 +10,10 @@ import { getClientToken } from '../helpers/session.helpers';
 
 type DeleteInteractionProps = {
   postId: string;
+  onDeleteCallback?: () => void;
 };
 
-function DeleteInteraction({ postId }: DeleteInteractionProps) {
+function DeleteInteraction({ postId, onDeleteCallback }: DeleteInteractionProps) {
   const { data: session } = useSession();
   const token = getClientToken(session);
 
@@ -22,6 +23,7 @@ function DeleteInteraction({ postId }: DeleteInteractionProps) {
         token,
         id: postId,
       });
+      onDeleteCallback && onDeleteCallback();
     } catch (error) {
       console.log(error);
     }
