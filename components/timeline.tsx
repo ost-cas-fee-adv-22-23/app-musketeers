@@ -9,6 +9,7 @@ const onClickTimestampHandler = () => {
 
 type TimeLineProps = {
   posts: QwackModelDecorated[];
+  onDeleteCallback?: () => void;
 };
 
 function Timeline(props: TimeLineProps) {
@@ -28,6 +29,7 @@ function Timeline(props: TimeLineProps) {
                   event.preventDefault();
                   router.push(`/profile/${mumble.creator}`);
                 }}
+                onDeleteCallback={props.onDeleteCallback}
               ></Mumble>
             </Card>
           </div>

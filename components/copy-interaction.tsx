@@ -10,6 +10,7 @@ function CopyInteraction({ postId }: CopyInteractionProps) {
 
   const handleCopy = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
+    event.stopPropagation();
     navigator.clipboard.writeText(`${location.protocol}//${location.host}/mumble/${postId}`);
     setIsCopied(true);
     setTimeout(() => {

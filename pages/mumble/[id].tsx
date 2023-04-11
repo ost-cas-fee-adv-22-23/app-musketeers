@@ -30,6 +30,16 @@ export default function MumblePage({
   const token = getClientToken(session);
   const [repliesState, setRepliesState] = useState<QwackModelDecorated[]>(replies || []);
 
+  const refetchAndSetReplies = async ({ successMessage }: { successMessage: string }) => {
+    const repliesPromise = fetchRepliesWithUser({ token, id: mumble.id });
+    const replies = await toast.promise(repliesPromise, {
+      error: 'Etwas ist schief gelaufen, versuch es nochmals!',
+      success: successMessage,
+    });
+
+    setRepliesState(replies);
+  };
+
   return (
     <>
       <Head>
@@ -56,13 +66,7 @@ export default function MumblePage({
                 onSend={async (text) => {
                   toast('Dein Reply wird gesendet...');
                   await createReply(token, mumble.id, { text: text });
-                  const repliesPromise = fetchRepliesWithUser({ token, id: mumble.id });
-                  const replies = await toast.promise(repliesPromise, {
-                    error: 'Etwas ist schief gelaufen, versuch es nochmals!',
-                    success: 'Dein Replyy wurde erfolgreich versendet',
-                  });
-
-                  setRepliesState(replies);
+                  refetchAndSetReplies({ successMessage: 'Dein Reply wurde gesendet!' });
                 }}
               />
 
@@ -77,6 +81,9 @@ export default function MumblePage({
                       onClickUserName={(e) => {
                         e.preventDefault();
                         router.push(`/profile/${mumble.creator}`);
+                      }}
+                      onDeleteCallback={() => {
+                        refetchAndSetReplies({ successMessage: 'Reply wurde gelöscht!' });
                       }}
                     ></Mumble>
                   </div>
