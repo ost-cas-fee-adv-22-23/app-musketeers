@@ -8,9 +8,11 @@ import { Card, CardSize, Container } from '@smartive-education/design-system-com
 import Mumble from '../../components/mumble';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 import MumbleAdd from '../../components/mumble-add';
 import { ProfileQuery, UserModel } from '../../models/user.model';
 import { getClientToken } from '../../helpers/session.helpers';
+import { toast } from 'react-toastify';
 
 type Props = {
   mumble: QwackModelDecorated;
@@ -26,6 +28,7 @@ export default function MumblePage({
   const router = useRouter();
   const { data: session } = useSession();
   const token = getClientToken(session);
+  const [repliesState, setRepliesState] = useState<QwackModelDecorated[]>(replies || []);
 
   return (
     <>
@@ -51,11 +54,19 @@ export default function MumblePage({
                 title={'Hey, was gibt’s neues?'}
                 onImageUpload={() => undefined}
                 onSend={async (text) => {
+                  toast('Dein Reply wird gesendet...');
                   await createReply(token, mumble.id, { text: text });
+                  const repliesPromise = fetchRepliesWithUser({ token, id: mumble.id });
+                  const replies = await toast.promise(repliesPromise, {
+                    error: 'Etwas ist schief gelaufen, versuch es nochmals!',
+                    success: 'Dein Replyy wurde erfolgreich versendet',
+                  });
+
+                  setRepliesState(replies);
                 }}
               />
 
-              {replies.map((mumble, index) => {
+              {repliesState.map((mumble, index) => {
                 return (
                   <div key={index} className={'pb-l mt-l border-b-2 last:border-b-0 border-slate-100'}>
                     <Mumble
