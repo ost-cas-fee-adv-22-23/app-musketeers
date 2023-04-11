@@ -44,7 +44,13 @@ function Mumble({
   const userId = getUserId(session);
 
   return (
-    <div className="relative">
+    <div
+      className="relative cursor-pointer"
+      onClick={(event) => {
+        event.preventDefault();
+        router.push(`/mumble/${mumbleData.id}`);
+      }}
+    >
       {isInline ? (
         <div className={'flex items-center mb-s'}>
           <div>
@@ -95,11 +101,9 @@ function Mumble({
               src={avatarUrl}
             />
           </div>
-
           <div className="label-l text-slate-900 mb-xxs">
             {mumbleData.creatorData.firstName} {mumbleData.creatorData.lastName}
           </div>
-
           <div className="flex gap-s">
             <IconLink
               type={IconLinkType.VIOLET}
@@ -122,7 +126,6 @@ function Mumble({
           </div>
         </>
       )}
-
       <div className="paragraph-s text-slate-900 grid gap-m">
         <div className={'pt-m'}>
           <div>{mumbleData.text}</div>
@@ -138,13 +141,13 @@ function Mumble({
           )}
         </div>
       </div>
-
       <div className="pt-s flex gap-s">
         <div className="block md:flex gap-xs">
           <CommentInteraction
             onClick={(event) => {
               event.preventDefault();
-              router.push('/mumble/' + mumbleData.id);
+              event.stopPropagation();
+              router.push(`/mumble/${mumbleData.id}`);
             }}
             initialCount={mumbleData.replyCount}
           />
@@ -153,7 +156,6 @@ function Mumble({
           {userId === mumbleData.creator && <DeleteInteraction postId={mumbleData.id} onDeleteCallback={onDeleteCallback} />}
         </div>
       </div>
-
       {children}
     </div>
   );

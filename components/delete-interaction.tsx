@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
+import { toast } from 'react-toastify';
 import {
   Interaction,
   InteractionType,
@@ -17,7 +18,10 @@ function DeleteInteraction({ postId, onDeleteCallback }: DeleteInteractionProps)
   const { data: session } = useSession();
   const token = getClientToken(session);
 
-  const handleDelete = async () => {
+  const handleDelete = async (event: MouseEvent<Element>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    toast('Wird gelöscht...');
     try {
       await destroyPost({
         token,

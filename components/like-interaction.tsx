@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, MouseEvent } from 'react';
 import {
   Interaction,
   InteractionType,
@@ -71,7 +71,9 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
     }
   };
 
-  const likeHandler = async () => {
+  const likeHandler = async (event: MouseEvent<Element>) => {
+    event.preventDefault();
+    event.stopPropagation();
     if (state.liked) {
       handleRemoveLike();
     } else {

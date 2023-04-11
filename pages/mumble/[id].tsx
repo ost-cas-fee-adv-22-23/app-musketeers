@@ -83,7 +83,6 @@ export default function MumblePage({
                         router.push(`/profile/${mumble.creator}`);
                       }}
                       onDeleteCallback={() => {
-                        toast('Reply wird gelöscht...');
                         refetchAndSetReplies({ successMessage: 'Reply wurde gelöscht!' });
                       }}
                     ></Mumble>
