@@ -67,10 +67,11 @@ export default function MumblePage({
                 avatarUrl={'https://picsum.photos/160/160?random=' + personalData.id}
                 title={'Hey, was gibt’s neues?'}
                 onImageUpload={() => undefined}
-                onSend={async (text) => {
+                onSend={async (text, setText) => {
                   toast('Dein Kommentar wird gesendet...');
                   await createReply(token, mumble.id, { text: text });
-                  refetchAndSetReplies({ successMessage: 'Dein Kommentar wurde gesendet!' });
+                  await refetchAndSetReplies({ successMessage: 'Dein Kommentar wurde gesendet!' });
+                  setText('');
                 }}
               />
 
