@@ -125,7 +125,16 @@ function Mumble({
           <div>{mumbleData.text}</div>
           <div className="flex gap-xs">
             {parseHashtags(mumbleData.text).map((hashtag: string) => (
-              <Hashtag key={hashtag} size={HashtagSize.M} label={hashtag} onClick={(event) => event} />
+              <Hashtag
+                key={hashtag}
+                size={HashtagSize.M}
+                label={hashtag}
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  router.push(`/results/${hashtag}`);
+                }}
+              />
             ))}
           </div>
           {mumbleData.mediaUrl && (
