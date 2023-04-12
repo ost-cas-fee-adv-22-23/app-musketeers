@@ -147,7 +147,13 @@ function Mumble({
           />
           <LikeInteraction initialCount={mumbleData.likeCount} likedByUser={mumbleData.likedByUser} postId={mumbleData.id} />
           <CopyInteraction postId={mumbleData.id} />
-          {userId === mumbleData.creator && <DeleteInteraction postId={mumbleData.id} onDeleteCallback={onDeleteCallback} />}
+          {userId === mumbleData.creator && (
+            <DeleteInteraction
+              postId={mumbleData.id}
+              label={mumbleData.type === 'reply' ? 'Delete Comment' : 'Delete Mumble'}
+              onDeleteCallback={onDeleteCallback}
+            />
+          )}
         </div>
       </div>
       {children}
