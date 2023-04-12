@@ -21,7 +21,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
 
   return (
     <SessionProvider session={session}>
-      <ToastContainer position={'top-center'} theme="colored" />
+      <ToastContainer position={'top-center'} theme="light" autoClose={2000} closeOnClick />
       {getLayout(<Component {...pageProps} />)}
     </SessionProvider>
   );

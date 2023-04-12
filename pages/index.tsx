@@ -112,7 +112,8 @@ export default function PageHome(props: PageHomeProps) {
           posts={posts}
           onDeleteCallback={async () => {
             await refetchAndSetPosts();
-            toast('Mumble wurde gelöscht...');
+            toast.dismiss();
+            toast.success('Mumble wurde gelöscht...');
           }}
         />
         <div id="page-bottom-boundary" ref={bottomBoundaryRef}></div>
