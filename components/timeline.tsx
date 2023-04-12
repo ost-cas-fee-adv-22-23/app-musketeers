@@ -19,7 +19,14 @@ function Timeline(props: TimeLineProps) {
     <>
       {props.posts &&
         props.posts.map((mumble) => (
-          <div key={mumble.id} className="mb-s">
+          <div
+            key={mumble.id}
+            className="mb-s cursor-pointer"
+            onClick={(event) => {
+              event.preventDefault();
+              router.push(`/mumble/${mumble.id}`);
+            }}
+          >
             <Card size={CardSize.XL} hasRoundBorders={true}>
               <Mumble
                 mumbleData={mumble}

@@ -44,13 +44,7 @@ function Mumble({
   const userId = getUserId(session);
 
   return (
-    <div
-      className="relative cursor-pointer"
-      onClick={(event) => {
-        event.preventDefault();
-        router.push(`/mumble/${mumbleData.id}`);
-      }}
-    >
+    <div className="relative">
       {isInline ? (
         <div className={'flex items-center mb-s'}>
           <div>
