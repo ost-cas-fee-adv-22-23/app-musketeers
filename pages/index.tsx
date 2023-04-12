@@ -96,14 +96,15 @@ export default function PageHome(props: PageHomeProps) {
               title={'Hey, was gibt’s neues?'}
               avatarUrl={'https://picsum.photos/160/160?random=' + session?.token.sub}
               onImageUpload={() => console.log('onImageUpload')}
-              onSend={async (text) => {
+              onSend={async (text, setText) => {
                 const createPostPromise = createPost(token, { text });
                 await toast.promise(createPostPromise, {
                   pending: 'Mumble wird gesendet...',
                   error: 'Etwas ist schief gelaufen, versuch es nochmals!',
                   success: 'Dein Mumble wurde erfolgreich versendet',
                 });
-                refetchAndSetPosts();
+                await refetchAndSetPosts();
+                setText('');
               }}
             />
           </Card>

@@ -11,7 +11,7 @@ import {
   Avatar,
   AvatarSize,
 } from '@smartive-education/design-system-component-library-musketeers';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { UserModel } from '../models/user.model';
 import Image from 'next/image';
 
@@ -20,7 +20,7 @@ type MumbleAddProps = {
   title: string;
   avatarUrl: string;
   onImageUpload: () => void;
-  onSend: (text: string) => void;
+  onSend: (text: string, setText: Dispatch<SetStateAction<string>>) => void;
   isInline?: boolean;
 };
 
@@ -105,7 +105,7 @@ function MumbleAdd(props: MumbleAddProps) {
             if (text.trim().length === 0) {
               return setHasError(true);
             }
-            props.onSend(text);
+            props.onSend(text, setText);
           }}
           type={ButtonType.VIOLET}
           size={ButtonSize.M}
