@@ -56,6 +56,9 @@ export default function MumblePage({
               event.stopPropagation();
               router.push(`/profile/${mumble.creator}`);
             }}
+            onDeleteCallback={() => {
+              router.push(`/`);
+            }}
           >
             <div className={'mt-l'}>
               <MumbleAdd
@@ -65,9 +68,9 @@ export default function MumblePage({
                 title={'Hey, was gibt’s neues?'}
                 onImageUpload={() => undefined}
                 onSend={async (text) => {
-                  toast('Dein Reply wird gesendet...');
+                  toast('Dein Kommentar wird gesendet...');
                   await createReply(token, mumble.id, { text: text });
-                  refetchAndSetReplies({ successMessage: 'Dein Reply wurde gesendet!' });
+                  refetchAndSetReplies({ successMessage: 'Dein Kommentar wurde gesendet!' });
                 }}
               />
 
