@@ -22,7 +22,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
 
   return (
     <>
-      <NextNProgress color="#C4B5FD" />
+      <NextNProgress color="#C4B5FD" options={{ showSpinner: false }} />
       <SessionProvider session={session}>
         <ToastContainer position={'top-center'} theme="light" autoClose={2000} closeOnClick />
         {getLayout(<Component {...pageProps} />)}
