@@ -123,7 +123,7 @@ function Mumble({
       <div className="paragraph-s text-slate-900 grid gap-m">
         <div className={'pt-m'}>
           <div>{mumbleData.text}</div>
-          <div className="flex gap-xs">
+          <div className="block md:flex md:gap-xs">
             {parseHashtags(mumbleData.text).map((hashtag: string) => (
               <Hashtag
                 key={hashtag}
