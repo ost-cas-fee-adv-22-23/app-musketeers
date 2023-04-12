@@ -4,6 +4,7 @@ import {
   QwackerSearchParamsModel,
   QwackerTokenParamsModel,
   QwackModel,
+  QwackModelDecorated,
 } from '../models/qwacker.model';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -54,7 +55,7 @@ export async function fetchLikedPostsWithUsers({ token, id }: QwackerTokenParams
   return await fetchPopulatedPosts(data, token);
 }
 
-export async function fetchRepliesWithUser({ token, id }: QwackerTokenParamsModel) {
+export async function fetchRepliesWithUser({ token, id }: QwackerTokenParamsModel): Promise<QwackModelDecorated[]> {
   const replies = await fetchReplies({ token, id });
   return await fetchPopulatedPosts(replies, token);
 }

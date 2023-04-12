@@ -5,7 +5,7 @@ const ENCODING_LEN = ENCODING.length;
 const TIME_LEN = 10;
 
 export const parseHashtags = (text: string) => {
-  const matches = text.match(/#(\w+)/g);
+  const matches = text?.match(/#(\w+)/g);
   if (matches) {
     return matches.map((match) => match.replace('#', ''));
   }

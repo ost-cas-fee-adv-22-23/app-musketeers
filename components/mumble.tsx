@@ -27,15 +27,30 @@ type MumbleProps = {
   onClickTimestamp: (e: MouseEvent<Element>) => void;
   children?: JSX.Element;
   isInline?: boolean;
+  onDeleteCallback?: () => void;
 };
 
-function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isInline, children }: MumbleProps) {
+function Mumble({
+  mumbleData,
+  avatarUrl,
+  onClickUserName,
+  onClickTimestamp,
+  isInline,
+  children,
+  onDeleteCallback,
+}: MumbleProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const userId = getUserId(session);
 
   return (
-    <div className="relative">
+    <div
+      className="relative cursor-pointer"
+      onClick={(event) => {
+        event.preventDefault();
+        router.push(`/mumble/${mumbleData.id}`);
+      }}
+    >
       {isInline ? (
         <div className={'flex items-center mb-s'}>
           <div>
@@ -86,11 +101,9 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
               src={avatarUrl}
             />
           </div>
-
           <div className="label-l text-slate-900 mb-xxs">
             {mumbleData.creatorData.firstName} {mumbleData.creatorData.lastName}
           </div>
-
           <div className="flex gap-s">
             <IconLink
               type={IconLinkType.VIOLET}
@@ -113,7 +126,6 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
           </div>
         </>
       )}
-
       <div className="paragraph-s text-slate-900 grid gap-m">
         <div className={'pt-m'}>
           <div>{mumbleData.text}</div>
@@ -129,22 +141,21 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, onClickTimestamp, isIn
           )}
         </div>
       </div>
-
       <div className="pt-s flex gap-s">
         <div className="block md:flex gap-xs">
           <CommentInteraction
             onClick={(event) => {
               event.preventDefault();
-              router.push('/mumble/' + mumbleData.id);
+              event.stopPropagation();
+              router.push(`/mumble/${mumbleData.id}`);
             }}
             initialCount={mumbleData.replyCount}
           />
           <LikeInteraction initialCount={mumbleData.likeCount} likedByUser={mumbleData.likedByUser} postId={mumbleData.id} />
           <CopyInteraction postId={mumbleData.id} />
-          {userId === mumbleData.creator && <DeleteInteraction postId={mumbleData.id} />}
+          {userId === mumbleData.creator && <DeleteInteraction postId={mumbleData.id} onDeleteCallback={onDeleteCallback} />}
         </div>
       </div>
-
       {children}
     </div>
   );

@@ -68,6 +68,17 @@ export default function PageHome(props: PageHomeProps) {
     setIsLoadingPosts(false);
   };
 
+  const refetchAndSetPosts = async () => {
+    if (token) {
+      const posts = await fetchPostsWithUsers({
+        token,
+        limit: POSTS_LIMIT,
+        offset: 0,
+      });
+      setPosts(posts);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -87,17 +98,24 @@ export default function PageHome(props: PageHomeProps) {
               onImageUpload={() => console.log('onImageUpload')}
               onSend={async (text) => {
                 const createPostPromise = createPost(token, { text });
-
                 await toast.promise(createPostPromise, {
-                  pending: 'Qwack wird versendet...',
+                  pending: 'Mumble wird gesendet...',
                   error: 'Etwas ist schief gelaufen, versuch es nochmals!',
-                  success: 'Dein Qwack wurde erfolgreich versendet',
+                  success: 'Dein Mumble wurde erfolgreich versendet',
                 });
+                refetchAndSetPosts();
               }}
             />
           </Card>
         </div>
-        <Timeline posts={posts} />
+        <Timeline
+          posts={posts}
+          onDeleteCallback={async () => {
+            await refetchAndSetPosts();
+            toast.dismiss();
+            toast.success('Mumble wurde gelöscht...');
+          }}
+        />
         <div id="page-bottom-boundary" ref={bottomBoundaryRef}></div>
         <LoadingIndicator isLoading={isLoadingPosts} />
       </Container>
