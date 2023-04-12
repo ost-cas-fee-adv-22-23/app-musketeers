@@ -136,15 +136,17 @@ function Mumble({
         </div>
       </div>
       <div className="pt-s flex gap-s">
-        <div className="block md:flex gap-xs">
-          <CommentInteraction
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              router.push(`/mumble/${mumbleData.id}`);
-            }}
-            initialCount={mumbleData.replyCount}
-          />
+        <div className="block md:flex">
+          {mumbleData.type !== 'reply' && (
+            <CommentInteraction
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                router.push(`/mumble/${mumbleData.id}`);
+              }}
+              initialCount={mumbleData.replyCount}
+            />
+          )}
           <LikeInteraction initialCount={mumbleData.likeCount} likedByUser={mumbleData.likedByUser} postId={mumbleData.id} />
           <CopyInteraction postId={mumbleData.id} />
           {userId === mumbleData.creator && (
