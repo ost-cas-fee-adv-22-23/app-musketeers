@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import { ToastContainer } from 'react-toastify';
+import NextNProgress from 'nextjs-progressbar';
 
 import '../styles/globals.css';
 
@@ -20,9 +21,12 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
 
   return (
-    <SessionProvider session={session}>
-      <ToastContainer position={'top-center'} theme="light" autoClose={2000} closeOnClick />
-      {getLayout(<Component {...pageProps} />)}
-    </SessionProvider>
+    <>
+      <NextNProgress color="#C4B5FD" />
+      <SessionProvider session={session}>
+        <ToastContainer position={'top-center'} theme="light" autoClose={2000} closeOnClick />
+        {getLayout(<Component {...pageProps} />)}
+      </SessionProvider>
+    </>
   );
 }
