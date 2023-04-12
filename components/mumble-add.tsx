@@ -11,7 +11,7 @@ import {
   Avatar,
   AvatarSize,
 } from '@smartive-education/design-system-component-library-musketeers';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { UserModel } from '../models/user.model';
 import Image from 'next/image';
 
@@ -20,7 +20,7 @@ type MumbleAddProps = {
   title: string;
   avatarUrl: string;
   onImageUpload: () => void;
-  onSend: (text: string) => void;
+  onSend: (text: string, setText: Dispatch<SetStateAction<string>>) => void;
   isInline?: boolean;
 };
 
@@ -28,6 +28,8 @@ const CHAR_COUNT = 280;
 
 function MumbleAdd(props: MumbleAddProps) {
   const [text, setText] = useState('');
+  const [hasError, setHasError] = useState(false);
+
   return (
     <div className="relative">
       {props.isInline ? (
@@ -69,6 +71,7 @@ function MumbleAdd(props: MumbleAddProps) {
 
       <Textarea
         onChange={(event) => {
+          setHasError(false);
           const inputEvent = event.nativeEvent as InputEvent;
           if (text.length < CHAR_COUNT || inputEvent.inputType === 'deleteContentBackward') {
             setText(event.target.value);
@@ -77,6 +80,8 @@ function MumbleAdd(props: MumbleAddProps) {
         placeholder="Deine Meinung zählt!"
         rows={5}
         value={text}
+        hasError={hasError}
+        errorMessage={hasError ? 'Bitte gib einen Text ein!' : ''}
       />
 
       <span className={'text-right w-full block'}>
@@ -96,7 +101,12 @@ function MumbleAdd(props: MumbleAddProps) {
         </Button>
         <Button
           label="Absenden"
-          onClick={() => props.onSend(text)}
+          onClick={() => {
+            if (text.trim().length === 0) {
+              return setHasError(true);
+            }
+            props.onSend(text, setText);
+          }}
           type={ButtonType.VIOLET}
           size={ButtonSize.M}
           isFullWidth={true}

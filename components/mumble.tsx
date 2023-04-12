@@ -125,7 +125,16 @@ function Mumble({
           <div>{mumbleData.text}</div>
           <div className="flex gap-xs">
             {parseHashtags(mumbleData.text).map((hashtag: string) => (
-              <Hashtag key={hashtag} size={HashtagSize.M} label={hashtag} onClick={(event) => event} />
+              <Hashtag
+                key={hashtag}
+                size={HashtagSize.M}
+                label={hashtag}
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  router.push(`/results/${hashtag}`);
+                }}
+              />
             ))}
           </div>
           {mumbleData.mediaUrl && (
@@ -136,18 +145,26 @@ function Mumble({
         </div>
       </div>
       <div className="pt-s flex gap-s">
-        <div className="block md:flex gap-xs">
-          <CommentInteraction
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              router.push(`/mumble/${mumbleData.id}`);
-            }}
-            initialCount={mumbleData.replyCount}
-          />
+        <div className="block md:flex">
+          {mumbleData.type !== 'reply' && (
+            <CommentInteraction
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                router.push(`/mumble/${mumbleData.id}`);
+              }}
+              initialCount={mumbleData.replyCount}
+            />
+          )}
           <LikeInteraction initialCount={mumbleData.likeCount} likedByUser={mumbleData.likedByUser} postId={mumbleData.id} />
           <CopyInteraction postId={mumbleData.id} />
-          {userId === mumbleData.creator && <DeleteInteraction postId={mumbleData.id} onDeleteCallback={onDeleteCallback} />}
+          {userId === mumbleData.creator && (
+            <DeleteInteraction
+              postId={mumbleData.id}
+              label={mumbleData.type === 'reply' ? 'Delete Comment' : 'Delete Mumble'}
+              onDeleteCallback={onDeleteCallback}
+            />
+          )}
         </div>
       </div>
       {children}
