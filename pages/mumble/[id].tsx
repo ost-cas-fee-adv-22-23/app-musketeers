@@ -51,8 +51,9 @@ export default function MumblePage({
             mumbleData={mumble}
             avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
             onClickTimestamp={() => undefined}
-            onClickUserName={(e) => {
-              e.preventDefault();
+            onClickUserName={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
               router.push(`/profile/${mumble.creator}`);
             }}
           >
@@ -78,8 +79,9 @@ export default function MumblePage({
                       mumbleData={mumble}
                       avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
                       onClickTimestamp={() => undefined}
-                      onClickUserName={(e) => {
-                        e.preventDefault();
+                      onClickUserName={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
                         router.push(`/profile/${mumble.creator}`);
                       }}
                       onDeleteCallback={() => {
