@@ -35,6 +35,11 @@ export type QwackerSearchParamsModel = {
   limit?: number;
 };
 
+export type QwackerByHashtagParamModel = {
+  token: string;
+  tags?: string[];
+};
+
 export type QwackerCreateParamsModel = {
   text?: string;
   image?: string;
