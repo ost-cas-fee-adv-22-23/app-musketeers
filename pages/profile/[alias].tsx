@@ -21,6 +21,9 @@ import { useEffect, useState } from 'react';
 import Timeline from '../../components/timeline';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
+import { useSession } from 'next-auth/react';
+import { getClientToken } from '../../helpers/session.helpers';
 
 type Props = {
   user: UserModel;
@@ -35,12 +38,26 @@ export default function ProfilePage({
   postsLiked,
   isPersonal,
 }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
+  const { data: session } = useSession();
+  const token = getClientToken(session);
   const [activeTab, setActiveTab] = useState('mumbles');
   const [activePosts, setActivePosts] = useState(posts);
 
   useEffect(() => {
     setActivePosts(posts);
   }, [posts]);
+
+  const reFetchAndSetPosts = async () => {
+    if (token) {
+      if (activeTab === 'mumbles') {
+        const postsDecorated = await fetchPostsWithUsers({ token: token, creator: user.id });
+        setActivePosts(postsDecorated);
+      } else {
+        const postsLikedDecorated = await fetchLikedPostsWithUsers({ token: token, id: user.id });
+        setActivePosts(postsLikedDecorated);
+      }
+    }
+  };
 
   return (
     <>
@@ -114,7 +131,14 @@ export default function ProfilePage({
               </Tabs>
             </div>
           ) : null}
-          {activePosts.length > 0 ? <Timeline posts={activePosts} /> : <div>There are no mumbles yet</div>}
+          <Timeline
+            posts={activePosts}
+            onDeleteCallback={async () => {
+              await reFetchAndSetPosts();
+              toast.dismiss();
+              toast.success('Mumble wurde gelöscht...');
+            }}
+          />
         </div>
       </Container>
     </>

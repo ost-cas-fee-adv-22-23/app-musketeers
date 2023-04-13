@@ -17,7 +17,7 @@ function Timeline(props: TimeLineProps) {
 
   return (
     <>
-      {props.posts &&
+      {props.posts && props.posts.length > 0 ? (
         props.posts.map((mumble) => (
           <div
             key={mumble.id}
@@ -42,7 +42,10 @@ function Timeline(props: TimeLineProps) {
               ></Mumble>
             </Card>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className={'text-center text-violet-400'}>Currently there are no posts available</div>
+      )}
     </>
   );
 }

@@ -108,6 +108,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const token = (await getToken(ctx)) as QJWT;
 
   const mumble = await fetchSinglePost({ token: token.accessToken, id: mumbleId });
+
+  if (!mumble) {
+    return {
+      notFound: true,
+    };
+  }
+
   const userData = await fetchUser({ token: token.accessToken, id: mumble.creator });
   const personalData = await fetchUser({ token: token.accessToken, id: ProfileQuery.me });
   const replies = await fetchRepliesWithUser({ token: token.accessToken, id: mumbleId });
