@@ -7,7 +7,6 @@ import {
   QwackModelDecorated,
   QwackerByHashtagParamModel,
 } from '../models/qwacker.model';
-
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 async function qwackerRequest(endpoint: string, jwtToken: string, options: { [key: string]: string }) {
@@ -20,8 +19,12 @@ async function qwackerRequest(endpoint: string, jwtToken: string, options: { [ke
     ...options,
   });
 
+  if (!res.ok) {
+    const message = 'Something went wrong. Please try later again..';
+    console.error(message);
+  }
+
   if (res.status !== 200) {
-    //TODO DO ERROR HANDLING
     return;
   }
 
