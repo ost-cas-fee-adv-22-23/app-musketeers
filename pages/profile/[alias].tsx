@@ -1,29 +1,30 @@
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 import {
-  ProfileImage,
+  Avatar,
+  AvatarSize,
   Calendar,
   Container,
   IconLink,
   IconLinkType,
   Location,
   Profile,
+  ProfileImage,
   Tabs,
   TabsItem,
-  Avatar,
-  AvatarSize,
 } from '@smartive-education/design-system-component-library-musketeers';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
 import { fetchLikedPostsWithUsers, fetchPostsWithUsers, fetchUser } from '../../services/qwacker.service';
 import { ProfileQuery, UserModel } from '../../models/user.model';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Timeline from '../../components/timeline';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 import { getClientToken } from '../../helpers/session.helpers';
+import { useContainerDimensions } from '../../helpers/common.helpers';
 
 type Props = {
   user: UserModel;
@@ -38,10 +39,13 @@ export default function ProfilePage({
   postsLiked,
   isPersonal,
 }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
+  const avatarClasses = ['absolute right-[32px]'];
   const { data: session } = useSession();
   const token = getClientToken(session);
   const [activeTab, setActiveTab] = useState('mumbles');
   const [activePosts, setActivePosts] = useState(posts);
+  const cmpRef = useRef<HTMLDivElement>(null);
+  const { width } = useContainerDimensions(cmpRef);
 
   useEffect(() => {
     setActivePosts(posts);
@@ -59,8 +63,14 @@ export default function ProfilePage({
     }
   };
 
+  if (width < 768) {
+    avatarClasses.push('bottom-[-45px]');
+  } else {
+    avatarClasses.push('bottom-[-80px]');
+  }
+
   return (
-    <>
+    <div ref={cmpRef}>
       <Head>
         <title>{'Profile'}</title>
       </Head>
@@ -68,9 +78,10 @@ export default function ProfilePage({
       <Container>
         <div className={'relative mb-l'}>
           <Image className={'rounded-16'} src={'https://picsum.photos/680/320'} width={680} height={320} alt={''}></Image>
-          <div className={'absolute bottom-[-80px] right-[32px]'}>
+          <div className={avatarClasses.join(' ')}>
             {isPersonal ? (
               <ProfileImage
+                size={width < 768 ? AvatarSize.L : AvatarSize.XL}
                 alt="Profile Image alt attribute text"
                 onClick={() => undefined}
                 src={'https://picsum.photos/160/160?random=' + user.id}
@@ -79,7 +90,7 @@ export default function ProfilePage({
               <Avatar
                 showBorder={true}
                 alt="Avatar"
-                size={AvatarSize.XL}
+                size={width < 768 ? AvatarSize.L : AvatarSize.XL}
                 src={'https://picsum.photos/160/160?random=' + user.id}
               />
             )}
@@ -141,7 +152,7 @@ export default function ProfilePage({
           />
         </div>
       </Container>
-    </>
+    </div>
   );
 }
 
