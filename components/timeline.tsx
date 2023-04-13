@@ -21,10 +21,12 @@ function Timeline(props: TimeLineProps) {
         props.posts.map((mumble) => (
           <div
             key={mumble.id}
-            className="mb-s cursor-pointer"
+            className="mb-s"
             onClick={(event) => {
               event.preventDefault();
-              router.push(`/mumble/${mumble.id}`);
+              event.stopPropagation();
+              //TODO CHECK HOW SOLVE THIS CLICK MISSMATCH SINCE THIS IS THE PARENT
+              //router.push(`/mumble/${mumble.id}`);
             }}
           >
             <Card size={CardSize.XL} hasRoundBorders={true}>
