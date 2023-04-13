@@ -3,10 +3,6 @@ import Mumble from './mumble';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { useRouter } from 'next/router';
 
-const onClickTimestampHandler = () => {
-  console.log('onClickTimestampHandler');
-};
-
 type TimeLineProps = {
   posts: QwackModelDecorated[];
   onDeleteCallback?: () => void;
@@ -33,7 +29,6 @@ function Timeline(props: TimeLineProps) {
               <Mumble
                 mumbleData={mumble}
                 avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
-                onClickTimestamp={onClickTimestampHandler}
                 onClickUserName={(event) => {
                   event.preventDefault();
                   router.push(`/profile/${mumble.creator}`);

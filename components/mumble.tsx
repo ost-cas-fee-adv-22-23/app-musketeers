@@ -10,21 +10,12 @@ type MumbleProps = {
   mumbleData: QwackModelDecorated;
   avatarUrl: string;
   onClickUserName: (e: MouseEvent<Element>) => void;
-  onClickTimestamp: (e: MouseEvent<Element>) => void;
   children?: JSX.Element;
   isInline?: boolean;
   onDeleteCallback?: () => void;
 };
 
-function Mumble({
-  mumbleData,
-  avatarUrl,
-  onClickUserName,
-  onClickTimestamp,
-  isInline,
-  children,
-  onDeleteCallback,
-}: MumbleProps) {
+function Mumble({ mumbleData, avatarUrl, onClickUserName, isInline, children, onDeleteCallback }: MumbleProps) {
   return (
     <div className="relative">
       {isInline ? (
@@ -33,7 +24,6 @@ function Mumble({
           userName={mumbleData.creatorData.userName}
           avatarUrl={avatarUrl}
           timeStamp={getFormattedTimestamp(mumbleData.id)}
-          onClickTimestamp={onClickTimestamp}
           onClickUserName={onClickUserName}
         ></MumbleInlineHeader>
       ) : (
@@ -42,7 +32,6 @@ function Mumble({
           userName={mumbleData.creatorData.userName}
           avatarUrl={avatarUrl}
           timeStamp={getFormattedTimestamp(mumbleData.id)}
-          onClickTimestamp={onClickTimestamp}
           onClickUserName={onClickUserName}
         ></MumbleOutlineHeader>
       )}

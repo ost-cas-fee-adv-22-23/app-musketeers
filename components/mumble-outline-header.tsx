@@ -14,18 +14,10 @@ type MumbleOutlineHeaderProps = {
   userName: string;
   avatarUrl: string;
   timeStamp: string;
-  onClickTimestamp: (e: MouseEvent<Element>) => void;
   onClickUserName: (e: MouseEvent<Element>) => void;
 };
 
-function MumbleOutlineHeader({
-  displayName,
-  userName,
-  avatarUrl,
-  timeStamp,
-  onClickTimestamp,
-  onClickUserName,
-}: MumbleOutlineHeaderProps) {
+function MumbleOutlineHeader({ displayName, userName, avatarUrl, timeStamp, onClickUserName }: MumbleOutlineHeaderProps) {
   return (
     <>
       <div className="absolute -top-s -left-[80px] hidden sm:block">
@@ -43,7 +35,7 @@ function MumbleOutlineHeader({
         <IconLink type={IconLinkType.VIOLET} label={userName} href="" target="" onClick={onClickUserName}>
           <Profile />
         </IconLink>
-        <IconLink type={IconLinkType.DEFAULT} label={timeStamp} href="" target="" onClick={onClickTimestamp}>
+        <IconLink type={IconLinkType.DEFAULT} label={timeStamp} href="" target="" onClick={() => undefined}>
           <Time />
         </IconLink>
       </div>
