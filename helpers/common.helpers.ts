@@ -36,7 +36,6 @@ export const getFormattedTimestamp = (id: string): string => {
 };
 
 export const useContainerDimensions = (myRef: RefObject<HTMLDivElement>) => {
-  console.log(myRef);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {

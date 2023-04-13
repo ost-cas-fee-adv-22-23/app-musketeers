@@ -95,9 +95,8 @@ export default function PageHome(props: PageHomeProps) {
             <MumbleAdd
               title={'Hey, was gibt’s neues?'}
               avatarUrl={'https://picsum.photos/160/160?random=' + session?.token.sub}
-              onImageUpload={() => console.log('onImageUpload')}
-              onSend={async (text, setText) => {
-                const createPostPromise = createPost(token, { text });
+              onSend={async (text, file, setText, setFile) => {
+                const createPostPromise = createPost(token, { text, image: file });
                 await toast.promise(createPostPromise, {
                   pending: 'Mumble wird gesendet...',
                   error: 'Etwas ist schief gelaufen, versuch es nochmals!',
@@ -105,6 +104,7 @@ export default function PageHome(props: PageHomeProps) {
                 });
                 await refetchAndSetPosts();
                 setText('');
+                setFile(null);
               }}
             />
           </Card>

@@ -1,26 +1,31 @@
 import {
-  Textarea,
-  Button,
-  ButtonType,
-  ButtonSize,
-  Upload,
-  Send,
-  IconLinkType,
-  Profile,
-  IconLink,
   Avatar,
   AvatarSize,
+  Button,
+  ButtonSize,
+  ButtonType,
+  IconLink,
+  IconLinkType,
+  Profile,
+  Send,
+  Textarea,
+  Upload,
 } from '@smartive-education/design-system-component-library-musketeers';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react';
 import { UserModel } from '../models/user.model';
 import Image from 'next/image';
+import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 
 type MumbleAddProps = {
   user?: UserModel;
   title: string;
   avatarUrl: string;
-  onImageUpload: () => void;
-  onSend: (text: string, setText: Dispatch<SetStateAction<string>>) => void;
+  onSend: (
+    text: string,
+    file: File | null,
+    setText: Dispatch<SetStateAction<string>>,
+    setFile: Dispatch<SetStateAction<File | null>>
+  ) => void;
   isInline?: boolean;
 };
 
@@ -29,6 +34,27 @@ const CHAR_COUNT = 280;
 function MumbleAdd(props: MumbleAddProps) {
   const [text, setText] = useState('');
   const [hasError, setHasError] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const triggerUploadImage = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+    const fileObj = target.files && target.files[0];
+    if (!fileObj) {
+      return;
+    }
+
+    target.value = '';
+
+    setSelectedImage(fileObj);
+  };
 
   return (
     <div className="relative">
@@ -88,10 +114,33 @@ function MumbleAdd(props: MumbleAddProps) {
         {text.length} / {CHAR_COUNT}
       </span>
 
+      {selectedImage ? (
+        <div className={'my-s max-h-[375px] overflow-hidden'}>
+          <div className={'flex justify-between mb-s'}>
+            <div>
+              <p className={'text-18'}>Image-Preview</p>
+              <p className={'text-14 text-slate-400'}>This is only a preview, double check if its the right picture</p>
+            </div>
+
+            <IconLink type={IconLinkType.VIOLET} onClick={() => setSelectedImage(null)}>
+              <CloseIcon />
+            </IconLink>
+          </div>
+
+          <Image
+            src={selectedImage ? URL.createObjectURL(selectedImage) : ''}
+            width={375}
+            height={150}
+            alt={'Image Preview'}
+          ></Image>
+        </div>
+      ) : null}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-xs mt-xs">
+        <input className={'hidden'} ref={inputRef} type="file" onChange={(e) => handleFileChange(e)} />
         <Button
           label="Bild hochladen"
-          onClick={props.onImageUpload}
+          onClick={triggerUploadImage}
           type={ButtonType.DEFAULT}
           size={ButtonSize.M}
           isFullWidth={true}
@@ -105,7 +154,7 @@ function MumbleAdd(props: MumbleAddProps) {
             if (text.trim().length === 0) {
               return setHasError(true);
             }
-            props.onSend(text, setText);
+            props.onSend(text, selectedImage, setText, setSelectedImage);
           }}
           type={ButtonType.VIOLET}
           size={ButtonSize.M}

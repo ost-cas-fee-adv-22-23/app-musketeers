@@ -50,7 +50,6 @@ export default function MumblePage({
           <Mumble
             mumbleData={mumble}
             avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
-            onClickTimestamp={() => undefined}
             onClickUserName={(event) => {
               event.preventDefault();
               event.stopPropagation();
@@ -66,12 +65,12 @@ export default function MumblePage({
                 user={personalData}
                 avatarUrl={'https://picsum.photos/160/160?random=' + personalData.id}
                 title={'Hey, was gibt’s neues?'}
-                onImageUpload={() => undefined}
-                onSend={async (text, setText) => {
+                onSend={async (text, file, setText, setFile) => {
                   toast('Dein Kommentar wird gesendet...');
-                  await createReply(token, mumble.id, { text: text });
+                  await createReply(token, mumble.id, { text: text, image: file });
                   await refetchAndSetReplies({ successMessage: 'Dein Kommentar wurde gesendet!' });
                   setText('');
+                  setFile(null);
                 }}
               />
 
@@ -82,7 +81,6 @@ export default function MumblePage({
                       isInline={true}
                       mumbleData={mumble}
                       avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
-                      onClickTimestamp={() => undefined}
                       onClickUserName={(event) => {
                         event.preventDefault();
                         event.stopPropagation();
