@@ -34,11 +34,10 @@ const CHAR_COUNT = 280;
 function MumbleAdd(props: MumbleAddProps) {
   const [text, setText] = useState('');
   const [hasError, setHasError] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
+  const [file, setFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const triggerUploadImage = () => {
+  const triggerUploadFileDialog = () => {
     if (inputRef.current) {
       inputRef.current.click();
     }
@@ -53,7 +52,7 @@ function MumbleAdd(props: MumbleAddProps) {
 
     target.value = '';
 
-    setSelectedImage(fileObj);
+    setFile(fileObj);
   };
 
   return (
@@ -114,7 +113,7 @@ function MumbleAdd(props: MumbleAddProps) {
         {text.length} / {CHAR_COUNT}
       </span>
 
-      {selectedImage ? (
+      {file ? (
         <div className={'my-s max-h-[375px] overflow-hidden'}>
           <div className={'flex justify-between mb-s'}>
             <div>
@@ -122,17 +121,12 @@ function MumbleAdd(props: MumbleAddProps) {
               <p className={'text-14 text-slate-400'}>This is only a preview, double check if its the right picture</p>
             </div>
 
-            <IconLink type={IconLinkType.VIOLET} onClick={() => setSelectedImage(null)}>
+            <IconLink type={IconLinkType.VIOLET} onClick={() => setFile(null)}>
               <CloseIcon />
             </IconLink>
           </div>
 
-          <Image
-            src={selectedImage ? URL.createObjectURL(selectedImage) : ''}
-            width={375}
-            height={150}
-            alt={'Image Preview'}
-          ></Image>
+          <Image src={file ? URL.createObjectURL(file) : ''} width={375} height={150} alt={'Image Preview'}></Image>
         </div>
       ) : null}
 
@@ -140,7 +134,7 @@ function MumbleAdd(props: MumbleAddProps) {
         <input className={'hidden'} ref={inputRef} type="file" onChange={(e) => handleFileChange(e)} />
         <Button
           label="Bild hochladen"
-          onClick={triggerUploadImage}
+          onClick={triggerUploadFileDialog}
           type={ButtonType.DEFAULT}
           size={ButtonSize.M}
           isFullWidth={true}
@@ -154,7 +148,7 @@ function MumbleAdd(props: MumbleAddProps) {
             if (text.trim().length === 0) {
               return setHasError(true);
             }
-            props.onSend(text, selectedImage, setText, setSelectedImage);
+            props.onSend(text, file, setText, setFile);
           }}
           type={ButtonType.VIOLET}
           size={ButtonSize.M}
