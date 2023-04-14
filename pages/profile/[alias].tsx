@@ -44,8 +44,8 @@ export default function ProfilePage({
   const token = getClientToken(session);
   const [activeTab, setActiveTab] = useState('mumbles');
   const [activePosts, setActivePosts] = useState(posts);
-  const cmpRef = useRef<HTMLDivElement>(null);
-  const { width } = useContainerDimensions(cmpRef);
+  const containerReference = useRef<HTMLDivElement>(null);
+  const { width } = useContainerDimensions(containerReference);
 
   useEffect(() => {
     setActivePosts(posts);
@@ -70,7 +70,7 @@ export default function ProfilePage({
   }
 
   return (
-    <div ref={cmpRef}>
+    <div ref={containerReference}>
       <Head>
         <title>{'Profile'}</title>
       </Head>

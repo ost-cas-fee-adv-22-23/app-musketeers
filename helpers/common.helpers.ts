@@ -35,20 +35,20 @@ export const getFormattedTimestamp = (id: string): string => {
   return 'vor' + ' ' + dateAgeHumanized;
 };
 
-export const useContainerDimensions = (myRef: RefObject<HTMLDivElement>) => {
+export const useContainerDimensions = (containerElement: RefObject<HTMLDivElement>) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     const getDimensions = () => ({
-      width: myRef?.current?.offsetWidth ? myRef?.current?.offsetWidth : 0,
-      height: myRef?.current?.offsetHeight ? myRef?.current?.offsetHeight : 0,
+      width: containerElement?.current?.offsetWidth ? containerElement?.current?.offsetWidth : 0,
+      height: containerElement?.current?.offsetHeight ? containerElement?.current?.offsetHeight : 0,
     });
 
     const handleResize = () => {
       setDimensions(getDimensions());
     };
 
-    if (myRef.current) {
+    if (containerElement.current) {
       setDimensions(getDimensions());
     }
 
@@ -57,7 +57,7 @@ export const useContainerDimensions = (myRef: RefObject<HTMLDivElement>) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [myRef]);
+  }, [containerElement]);
 
   return dimensions;
 };
