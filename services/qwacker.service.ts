@@ -21,21 +21,21 @@ async function qwackerRequest(endpoint: string, jwtToken: string, options: { [ke
     delete headers['content-type'];
   }
 
-  const res = await fetch(url, {
+  const response = await fetch(url, {
     headers,
     ...options,
   });
 
-  if (!res.ok) {
+  if (!response.ok) {
     const message = 'Something went wrong. Please try later again..';
     console.error(message);
   }
 
-  if (res.status !== 200) {
+  if (response.status !== 200) {
     return;
   }
 
-  return res.json();
+  return response.json();
 }
 
 export function fetchPosts({
