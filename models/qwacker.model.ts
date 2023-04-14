@@ -41,8 +41,8 @@ export type QwackerByHashtagParamModel = {
 };
 
 export type QwackerCreateParamsModel = {
-  text?: string;
-  image?: string;
+  text: string;
+  image: File | null;
 };
 
 export type QwackerTokenParamsModel = { token: string; id: string };

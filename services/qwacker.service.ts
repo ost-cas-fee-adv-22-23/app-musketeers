@@ -10,22 +10,32 @@ import {
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-async function qwackerRequest(endpoint: string, jwtToken: string, options: { [key: string]: string }) {
+async function qwackerRequest(endpoint: string, jwtToken: string, options: { [key: string]: string | FormData }) {
   const url = BASE_URL + '/' + endpoint;
-  const res = await fetch(url, {
-    headers: {
-      'content-type': 'application/json',
-      Authorization: `Bearer ${jwtToken}`,
-    },
+  const headers: { [key: string]: string } = {
+    'content-type': 'application/json',
+    Authorization: `Bearer ${jwtToken}`,
+  };
+
+  if (options.body && typeof options.body !== 'string') {
+    delete headers['content-type'];
+  }
+
+  const response = await fetch(url, {
+    headers,
     ...options,
   });
 
-  if (res.status !== 200) {
-    //TODO DO ERROR HANDLING
+  if (!response.ok) {
+    const message = 'Something went wrong. Please try later again..';
+    console.error(message);
+  }
+
+  if (response.status !== 200) {
     return;
   }
 
-  return res.json();
+  return response.json();
 }
 
 export function fetchPosts({
@@ -90,16 +100,20 @@ export function searchPosts(token = '', searchParams: QwackerSearchParamsModel =
   return qwackerRequest(`posts/search`, token, { method: 'POST', body: JSON.stringify(searchParams) });
 }
 
-export function createPost(token = '', postParams: QwackerCreateParamsModel = {}) {
-  return qwackerRequest('posts', token, { method: 'POST', body: JSON.stringify(postParams) });
+export function createPost(token = '', postParams: QwackerCreateParamsModel) {
+  const formData = getFormDataFromParams(postParams);
+
+  return qwackerRequest('posts', token, { method: 'POST', body: formData });
 }
 
 export function destroyPost({ token = '', id = '' }: QwackerTokenParamsModel) {
   return qwackerRequest(`posts/${id}`, token, { method: 'DELETE' });
 }
 
-export function createReply(token = '', id = '', postParams: QwackerCreateParamsModel = {}) {
-  return qwackerRequest(`posts/${id}`, token, { method: 'POST', body: JSON.stringify(postParams) });
+export function createReply(token = '', id = '', postParams: QwackerCreateParamsModel) {
+  const formData = getFormDataFromParams(postParams);
+
+  return qwackerRequest(`posts/${id}`, token, { method: 'POST', body: formData });
 }
 
 export function fetchReplies({ token, id }: QwackerTokenParamsModel) {
@@ -113,4 +127,15 @@ async function fetchPopulatedPosts(data: QwackModel[], token: string) {
       return { ...post, creatorData: userData };
     })
   );
+}
+
+function getFormDataFromParams(params: QwackerCreateParamsModel) {
+  const formData = new FormData();
+  formData.append('text', params.text);
+
+  if (params.image) {
+    formData.append('image', params.image);
+  }
+
+  return formData;
 }
