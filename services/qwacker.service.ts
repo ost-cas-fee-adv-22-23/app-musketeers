@@ -7,8 +7,10 @@ import {
   QwackModelDecorated,
   QwackerByHashtagParamModel,
 } from '../models/qwacker.model';
+import { UserModel } from '../models/user.model';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const userCache: { [key: string]: UserModel } = {};
 
 async function qwackerRequest(endpoint: string, jwtToken: string, options: { [key: string]: string | FormData }) {
   const url = BASE_URL + '/' + endpoint;
@@ -84,6 +86,15 @@ export function fetchUser({ token, id }: QwackerTokenParamsModel) {
   return qwackerRequest(`users/${id}`, token, { method: 'GET' });
 }
 
+export async function fetchCachedUser({ token, id }: QwackerTokenParamsModel) {
+  if (userCache[id]) {
+    return userCache[id];
+  }
+  const userData = await fetchUser({ token, id });
+  userCache[id] = userData;
+  return userData;
+}
+
 export function updateLikes({ token, id }: QwackerTokenParamsModel) {
   return qwackerRequest(`posts/${id}/likes`, token, {
     method: 'PUT',
@@ -123,7 +134,7 @@ export function fetchReplies({ token, id }: QwackerTokenParamsModel) {
 async function fetchPopulatedPosts(data: QwackModel[], token: string) {
   return await Promise.all(
     data.map(async (post: QwackModel) => {
-      const userData = await fetchUser({ token, id: post.creator });
+      const userData = await fetchCachedUser({ token, id: post.creator });
       return { ...post, creatorData: userData };
     })
   );

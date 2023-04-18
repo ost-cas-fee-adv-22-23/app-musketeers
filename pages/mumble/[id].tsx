@@ -1,7 +1,7 @@
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
-import { createReply, fetchRepliesWithUser, fetchSinglePost, fetchUser } from '../../services/qwacker.service';
+import { createReply, fetchRepliesWithUser, fetchSinglePost, fetchCachedUser } from '../../services/qwacker.service';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import Head from 'next/head';
 import { Card, CardSize, Container } from '@smartive-education/design-system-component-library-musketeers';
@@ -113,8 +113,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
     };
   }
 
-  const userData = await fetchUser({ token: token.accessToken, id: mumble.creator });
-  const personalData = await fetchUser({ token: token.accessToken, id: ProfileQuery.me });
+  const userData = await fetchCachedUser({ token: token.accessToken, id: mumble.creator });
+  const personalData = await fetchCachedUser({ token: token.accessToken, id: ProfileQuery.me });
   const replies = await fetchRepliesWithUser({ token: token.accessToken, id: mumbleId });
 
   return {
