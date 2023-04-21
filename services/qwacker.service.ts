@@ -7,10 +7,9 @@ import {
   QwackModelDecorated,
   QwackerByHashtagParamModel,
 } from '../models/qwacker.model';
-import { UserModel } from '../models/user.model';
+import { userCache } from '../pages/_app';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const userCache: { [key: string]: UserModel } = {};
 
 async function qwackerRequest(endpoint: string, jwtToken: string, options: { [key: string]: string | FormData }) {
   const url = BASE_URL + '/' + endpoint;
