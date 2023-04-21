@@ -1,7 +1,7 @@
 {
     "theme_color": "#6d28d9",
     "background_color": "#f1f5f9",
-    "display": "browser",
+    "display": "standalone",
     "scope": "/",
     "start_url": "/",
     "name": "musketeers",
