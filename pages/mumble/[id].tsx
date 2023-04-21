@@ -1,7 +1,8 @@
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
-import { createReply, fetchRepliesWithUser, fetchSinglePost, fetchCachedUser } from '../../services/qwacker.service';
+import { createReply, fetchRepliesWithUser, fetchSinglePost } from '../../services/posts.service';
+import { fetchCachedUser } from '../../services/users.service';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import Head from 'next/head';
 import { Card, CardSize, Container } from '@smartive-education/design-system-component-library-musketeers';

@@ -5,7 +5,7 @@ import {
   InteractionType,
   Cancel as CancelSvg,
 } from '@smartive-education/design-system-component-library-musketeers';
-import { destroyPost } from '../services/qwacker.service';
+import { destroyPost } from '../services/posts.service';
 import { useSession } from 'next-auth/react';
 import { getClientToken } from '../helpers/session.helpers';
 
