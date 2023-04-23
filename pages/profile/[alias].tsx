@@ -49,6 +49,9 @@ export default function ProfilePage({
   const token = getClientToken(session);
   const avatarClasses = ['absolute right-[32px]'];
 
+  // THIS USE EFFECT ON POSTS IS NEEDED FOR THE CASE
+  // WHEN THE USER SWITCHES FROM THE PROFILE PAGE TO ANOTHER PROFILE PAGE
+  // A RERENDER NEED TO HAPPEN SINCE NEW POSTS WERE FETCHED IN THE SSR METHOD
   useEffect(() => {
     setActivePosts(posts);
   }, [posts]);
