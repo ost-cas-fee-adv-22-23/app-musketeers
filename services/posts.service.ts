@@ -52,8 +52,15 @@ export function fetchReplies({ token, id }: QwackerTokenParamsModel) {
   return qwackerRequest(`posts/${id}/replies`, token, { method: 'GET' });
 }
 
-export async function fetchPostsWithUsers({ token, limit = 10, offset = 0, creator = '' }: QwackerPostsParamModel) {
-  const { data } = await fetchPosts({ token, offset, limit, creator });
+export async function fetchPostsWithUsers({
+  token,
+  limit = 10,
+  offset,
+  creator = '',
+  newerThan,
+  olderThan,
+}: QwackerPostsParamModel) {
+  const { data } = await fetchPosts({ token, offset, limit, creator, newerThan, olderThan });
   return await fetchPopulatedPosts(data, token);
 }
 

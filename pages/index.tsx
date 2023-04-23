@@ -27,7 +27,6 @@ export default function PageHome(props: PageHomeProps) {
   const bottomBoundaryRef = useRef(null);
   const { data: session } = useSession();
   const token = getClientToken(session);
-  const currentOffset = posts.length;
 
   const scrollObserver = useCallback((node: Element) => {
     new IntersectionObserver((entries) => {
@@ -47,6 +46,7 @@ export default function PageHome(props: PageHomeProps) {
     }
   }, [scrollObserver]);
 
+  // TODO EXPLAIN WHY THIS USE EFFECT IS NEEDED
   useEffect(() => {
     if (isIntersecting) {
       fetchMorePosts();
@@ -56,11 +56,11 @@ export default function PageHome(props: PageHomeProps) {
 
   const fetchMorePosts = async () => {
     setIsLoadingPosts(true);
-    if (token) {
+    if (token && posts.length > 0) {
       const newPosts = await fetchPostsWithUsers({
         token,
         limit: POSTS_LIMIT,
-        offset: currentOffset,
+        olderThan: posts[posts.length - 1].id,
       });
       const newPostsAggregated = [...posts, ...newPosts];
       setPosts(newPostsAggregated);
