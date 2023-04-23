@@ -15,16 +15,18 @@ import {
 } from '@smartive-education/design-system-component-library-musketeers';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
-import { fetchLikedPostsWithUsers, fetchPostsWithUsers, fetchUser } from '../../services/qwacker.service';
+import { fetchLikedPostsWithUsers, fetchPostsWithUsers } from '../../services/posts.service';
+import { fetchUser } from '../../services/users.service';
 import { ProfileQuery, UserModel } from '../../models/user.model';
 import { useEffect, useRef, useState } from 'react';
 import Timeline from '../../components/timeline';
-import { QwackModelDecorated } from '../../models/qwacker.model';
+import { ProfileTabType, QwackModelDecorated } from '../../models/qwacker.model';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 import { getClientToken } from '../../helpers/session.helpers';
 import { useContainerDimensions } from '../../helpers/common.helpers';
+import { PROFILE_IMG_URL } from '../../constants/qwacker.constants';
 
 type Props = {
   user: UserModel;
@@ -39,21 +41,24 @@ export default function ProfilePage({
   postsLiked,
   isPersonal,
 }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
-  const avatarClasses = ['absolute right-[32px]'];
-  const { data: session } = useSession();
-  const token = getClientToken(session);
-  const [activeTab, setActiveTab] = useState('mumbles');
+  const [activeTab, setActiveTab] = useState(ProfileTabType.MUMBLES);
   const [activePosts, setActivePosts] = useState(posts);
   const containerReference = useRef<HTMLDivElement>(null);
   const { width } = useContainerDimensions(containerReference);
+  const { data: session } = useSession();
+  const token = getClientToken(session);
+  const avatarClasses = ['absolute right-[32px]'];
 
+  // THIS USE EFFECT ON POSTS IS NEEDED FOR THE CASE
+  // WHEN THE USER SWITCHES FROM THE PROFILE PAGE TO ANOTHER PROFILE PAGE
+  // A RERENDER NEED TO HAPPEN SINCE NEW POSTS WERE FETCHED IN THE SSR METHOD
   useEffect(() => {
     setActivePosts(posts);
   }, [posts]);
 
   const reFetchAndSetPosts = async () => {
     if (token) {
-      if (activeTab === 'mumbles') {
+      if (activeTab === ProfileTabType.MUMBLES) {
         const postsDecorated = await fetchPostsWithUsers({ token: token, creator: user.id });
         setActivePosts(postsDecorated);
       } else {
@@ -84,14 +89,14 @@ export default function ProfilePage({
                 size={width < 768 ? AvatarSize.L : AvatarSize.XL}
                 alt="Profile Image alt attribute text"
                 onClick={() => undefined}
-                src={'https://picsum.photos/160/160?random=' + user.id}
+                src={PROFILE_IMG_URL + user.id}
               />
             ) : (
               <Avatar
                 showBorder={true}
                 alt="Avatar"
                 size={width < 768 ? AvatarSize.L : AvatarSize.XL}
-                src={'https://picsum.photos/160/160?random=' + user.id}
+                src={PROFILE_IMG_URL + user.id}
               />
             )}
           </div>
@@ -125,19 +130,19 @@ export default function ProfilePage({
               <Tabs>
                 <TabsItem
                   onClick={() => {
-                    setActiveTab('mumbles');
+                    setActiveTab(ProfileTabType.MUMBLES);
                     setActivePosts(posts);
                   }}
                   label={'Deine Mumbels'}
-                  active={activeTab === 'mumbles'}
+                  active={activeTab === ProfileTabType.MUMBLES}
                 ></TabsItem>
                 <TabsItem
                   onClick={() => {
-                    setActiveTab('likes');
+                    setActiveTab(ProfileTabType.LIKES);
                     setActivePosts(postsLiked);
                   }}
                   label={'Deine Likes'}
-                  active={activeTab === 'likes'}
+                  active={activeTab === ProfileTabType.LIKES}
                 ></TabsItem>
               </Tabs>
             </div>
@@ -146,7 +151,6 @@ export default function ProfilePage({
             posts={activePosts}
             onDeleteCallback={async () => {
               await reFetchAndSetPosts();
-              toast.dismiss();
               toast.success('Mumble wurde gelöscht...');
             }}
           />

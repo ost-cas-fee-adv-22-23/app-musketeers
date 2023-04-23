@@ -1,7 +1,7 @@
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
-import { fetchPostsByHashtags } from '../../services/qwacker.service';
+import { fetchPostsByHashtags } from '../../services/posts.service';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import Head from 'next/head';
 import { Container, Hashtag, HashtagSize } from '@smartive-education/design-system-component-library-musketeers';

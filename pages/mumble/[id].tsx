@@ -1,7 +1,8 @@
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
-import { createReply, fetchRepliesWithUser, fetchSinglePost, fetchUser } from '../../services/qwacker.service';
+import { createReply, fetchRepliesWithUser, fetchSinglePost } from '../../services/posts.service';
+import { fetchCachedUser } from '../../services/users.service';
 import { QwackModelDecorated } from '../../models/qwacker.model';
 import Head from 'next/head';
 import { Card, CardSize, Container } from '@smartive-education/design-system-component-library-musketeers';
@@ -13,6 +14,7 @@ import MumbleAdd from '../../components/mumble-add';
 import { ProfileQuery, UserModel } from '../../models/user.model';
 import { getClientToken } from '../../helpers/session.helpers';
 import { toast } from 'react-toastify';
+import { PROFILE_IMG_URL } from '../../constants/qwacker.constants';
 
 type Props = {
   mumble: QwackModelDecorated;
@@ -30,7 +32,7 @@ export default function MumblePage({
   const token = getClientToken(session);
   const [repliesState, setRepliesState] = useState<QwackModelDecorated[]>(replies || []);
 
-  const refetchAndSetReplies = async ({ successMessage }: { successMessage: string }) => {
+  const reFetchAndSetReplies = async ({ successMessage }: { successMessage: string }) => {
     const repliesPromise = fetchRepliesWithUser({ token, id: mumble.id });
     const replies = await toast.promise(repliesPromise, {
       error: 'Etwas ist schief gelaufen, versuch es nochmals!',
@@ -49,12 +51,7 @@ export default function MumblePage({
         <Card size={CardSize.XL} hasRoundBorders={true}>
           <Mumble
             mumbleData={mumble}
-            avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
-            onClickUserName={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              router.push(`/profile/${mumble.creator}`);
-            }}
+            avatarUrl={PROFILE_IMG_URL + mumble.creator}
             onDeleteCallback={() => {
               router.push(`/`);
             }}
@@ -63,12 +60,12 @@ export default function MumblePage({
               <MumbleAdd
                 isInline={true}
                 user={personalData}
-                avatarUrl={'https://picsum.photos/160/160?random=' + personalData.id}
+                avatarUrl={PROFILE_IMG_URL + personalData.id}
                 title={'Hey, was gibt’s neues?'}
                 onSend={async (text, file, setText, setFile) => {
                   toast('Dein Kommentar wird gesendet...');
                   await createReply(token, mumble.id, { text: text, image: file });
-                  await refetchAndSetReplies({ successMessage: 'Dein Kommentar wurde gesendet!' });
+                  await reFetchAndSetReplies({ successMessage: 'Dein Kommentar wurde gesendet!' });
                   setText('');
                   setFile(null);
                 }}
@@ -80,14 +77,9 @@ export default function MumblePage({
                     <Mumble
                       isInline={true}
                       mumbleData={mumble}
-                      avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
-                      onClickUserName={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        router.push(`/profile/${mumble.creator}`);
-                      }}
+                      avatarUrl={PROFILE_IMG_URL + mumble.creator}
                       onDeleteCallback={() => {
-                        refetchAndSetReplies({ successMessage: 'Reply wurde gelöscht!' });
+                        reFetchAndSetReplies({ successMessage: 'Reply wurde gelöscht!' });
                       }}
                     ></Mumble>
                   </div>
@@ -113,8 +105,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
     };
   }
 
-  const userData = await fetchUser({ token: token.accessToken, id: mumble.creator });
-  const personalData = await fetchUser({ token: token.accessToken, id: ProfileQuery.me });
+  const userData = await fetchCachedUser({ token: token.accessToken, id: mumble.creator });
+  const personalData = await fetchCachedUser({ token: token.accessToken, id: ProfileQuery.me });
   const replies = await fetchRepliesWithUser({ token: token.accessToken, id: mumbleId });
 
   return {

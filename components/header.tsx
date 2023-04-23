@@ -8,19 +8,18 @@ import {
   Settings as SvgSettings,
   LogOut as SvgLogOut,
 } from '@smartive-education/design-system-component-library-musketeers';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { PROFILE_IMG_URL } from '../constants/qwacker.constants';
 
 export default function Header() {
+  const session = useSession();
+
   return (
     <>
       <HeaderFromDesignSystem elementType={Link} iconLinkUrl={'/'}>
         <Navigation>
           <NavigationItem elementType={Link} href={'/profile/me'}>
-            <Avatar
-              alt="Avatar"
-              size={AvatarSize.S}
-              src="https://randompicturegenerator.com/img/people-generator/gd121f56d8674f28d00ce9f1c44686e7a9bee58b8d33a3c57daaada1fa493c214290f9490833d1ff18f4ee16cd5298e1f_640.jpg"
-            />
+            <Avatar alt="Avatar" size={AvatarSize.S} src={PROFILE_IMG_URL + session.data?.token.sub} />
           </NavigationItem>
           <NavigationItem label="Settings" elementType={Link} href={'/settings'}>
             <span className="animation-svg-settings">

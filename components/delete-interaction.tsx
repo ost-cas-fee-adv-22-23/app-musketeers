@@ -5,7 +5,7 @@ import {
   InteractionType,
   Cancel as CancelSvg,
 } from '@smartive-education/design-system-component-library-musketeers';
-import { destroyPost } from '../services/qwacker.service';
+import { destroyPost } from '../services/posts.service';
 import { useSession } from 'next-auth/react';
 import { getClientToken } from '../helpers/session.helpers';
 
@@ -30,7 +30,8 @@ function DeleteInteraction({ postId, label, onDeleteCallback }: DeleteInteractio
       });
       onDeleteCallback && onDeleteCallback();
     } catch (error) {
-      console.log(error);
+      toast.error('Sorry something went wrong please try again');
+      console.error(error);
     }
   };
 
