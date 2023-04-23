@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Interaction, InteractionType, Share } from '@smartive-education/design-system-component-library-musketeers';
+import { toast } from 'react-toastify';
 
 type CopyInteractionProps = {
   postId: string;
@@ -13,6 +14,7 @@ function CopyInteraction({ postId }: CopyInteractionProps) {
     event.stopPropagation();
     navigator.clipboard.writeText(`${location.protocol}//${location.host}/mumble/${postId}`);
     setIsCopied(true);
+    toast.success('Copied successfully to clipboard');
     setTimeout(() => {
       setIsCopied(false);
     }, 2000);

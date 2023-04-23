@@ -1,6 +1,1 @@
-export const REDIRECT_LOGIN = {
-  redirect: {
-    destination: '/login',
-    permanent: false,
-  },
-};
+export const PROFILE_IMG_URL = 'https://picsum.photos/160/160?random=';

@@ -11,7 +11,6 @@ import { QwackModelDecorated } from '../models/qwacker.model';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import LoadingIndicator from '../components/loading-indicator';
 import { getClientToken } from '../helpers/session.helpers';
-import { REDIRECT_LOGIN } from '../constants/qwacker.constants';
 import { toast } from 'react-toastify';
 
 const POSTS_LIMIT = 7;
@@ -24,9 +23,9 @@ export default function PageHome(props: PageHomeProps) {
   const [posts, setPosts] = useState<QwackModelDecorated[]>(props.posts);
   const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>(false);
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
+  const bottomBoundaryRef = useRef(null);
   const { data: session } = useSession();
   const token = getClientToken(session);
-  const bottomBoundaryRef = useRef(null);
   const currentOffset = posts.length;
 
   const scrollObserver = useCallback((node: Element) => {
@@ -68,7 +67,7 @@ export default function PageHome(props: PageHomeProps) {
     setIsLoadingPosts(false);
   };
 
-  const refetchAndSetPosts = async () => {
+  const reFetchAndSetPosts = async () => {
     if (token) {
       const posts = await fetchPostsWithUsers({
         token,
@@ -102,7 +101,7 @@ export default function PageHome(props: PageHomeProps) {
                   error: 'Etwas ist schief gelaufen, versuch es nochmals!',
                   success: 'Dein Mumble wurde erfolgreich versendet',
                 });
-                await refetchAndSetPosts();
+                await reFetchAndSetPosts();
                 setText('');
                 setFile(null);
               }}
@@ -112,8 +111,7 @@ export default function PageHome(props: PageHomeProps) {
         <Timeline
           posts={posts}
           onDeleteCallback={async () => {
-            await refetchAndSetPosts();
-            toast.dismiss();
+            await reFetchAndSetPosts();
             toast.success('Mumble wurde gelöscht...');
           }}
         />
@@ -126,10 +124,6 @@ export default function PageHome(props: PageHomeProps) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const session = await getSession(ctx);
-
-  if (!session) {
-    return REDIRECT_LOGIN;
-  }
 
   const token = (await getToken(ctx)) as QJWT;
   let posts: QwackModelDecorated[] = [];

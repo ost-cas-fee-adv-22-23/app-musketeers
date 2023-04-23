@@ -30,7 +30,8 @@ function DeleteInteraction({ postId, label, onDeleteCallback }: DeleteInteractio
       });
       onDeleteCallback && onDeleteCallback();
     } catch (error) {
-      console.log(error);
+      toast.error('Sorry something went wrong please try again');
+      console.error(error);
     }
   };
 

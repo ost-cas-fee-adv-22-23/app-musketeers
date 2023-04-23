@@ -9,11 +9,12 @@ import { Card, CardSize, Container } from '@smartive-education/design-system-com
 import Mumble from '../../components/mumble';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import MumbleAdd from '../../components/mumble-add';
 import { ProfileQuery, UserModel } from '../../models/user.model';
 import { getClientToken } from '../../helpers/session.helpers';
 import { toast } from 'react-toastify';
+import { PROFILE_IMG_URL } from '../../constants/qwacker.constants';
 
 type Props = {
   mumble: QwackModelDecorated;
@@ -31,7 +32,7 @@ export default function MumblePage({
   const token = getClientToken(session);
   const [repliesState, setRepliesState] = useState<QwackModelDecorated[]>(replies || []);
 
-  const refetchAndSetReplies = async ({ successMessage }: { successMessage: string }) => {
+  const reFetchAndSetReplies = async ({ successMessage }: { successMessage: string }) => {
     const repliesPromise = fetchRepliesWithUser({ token, id: mumble.id });
     const replies = await toast.promise(repliesPromise, {
       error: 'Etwas ist schief gelaufen, versuch es nochmals!',
@@ -39,6 +40,12 @@ export default function MumblePage({
     });
 
     setRepliesState(replies);
+  };
+
+  const onClickUserName = (event: MouseEvent<Element>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    router.push(`/profile/${mumble.creator}`);
   };
 
   return (
@@ -50,12 +57,8 @@ export default function MumblePage({
         <Card size={CardSize.XL} hasRoundBorders={true}>
           <Mumble
             mumbleData={mumble}
-            avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
-            onClickUserName={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              router.push(`/profile/${mumble.creator}`);
-            }}
+            avatarUrl={PROFILE_IMG_URL + mumble.creator}
+            onClickUserName={(event) => onClickUserName(event)}
             onDeleteCallback={() => {
               router.push(`/`);
             }}
@@ -64,12 +67,12 @@ export default function MumblePage({
               <MumbleAdd
                 isInline={true}
                 user={personalData}
-                avatarUrl={'https://picsum.photos/160/160?random=' + personalData.id}
+                avatarUrl={PROFILE_IMG_URL + personalData.id}
                 title={'Hey, was gibt’s neues?'}
                 onSend={async (text, file, setText, setFile) => {
                   toast('Dein Kommentar wird gesendet...');
                   await createReply(token, mumble.id, { text: text, image: file });
-                  await refetchAndSetReplies({ successMessage: 'Dein Kommentar wurde gesendet!' });
+                  await reFetchAndSetReplies({ successMessage: 'Dein Kommentar wurde gesendet!' });
                   setText('');
                   setFile(null);
                 }}
@@ -81,14 +84,10 @@ export default function MumblePage({
                     <Mumble
                       isInline={true}
                       mumbleData={mumble}
-                      avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
-                      onClickUserName={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        router.push(`/profile/${mumble.creator}`);
-                      }}
+                      avatarUrl={PROFILE_IMG_URL + mumble.creator}
+                      onClickUserName={(event) => onClickUserName(event)}
                       onDeleteCallback={() => {
-                        refetchAndSetReplies({ successMessage: 'Reply wurde gelöscht!' });
+                        reFetchAndSetReplies({ successMessage: 'Reply wurde gelöscht!' });
                       }}
                     ></Mumble>
                   </div>

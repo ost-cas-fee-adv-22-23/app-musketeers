@@ -2,6 +2,7 @@ import { Card, CardSize } from '@smartive-education/design-system-component-libr
 import Mumble from './mumble';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { useRouter } from 'next/router';
+import { PROFILE_IMG_URL } from '../constants/qwacker.constants';
 
 type TimeLineProps = {
   posts: QwackModelDecorated[];
@@ -15,20 +16,11 @@ function Timeline(props: TimeLineProps) {
     <>
       {props.posts && props.posts.length > 0 ? (
         props.posts.map((mumble) => (
-          <div
-            key={mumble.id}
-            className="mb-s"
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              //TODO CHECK HOW SOLVE THIS CLICK MISSMATCH SINCE THIS IS THE PARENT
-              //router.push(`/mumble/${mumble.id}`);
-            }}
-          >
+          <div key={mumble.id} className="mb-s">
             <Card size={CardSize.XL} hasRoundBorders={true}>
               <Mumble
                 mumbleData={mumble}
-                avatarUrl={'https://picsum.photos/160/160?random=' + mumble.creator}
+                avatarUrl={PROFILE_IMG_URL + mumble.creator}
                 onClickUserName={(event) => {
                   event.preventDefault();
                   router.push(`/profile/${mumble.creator}`);
