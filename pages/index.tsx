@@ -5,7 +5,7 @@ import Timeline from '../components/timeline';
 import { getSession, useSession } from 'next-auth/react';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { createPost, fetchPostsWithUsers } from '../services/qwacker.service';
+import { createPost, fetchPostsWithUsers } from '../services/posts.service';
 import { QJWT } from './api/auth/[...nextauth]';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { useCallback, useEffect, useRef, useState } from 'react';

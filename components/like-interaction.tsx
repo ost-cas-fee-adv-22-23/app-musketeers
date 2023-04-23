@@ -5,7 +5,7 @@ import {
   Heart,
   HeartFilled,
 } from '@smartive-education/design-system-component-library-musketeers';
-import { updateLikes, destroyLikes } from '../services/qwacker.service';
+import { updateLikes, destroyLikes } from '../services/likes.service';
 import { useSession } from 'next-auth/react';
 import { getClientToken } from '../helpers/session.helpers';
 

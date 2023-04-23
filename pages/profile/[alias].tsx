@@ -15,7 +15,8 @@ import {
 } from '@smartive-education/design-system-component-library-musketeers';
 import { getToken } from 'next-auth/jwt';
 import { QJWT } from '../api/auth/[...nextauth]';
-import { fetchLikedPostsWithUsers, fetchPostsWithUsers, fetchUser } from '../../services/qwacker.service';
+import { fetchLikedPostsWithUsers, fetchPostsWithUsers } from '../../services/posts.service';
+import { fetchUser } from '../../services/users.service';
 import { ProfileQuery, UserModel } from '../../models/user.model';
 import { useEffect, useRef, useState } from 'react';
 import Timeline from '../../components/timeline';
