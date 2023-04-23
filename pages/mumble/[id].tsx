@@ -9,7 +9,7 @@ import { Card, CardSize, Container } from '@smartive-education/design-system-com
 import Mumble from '../../components/mumble';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import MumbleAdd from '../../components/mumble-add';
 import { ProfileQuery, UserModel } from '../../models/user.model';
 import { getClientToken } from '../../helpers/session.helpers';
@@ -42,12 +42,6 @@ export default function MumblePage({
     setRepliesState(replies);
   };
 
-  const onClickUserName = (event: MouseEvent<Element>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    router.push(`/profile/${mumble.creator}`);
-  };
-
   return (
     <>
       <Head>
@@ -58,7 +52,6 @@ export default function MumblePage({
           <Mumble
             mumbleData={mumble}
             avatarUrl={PROFILE_IMG_URL + mumble.creator}
-            onClickUserName={(event) => onClickUserName(event)}
             onDeleteCallback={() => {
               router.push(`/`);
             }}
@@ -85,7 +78,6 @@ export default function MumblePage({
                       isInline={true}
                       mumbleData={mumble}
                       avatarUrl={PROFILE_IMG_URL + mumble.creator}
-                      onClickUserName={(event) => onClickUserName(event)}
                       onDeleteCallback={() => {
                         reFetchAndSetReplies({ successMessage: 'Reply wurde gelöscht!' });
                       }}
