@@ -8,6 +8,7 @@ import {
 import { updateLikes, destroyLikes } from '../services/likes.service';
 import { useSession } from 'next-auth/react';
 import { getClientToken } from '../helpers/session.helpers';
+import { toast } from 'react-toastify';
 
 type LikeInteractionProps = {
   initialCount: number;
@@ -47,6 +48,7 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
         id: postId,
       });
     } catch (error) {
+      toast.error('Sorry something went wront please try again');
       console.log(error);
       dispatch({
         type: 'removeLike',
@@ -64,6 +66,7 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
         id: postId,
       });
     } catch (error) {
+      toast.error('Sorry something went wront please try again');
       console.log(error);
       dispatch({
         type: 'addLike',
@@ -75,9 +78,9 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
     event.preventDefault();
     event.stopPropagation();
     if (state.liked) {
-      handleRemoveLike();
+      await handleRemoveLike();
     } else {
-      handleAddLike();
+      await handleAddLike();
     }
   };
 

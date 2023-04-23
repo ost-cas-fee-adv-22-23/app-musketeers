@@ -46,3 +46,8 @@ export type QwackerCreateParamsModel = {
 };
 
 export type QwackerTokenParamsModel = { token: string; id: string };
+
+export enum ProfileTabType {
+  MUMBLES = 'mumbles',
+  LIKES = 'likes',
+}

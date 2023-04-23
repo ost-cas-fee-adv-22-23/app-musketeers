@@ -13,6 +13,8 @@ export const parseHashtags = (text: string) => {
   return [];
 };
 
+// METHOD COPIED FROM https://github.com/ulid/javascript/blob/master/lib/index.ts#L97
+// GETS TIMESTAMP FROM ID
 const getTimestampFromId = (id: string) => {
   return id
     .substr(0, TIME_LEN)

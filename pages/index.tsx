@@ -11,8 +11,8 @@ import { QwackModelDecorated } from '../models/qwacker.model';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import LoadingIndicator from '../components/loading-indicator';
 import { getClientToken } from '../helpers/session.helpers';
-import { REDIRECT_LOGIN } from '../constants/qwacker.constants';
 import { toast } from 'react-toastify';
+import { PROFILE_IMG_URL } from '../constants/qwacker.constants';
 
 const POSTS_LIMIT = 7;
 
@@ -24,10 +24,9 @@ export default function PageHome(props: PageHomeProps) {
   const [posts, setPosts] = useState<QwackModelDecorated[]>(props.posts);
   const [isLoadingPosts, setIsLoadingPosts] = useState<boolean>(false);
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
+  const bottomBoundaryRef = useRef(null);
   const { data: session } = useSession();
   const token = getClientToken(session);
-  const bottomBoundaryRef = useRef(null);
-  const currentOffset = posts.length;
 
   const scrollObserver = useCallback((node: Element) => {
     new IntersectionObserver((entries) => {
@@ -47,6 +46,7 @@ export default function PageHome(props: PageHomeProps) {
     }
   }, [scrollObserver]);
 
+  // TODO EXPLAIN WHY THIS USE EFFECT IS NEEDED
   useEffect(() => {
     if (isIntersecting) {
       fetchMorePosts();
@@ -56,11 +56,11 @@ export default function PageHome(props: PageHomeProps) {
 
   const fetchMorePosts = async () => {
     setIsLoadingPosts(true);
-    if (token) {
+    if (token && posts.length > 0) {
       const newPosts = await fetchPostsWithUsers({
         token,
         limit: POSTS_LIMIT,
-        offset: currentOffset,
+        olderThan: posts[posts.length - 1].id,
       });
       const newPostsAggregated = [...posts, ...newPosts];
       setPosts(newPostsAggregated);
@@ -68,7 +68,7 @@ export default function PageHome(props: PageHomeProps) {
     setIsLoadingPosts(false);
   };
 
-  const refetchAndSetPosts = async () => {
+  const reFetchAndSetPosts = async () => {
     if (token) {
       const posts = await fetchPostsWithUsers({
         token,
@@ -94,7 +94,7 @@ export default function PageHome(props: PageHomeProps) {
           <Card size={CardSize.XL} hasRoundBorders={true}>
             <MumbleAdd
               title={'Hey, was gibt’s neues?'}
-              avatarUrl={'https://picsum.photos/160/160?random=' + session?.token.sub}
+              avatarUrl={PROFILE_IMG_URL + session?.token.sub}
               onSend={async (text, file, setText, setFile) => {
                 const createPostPromise = createPost(token, { text, image: file });
                 await toast.promise(createPostPromise, {
@@ -102,7 +102,7 @@ export default function PageHome(props: PageHomeProps) {
                   error: 'Etwas ist schief gelaufen, versuch es nochmals!',
                   success: 'Dein Mumble wurde erfolgreich versendet',
                 });
-                await refetchAndSetPosts();
+                await reFetchAndSetPosts();
                 setText('');
                 setFile(null);
               }}
@@ -112,8 +112,7 @@ export default function PageHome(props: PageHomeProps) {
         <Timeline
           posts={posts}
           onDeleteCallback={async () => {
-            await refetchAndSetPosts();
-            toast.dismiss();
+            await reFetchAndSetPosts();
             toast.success('Mumble wurde gelöscht...');
           }}
         />
@@ -126,10 +125,6 @@ export default function PageHome(props: PageHomeProps) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const session = await getSession(ctx);
-
-  if (!session) {
-    return REDIRECT_LOGIN;
-  }
 
   const token = (await getToken(ctx)) as QJWT;
   let posts: QwackModelDecorated[] = [];
