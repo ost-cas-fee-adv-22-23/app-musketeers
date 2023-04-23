@@ -12,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import LoadingIndicator from '../components/loading-indicator';
 import { getClientToken } from '../helpers/session.helpers';
 import { toast } from 'react-toastify';
+import { PROFILE_IMG_URL } from '../constants/qwacker.constants';
 
 const POSTS_LIMIT = 7;
 
@@ -93,7 +94,7 @@ export default function PageHome(props: PageHomeProps) {
           <Card size={CardSize.XL} hasRoundBorders={true}>
             <MumbleAdd
               title={'Hey, was gibt’s neues?'}
-              avatarUrl={'https://picsum.photos/160/160?random=' + session?.token.sub}
+              avatarUrl={PROFILE_IMG_URL + session?.token.sub}
               onSend={async (text, file, setText, setFile) => {
                 const createPostPromise = createPost(token, { text, image: file });
                 await toast.promise(createPostPromise, {

@@ -1,4 +1,3 @@
-import { MouseEvent } from 'react';
 import { QwackModelDecorated } from '../models/qwacker.model';
 import { getFormattedTimestamp } from '../helpers/common.helpers';
 import MumbleInlineHeader from './mumble-inline-header';
@@ -9,13 +8,12 @@ import MumbleFooter from './mumble-footer';
 type MumbleProps = {
   mumbleData: QwackModelDecorated;
   avatarUrl: string;
-  onClickUserName: (e: MouseEvent<Element>) => void;
   children?: JSX.Element;
   isInline?: boolean;
   onDeleteCallback?: () => void;
 };
 
-function Mumble({ mumbleData, avatarUrl, onClickUserName, isInline, children, onDeleteCallback }: MumbleProps) {
+function Mumble({ mumbleData, avatarUrl, isInline, children, onDeleteCallback }: MumbleProps) {
   return (
     <div className="relative">
       {isInline ? (
@@ -24,7 +22,7 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, isInline, children, on
           userName={mumbleData.creatorData.userName}
           avatarUrl={avatarUrl}
           timeStamp={getFormattedTimestamp(mumbleData.id)}
-          onClickUserName={onClickUserName}
+          creator={mumbleData.creator}
         ></MumbleInlineHeader>
       ) : (
         <MumbleOutlineHeader
@@ -32,7 +30,7 @@ function Mumble({ mumbleData, avatarUrl, onClickUserName, isInline, children, on
           userName={mumbleData.creatorData.userName}
           avatarUrl={avatarUrl}
           timeStamp={getFormattedTimestamp(mumbleData.id)}
-          onClickUserName={onClickUserName}
+          creator={mumbleData.creator}
         ></MumbleOutlineHeader>
       )}
       <MumbleContent text={mumbleData.text} mediaUrl={mumbleData.mediaUrl ? mumbleData.mediaUrl : null}></MumbleContent>

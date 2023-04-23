@@ -7,17 +7,16 @@ import {
   Time,
 } from '@smartive-education/design-system-component-library-musketeers';
 import Image from 'next/image';
-import { MouseEvent } from 'react';
 
 type MumbleOutlineHeaderProps = {
   displayName: string;
   userName: string;
   avatarUrl: string;
   timeStamp: string;
-  onClickUserName: (e: MouseEvent<Element>) => void;
+  creator: string;
 };
 
-function MumbleOutlineHeader({ displayName, userName, avatarUrl, timeStamp, onClickUserName }: MumbleOutlineHeaderProps) {
+function MumbleOutlineHeader({ displayName, userName, avatarUrl, timeStamp, creator }: MumbleOutlineHeaderProps) {
   return (
     <>
       <div className="absolute -top-s -left-[80px] hidden sm:block">
@@ -32,10 +31,22 @@ function MumbleOutlineHeader({ displayName, userName, avatarUrl, timeStamp, onCl
       </div>
       <div className="label-l text-slate-900 mb-xxs">{displayName}</div>
       <div className="flex gap-s">
-        <IconLink type={IconLinkType.VIOLET} label={userName} href="" target="" onClick={onClickUserName}>
+        <IconLink
+          type={IconLinkType.VIOLET}
+          label={userName}
+          href={`/profile/${creator}`}
+          target="_self"
+          onClick={() => undefined}
+        >
           <Profile />
         </IconLink>
-        <IconLink type={IconLinkType.DEFAULT} label={timeStamp} href="" target="" onClick={() => undefined}>
+        <IconLink
+          type={IconLinkType.DEFAULT}
+          label={timeStamp}
+          href={`/profile/${creator}`}
+          target="_self"
+          onClick={() => undefined}
+        >
           <Time />
         </IconLink>
       </div>

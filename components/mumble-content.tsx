@@ -14,7 +14,7 @@ function MumbleContent({ text, mediaUrl }: MumbleContentProps) {
   return (
     <div className="paragraph-s text-slate-900 grid gap-m">
       <div className={'pt-m'}>
-        <div>{text}</div>
+        <div className={'break-all'}>{text}</div>
         <div className="block md:flex md:gap-xs">
           {parseHashtags(text).map((hashtag: string) => (
             <Hashtag

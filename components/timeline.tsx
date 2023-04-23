@@ -1,7 +1,6 @@
 import { Card, CardSize } from '@smartive-education/design-system-component-library-musketeers';
 import Mumble from './mumble';
 import { QwackModelDecorated } from '../models/qwacker.model';
-import { useRouter } from 'next/router';
 import { PROFILE_IMG_URL } from '../constants/qwacker.constants';
 
 type TimeLineProps = {
@@ -10,8 +9,6 @@ type TimeLineProps = {
 };
 
 function Timeline(props: TimeLineProps) {
-  const router = useRouter();
-
   return (
     <>
       {props.posts && props.posts.length > 0 ? (
@@ -21,10 +18,6 @@ function Timeline(props: TimeLineProps) {
               <Mumble
                 mumbleData={mumble}
                 avatarUrl={PROFILE_IMG_URL + mumble.creator}
-                onClickUserName={(event) => {
-                  event.preventDefault();
-                  router.push(`/profile/${mumble.creator}`);
-                }}
                 onDeleteCallback={props.onDeleteCallback}
               ></Mumble>
             </Card>
