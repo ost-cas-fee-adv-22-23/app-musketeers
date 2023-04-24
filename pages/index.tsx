@@ -28,6 +28,7 @@ export default function PageHome(props: PageHomeProps) {
   const { data: session } = useSession();
   const token = getClientToken(session);
 
+  // Instantiate a scrollObserver for the bottomBoundaryRef, useCallback to persist the observer across renders
   const scrollObserver = useCallback((node: Element) => {
     new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -46,7 +47,7 @@ export default function PageHome(props: PageHomeProps) {
     }
   }, [scrollObserver]);
 
-  // TODO EXPLAIN WHY THIS USE EFFECT IS NEEDED
+  // Fetch more posts if bottomBoundaryRef is visible, but only do it once, when isIntersecting changes from false to true
   useEffect(() => {
     if (isIntersecting) {
       fetchMorePosts();
