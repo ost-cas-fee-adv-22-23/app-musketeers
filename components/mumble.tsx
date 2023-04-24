@@ -11,6 +11,7 @@ import {
   Time,
 } from '@smartive-education/design-system-component-library-musketeers';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { getUserId } from '../helpers/session.helpers';
@@ -88,7 +89,7 @@ function MumbleHeaderLinks({ userName, timeStamp, creator }: MumbleHeaderLinksPr
 function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, creator }: MumbleHeaderProps) {
   return isInline ? (
     <div className={'flex items-center mb-s'}>
-      <div>
+      <Link href={`/profile/${creator}`}>
         <Avatar
           alt="Display Name @displayName"
           showBorder
@@ -97,7 +98,7 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
           imageComponentProps={{ width: '480', height: '480' }}
           src={avatarUrl}
         />
-      </div>
+      </Link>
       <div className={'flex flex-col ml-xs'}>
         <div className="label-m text-slate-900 mb-xxs">{displayName}</div>
         <div className="flex gap-s">
@@ -108,14 +109,16 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
   ) : (
     <>
       <div className="absolute -top-s -left-[80px] hidden sm:block">
-        <Avatar
-          alt="Display Name @displayName"
-          showBorder
-          size={AvatarSize.M}
-          imageElementType={Image}
-          imageComponentProps={{ width: '480', height: '480' }}
-          src={avatarUrl}
-        />
+        <Link href={`/profile/${creator}`}>
+          <Avatar
+            alt="Display Name @displayName"
+            showBorder
+            size={AvatarSize.M}
+            imageElementType={Image}
+            imageComponentProps={{ width: '480', height: '480' }}
+            src={avatarUrl}
+          />
+        </Link>
       </div>
       <div className="label-l text-slate-900 mb-xxs">{displayName}</div>
       <div className="flex gap-s">
