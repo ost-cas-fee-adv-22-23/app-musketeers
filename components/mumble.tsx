@@ -71,18 +71,14 @@ function Mumble({ mumbleData, avatarUrl, isInline, children, onDeleteCallback }:
 }
 
 function MumbleHeaderLinks({ userName, timeStamp, creator }: MumbleHeaderLinksProps) {
+  const router = useRouter();
+
   return (
     <>
-      <IconLink
-        type={IconLinkType.VIOLET}
-        label={userName}
-        href={`/profile/${creator}`}
-        target="_self"
-        onClick={() => undefined}
-      >
+      <IconLink type={IconLinkType.VIOLET} label={userName} onClick={() => router.push(`/profile/${creator}`)}>
         <Profile />
       </IconLink>
-      <IconLink type={IconLinkType.DEFAULT} label={timeStamp} target="_self" onClick={() => undefined}>
+      <IconLink type={IconLinkType.DEFAULT} label={timeStamp}>
         <Time />
       </IconLink>
     </>
