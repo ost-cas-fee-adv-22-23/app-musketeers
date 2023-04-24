@@ -73,10 +73,17 @@ function Mumble({ mumbleData, avatarUrl, isInline, children, onDeleteCallback }:
 
 function MumbleHeaderLinks({ userName, timeStamp, creator }: MumbleHeaderLinksProps) {
   const router = useRouter();
-
   return (
     <>
-      <IconLink type={IconLinkType.VIOLET} label={userName} onClick={() => router.push(`/profile/${creator}`)}>
+      <IconLink
+        type={IconLinkType.VIOLET}
+        label={userName}
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          router.push(`/profile/${creator}`);
+        }}
+      >
         <Profile />
       </IconLink>
       <IconLink type={IconLinkType.DEFAULT} label={timeStamp}>
@@ -87,18 +94,25 @@ function MumbleHeaderLinks({ userName, timeStamp, creator }: MumbleHeaderLinksPr
 }
 
 function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, creator }: MumbleHeaderProps) {
+  const router = useRouter();
+
+  const gotoProfile = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    router.push(`/profile/${creator}`);
+  };
+
   return isInline ? (
     <div className={'flex items-center mb-s'}>
-      <Link href={`/profile/${creator}`}>
-        <Avatar
-          alt="Display Name @displayName"
-          showBorder
-          size={AvatarSize.S}
-          imageElementType={Image}
-          imageComponentProps={{ width: '480', height: '480' }}
-          src={avatarUrl}
-        />
-      </Link>
+      <Avatar
+        alt="Display Name @displayName"
+        showBorder
+        size={AvatarSize.S}
+        imageElementType={Image}
+        imageComponentProps={{ width: '480', height: '480' }}
+        src={avatarUrl}
+        onClick={gotoProfile}
+      />
       <div className={'flex flex-col ml-xs'}>
         <div className="label-m text-slate-900 mb-xxs">{displayName}</div>
         <div className="flex gap-s">
@@ -109,16 +123,15 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
   ) : (
     <>
       <div className="absolute -top-s -left-[80px] hidden sm:block">
-        <Link href={`/profile/${creator}`}>
-          <Avatar
-            alt="Display Name @displayName"
-            showBorder
-            size={AvatarSize.M}
-            imageElementType={Image}
-            imageComponentProps={{ width: '480', height: '480' }}
-            src={avatarUrl}
-          />
-        </Link>
+        <Avatar
+          alt="Display Name @displayName"
+          showBorder
+          size={AvatarSize.M}
+          imageElementType={Image}
+          imageComponentProps={{ width: '480', height: '480' }}
+          src={avatarUrl}
+          onClick={gotoProfile}
+        />
       </div>
       <div className="label-l text-slate-900 mb-xxs">{displayName}</div>
       <div className="flex gap-s">
