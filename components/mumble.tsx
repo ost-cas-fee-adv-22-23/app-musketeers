@@ -11,6 +11,7 @@ import {
   Time,
 } from '@smartive-education/design-system-component-library-musketeers';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { getUserId } from '../helpers/session.helpers';
@@ -32,6 +33,12 @@ type MumbleHeaderProps = {
   displayName: string;
   userName: string;
   avatarUrl: string;
+  timeStamp: string;
+  creator: string;
+};
+
+type MumbleHeaderLinksProps = {
+  userName: string;
   timeStamp: string;
   creator: string;
 };
@@ -64,10 +71,25 @@ function Mumble({ mumbleData, avatarUrl, isInline, children, onDeleteCallback }:
   );
 }
 
+function MumbleHeaderLinks({ userName, timeStamp, creator }: MumbleHeaderLinksProps) {
+  const router = useRouter();
+
+  return (
+    <>
+      <IconLink type={IconLinkType.VIOLET} label={userName} onClick={() => router.push(`/profile/${creator}`)}>
+        <Profile />
+      </IconLink>
+      <IconLink type={IconLinkType.DEFAULT} label={timeStamp}>
+        <Time />
+      </IconLink>
+    </>
+  );
+}
+
 function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, creator }: MumbleHeaderProps) {
   return isInline ? (
     <div className={'flex items-center mb-s'}>
-      <div>
+      <Link href={`/profile/${creator}`}>
         <Avatar
           alt="Display Name @displayName"
           showBorder
@@ -76,63 +98,31 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
           imageComponentProps={{ width: '480', height: '480' }}
           src={avatarUrl}
         />
-      </div>
+      </Link>
       <div className={'flex flex-col ml-xs'}>
         <div className="label-m text-slate-900 mb-xxs">{displayName}</div>
         <div className="flex gap-s">
-          <IconLink
-            type={IconLinkType.VIOLET}
-            label={userName}
-            href={`/profile/${creator}`}
-            target="_self"
-            onClick={() => undefined}
-          >
-            <Profile />
-          </IconLink>
-          <IconLink
-            type={IconLinkType.DEFAULT}
-            label={timeStamp}
-            href={`/profile/${creator}`}
-            target="_self"
-            onClick={() => undefined}
-          >
-            <Time />
-          </IconLink>
+          <MumbleHeaderLinks userName={userName} timeStamp={timeStamp} creator={creator} />
         </div>
       </div>
     </div>
   ) : (
     <>
       <div className="absolute -top-s -left-[80px] hidden sm:block">
-        <Avatar
-          alt="Display Name @displayName"
-          showBorder
-          size={AvatarSize.M}
-          imageElementType={Image}
-          imageComponentProps={{ width: '480', height: '480' }}
-          src={avatarUrl}
-        />
+        <Link href={`/profile/${creator}`}>
+          <Avatar
+            alt="Display Name @displayName"
+            showBorder
+            size={AvatarSize.M}
+            imageElementType={Image}
+            imageComponentProps={{ width: '480', height: '480' }}
+            src={avatarUrl}
+          />
+        </Link>
       </div>
       <div className="label-l text-slate-900 mb-xxs">{displayName}</div>
       <div className="flex gap-s">
-        <IconLink
-          type={IconLinkType.VIOLET}
-          label={userName}
-          href={`/profile/${creator}`}
-          target="_self"
-          onClick={() => undefined}
-        >
-          <Profile />
-        </IconLink>
-        <IconLink
-          type={IconLinkType.DEFAULT}
-          label={timeStamp}
-          href={`/profile/${creator}`}
-          target="_self"
-          onClick={() => undefined}
-        >
-          <Time />
-        </IconLink>
+        <MumbleHeaderLinks userName={userName} timeStamp={timeStamp} creator={creator} />
       </div>
     </>
   );
