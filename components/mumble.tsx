@@ -36,6 +36,12 @@ type MumbleHeaderProps = {
   creator: string;
 };
 
+type MumbleHeaderLinksProps = {
+  userName: string;
+  timeStamp: string;
+  creator: string;
+};
+
 type MumbleContentProps = {
   text: string;
   mediaUrl: string | null;
@@ -64,6 +70,25 @@ function Mumble({ mumbleData, avatarUrl, isInline, children, onDeleteCallback }:
   );
 }
 
+function MumbleHeaderLinks({ userName, timeStamp, creator }: MumbleHeaderLinksProps) {
+  return (
+    <>
+      <IconLink
+        type={IconLinkType.VIOLET}
+        label={userName}
+        href={`/profile/${creator}`}
+        target="_self"
+        onClick={() => undefined}
+      >
+        <Profile />
+      </IconLink>
+      <IconLink type={IconLinkType.DEFAULT} label={timeStamp} target="_self" onClick={() => undefined}>
+        <Time />
+      </IconLink>
+    </>
+  );
+}
+
 function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, creator }: MumbleHeaderProps) {
   return isInline ? (
     <div className={'flex items-center mb-s'}>
@@ -80,24 +105,7 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
       <div className={'flex flex-col ml-xs'}>
         <div className="label-m text-slate-900 mb-xxs">{displayName}</div>
         <div className="flex gap-s">
-          <IconLink
-            type={IconLinkType.VIOLET}
-            label={userName}
-            href={`/profile/${creator}`}
-            target="_self"
-            onClick={() => undefined}
-          >
-            <Profile />
-          </IconLink>
-          <IconLink
-            type={IconLinkType.DEFAULT}
-            label={timeStamp}
-            href={`/profile/${creator}`}
-            target="_self"
-            onClick={() => undefined}
-          >
-            <Time />
-          </IconLink>
+          <MumbleHeaderLinks userName={userName} timeStamp={timeStamp} creator={creator} />
         </div>
       </div>
     </div>
@@ -115,24 +123,7 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
       </div>
       <div className="label-l text-slate-900 mb-xxs">{displayName}</div>
       <div className="flex gap-s">
-        <IconLink
-          type={IconLinkType.VIOLET}
-          label={userName}
-          href={`/profile/${creator}`}
-          target="_self"
-          onClick={() => undefined}
-        >
-          <Profile />
-        </IconLink>
-        <IconLink
-          type={IconLinkType.DEFAULT}
-          label={timeStamp}
-          href={`/profile/${creator}`}
-          target="_self"
-          onClick={() => undefined}
-        >
-          <Time />
-        </IconLink>
+        <MumbleHeaderLinks userName={userName} timeStamp={timeStamp} creator={creator} />
       </div>
     </>
   );
