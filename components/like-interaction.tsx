@@ -34,7 +34,7 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
         };
       }
     }
-    throw Error('Unknown action: ' + action.type);
+    throw Error(`Unknown action: '${action.type}`);
   };
   const [state, dispatch] = useReducer(reducer, { likes: initialCount || 0, liked: likedByUser || false });
 
