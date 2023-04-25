@@ -94,7 +94,7 @@ https://deepsource.com/blog/git-branch-naming-conventions/
 ### Rendering Strategies
 All our pages are follwing the SSR strategie combiend with CSR. We went for this strategie because of these criterias.
 
-- Scalability is not really there, when rendering
+- Scalability is not really there, when rendering static
 - App contains a lot of dynamic components which are changing a lot
 - Performance is good enough with SSR
 
