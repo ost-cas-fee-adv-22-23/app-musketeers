@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 
-export default function PageHome() {
+function Settings() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -106,3 +106,5 @@ export default function PageHome() {
     </>
   );
 }
+
+export default Settings;
