@@ -1,59 +1,102 @@
 # Musketeer's Mumble App
 
-## INstallation Instructions
+People say this app could easily replace twitter. You know.. people say. 
 
-- TODO
+## Musketeer's Production URL
 
-## Development decisions and thoughts
-
-- TODO: click handlers to get around event bubbling and next/link in next/link problem
-- TODO: state management, why did we use only useState and useReducer?
-- TODO: page transisions, loading indicators, toasts
-
-## Vercel Prod URL
+Our production enviroment can be accessed via following URL
 
 https://app-musketeers.vercel.app
 
-## Development
+## Setup
 
-### Node/NPM Version
+### 1. Node/NPM Version
 
 There is a .nvmrc file included, in case you use NVM for local node version management.
 Just type `$nvm use` in the projects folder, and NVM determines the correct Node version based on the configuration.
 
-## Next.js Infos
+### 2. GitHub Registry AuthToken
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+In order to access all packages used in this repository you need to create a registry personal access token.
+This can be reached following these steps.
+
+1. Go to Github Settings
+2. Go to Developer Settings
+3. Go to Personal Access Token
+4. Click Generate Token, Set token lifetime and token right's
+
+Now you need to create a **.npmrc** file in the root where you paste your token in order to authenticate against the register which we try to access.
+
+```bash
+@smartive-education:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_TOKEN
+```
+
+### 3. Local Environment Variables
+
+In order to run the repository localy we need to feed next.js with some variables.
+Create the following file **.env** in the project root with the following content.
+
+```bash
+NEXT_PUBLIC_API_BASE_URL={URL_TO_API}
+ZITADEL_CLIENT_ID={ZITADEL_CLIENT_ID}
+ZITADEL_ISSUER={ZITADEL_ISSUER}
+NEXTAUTH_SECRET={NEXTAUTH_SECRET}
+```
+
+Get in touch with the Smartive-G's to access the variables. Replace the placeholders then.
 
 ## Getting Started
 
-First, run the development server:
+### Installation Commands
+
+Run the following command to install all dependencies from package.json.
 
 ```bash
-npm run dev
-# or
-yarn dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development Commands
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+#### Running local dev server
+```bash
+npm run dev
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+#### Building the project
+```bash
+npm run build
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+#### Running local build
+```bash
+npm run start
+```
 
-## Learn More
+## Development guidelines
 
-To learn more about Next.js, take a look at the following resources:
+### Conventions
+#### Ticketing
+We created feature tickets in order to keep track what we are working on
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+https://trello.com/b/BK3h5ADR/mumble
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### Variable Naming
+We used following variable naming convention
 
-## Deploy on Vercel
+https://github.com/kettanaito/naming-cheatsheet
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Branch Naming
+We used following branch naming convention
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+https://deepsource.com/blog/git-branch-naming-conventions/
+
+### Rendering Strategies
+All our pages are follwing the SSR strategie combiend with CSR. We went for this strategie because of these criterias.
+
+- Scalability is not really there, when rendering static
+- App contains a lot of dynamic components which are changing a lot
+- Performance is good enough with SSR
+
+### State Manangement 
+Except from the Auth custom hooks, there is not much shared client state. Therefore we decided to use plain state hooks like **useState**, **useReducer** and **React Context - Provider**.
