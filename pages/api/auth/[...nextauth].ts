@@ -99,7 +99,7 @@ export default NextAuth({
   pages: {
     signIn: '/login',
     signOut: '/login',
-    error: '/login', // TODO: CREATE ERROR PAGE
+    error: '/login',
     newUser: '/login',
   },
 });
