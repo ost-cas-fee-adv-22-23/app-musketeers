@@ -76,5 +76,27 @@ npm run start
 ## Development guidelines
 
 ### Conventions
+#### Ticketing
+We created feature tickets in order to keep track what we are working on
+
+https://trello.com/b/BK3h5ADR/mumble
+
+#### Variable Naming
+We used following variable naming convention
+
+https://github.com/kettanaito/naming-cheatsheet
+
+#### Branch Naming
+We used following branch naming convention
+
+https://deepsource.com/blog/git-branch-naming-conventions/
+
 ### Rendering Strategies
+All our pages are follwing the SSR strategie combiend with CSR. We went for this strategie because of these criterias.
+
+- Scalability is not really there, when rendering
+- App contains a lot of dynamic components which are changing a lot
+- Performance is good enough with SSR
+
 ### State Manangement 
+Except from the Auth custom hooks, there is not much shared client state. Therefore we decided to use plain state hooks like **useState**, **useReducer** and **React Context - Provider**.
