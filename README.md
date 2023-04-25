@@ -1,5 +1,15 @@
 # Musketeer's Mumble App
 
+## INstallation Instructions
+
+- TODO
+
+## Development decisions and thoughts
+
+- TODO: click handlers to get around event bubbling and next/link in next/link problem
+- TODO: state management, why did we use only useState and useReducer?
+- TODO: page transisions, loading indicators, toasts
+
 ## Vercel Prod URL
 
 https://app-musketeers.vercel.app
