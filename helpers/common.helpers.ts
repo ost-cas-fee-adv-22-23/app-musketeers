@@ -34,7 +34,7 @@ export const getFormattedTimestamp = (id: string): string => {
     units: ['y', 'd', 'h', 'm'],
     largest: 1,
   });
-  return 'vor' + ' ' + dateAgeHumanized;
+  return `vor ${dateAgeHumanized}`;
 };
 
 export const useContainerDimensions = (containerElement: RefObject<HTMLDivElement>) => {

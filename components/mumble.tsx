@@ -11,7 +11,6 @@ import {
   Time,
 } from '@smartive-education/design-system-component-library-musketeers';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { getUserId } from '../helpers/session.helpers';
@@ -58,7 +57,7 @@ function Mumble({ mumbleData, avatarUrl, isInline, children, onDeleteCallback }:
     <div className="relative">
       <MumbleHeader
         isInline={isInline}
-        displayName={mumbleData.creatorData.firstName + ' ' + mumbleData.creatorData.lastName}
+        displayName={`${mumbleData.creatorData.firstName} ${mumbleData.creatorData.lastName}`}
         userName={mumbleData.creatorData.userName}
         avatarUrl={avatarUrl}
         timeStamp={getFormattedTimestamp(mumbleData.id)}

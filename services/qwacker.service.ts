@@ -1,7 +1,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function qwackerRequest(endpoint: string, jwtToken: string, options: { [key: string]: string | FormData }) {
-  const url = BASE_URL + '/' + endpoint;
+  const url = `${BASE_URL}/${endpoint}`;
   const headers: { [key: string]: string } = {
     'content-type': 'application/json',
     Authorization: `Bearer ${jwtToken}`,
