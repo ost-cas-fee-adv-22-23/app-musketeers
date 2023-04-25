@@ -90,6 +90,7 @@ export default function ProfilePage({
                 alt="Profile Image alt attribute text"
                 onClick={() => undefined}
                 src={PROFILE_IMG_URL + user.id}
+                editButtonAriaLabel="Edit Profile Image"
               />
             ) : (
               <Avatar
