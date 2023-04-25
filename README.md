@@ -92,11 +92,17 @@ We used following branch naming convention
 https://deepsource.com/blog/git-branch-naming-conventions/
 
 ### Rendering Strategies
-All our pages are follwing the SSR strategie combiend with CSR. We went for this strategie because of these criterias.
+All our pages are follwing the SSR strategie combiend with CSR. (Except Login and NotFound Page which are by default Static, no Logic needed)
+We went for this strategie because of these criterias.
 
 - Scalability is not really there, when rendering static
 - App contains a lot of dynamic components which are changing a lot
 - Performance is good enough with SSR
 
 ### State Manangement 
-Except from the Auth custom hooks, there is not much shared client state. Therefore we decided to use plain state hooks like **useState**, **useReducer** and **React Context - Provider**.
+Except from the Auth custom hooks, there is not much shared client state. Therefore, we decided to use plain state hooks like **useState**, **useReducer** and **React Context - Provider**.
+
+### REST
+We decided that for our application scope the native Fetch API will be enough to handle our request cases. Therefore, we are not using any request library.
+
+The problem with SWR was, that we wanted to use our existing service architecture. And the useSwrInfinite hook as example, provides currentPage for the getKey method only, and is not passing any infos about the paging to the fetcher function.
