@@ -28,6 +28,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon-192x192.png"></link>
         <meta name="theme-color" content="#fff" />
+        <meta name="description" content="Let's get ready to Mumble!"></meta>
       </Head>
 
       <NextNProgress color="#C4B5FD" options={{ showSpinner: false }} />
