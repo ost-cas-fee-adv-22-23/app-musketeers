@@ -1,11 +1,17 @@
 {
+  "root": true,
   "extends": ["next/core-web-vitals", "@smartive/eslint-config/react"],
+  "plugins": ["testing-library"],
   "overrides": [
     {
       "files": ["pages/**/*.tsx", "components/**/*.tsx"],
       "rules": {
         "react/forbid-component-props": ["error", { "forbid": [] }]
       }
+    },
+    {
+      "files": ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
+      "extends": ["plugin:testing-library/react"]
     }
   ]
 }
