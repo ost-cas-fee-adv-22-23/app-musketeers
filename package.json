@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --watch",
+    "test:ci": "jest --ci",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@smartive-education/design-system-component-library-musketeers": "^1.37.0",
@@ -27,11 +30,18 @@
     "react-dom": "18.2.0",
     "react-toastify": "^9.1.2",
     "sharp": "^0.32.0",
+    "ts-node": "^10.9.1",
     "typescript": "4.8.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.33.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/humanize-duration": "^3.27.1",
     "autoprefixer": "^10.4.13",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.4"
   }
