@@ -10,7 +10,8 @@
     "test": "jest --watch",
     "test:ci": "jest --ci",
     "test:e2e": "playwright test",
-    "prettier:check": "prettier --check './**/*.{ts,tsx}' --config ./.prettierrc"
+    "prettier:check": "prettier --check './**/*.{ts,tsx}' --config ./.prettierrc",
+    "dep-graph:validate": "npx depcruise src --include-only \"^src\" --config .dependency-cruiser.js"
   },
   "dependencies": {
     "@smartive-education/design-system-component-library-musketeers": "^1.37.0",
