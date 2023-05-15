@@ -87,7 +87,9 @@ export default function PageHome(props: PageHomeProps) {
       </Head>
 
       <Container>
-        <h1 className="heading-2 text-violet-600 mb-xs">Willkommen auf Mumble</h1>
+        <h1 className="heading-2 text-violet-600 mb-xs" data-testid="heading">
+          Willkommen auf Mumble
+        </h1>
         <h2 className="heading-4 text-slate-500 mb-m">
           Voluptatem qui cumque voluptatem quia tempora dolores distinctio vel repellat dicta.
         </h2>
