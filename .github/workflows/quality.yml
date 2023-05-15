@@ -1,0 +1,32 @@
+name: Code quality checks, dependency graph and build
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+
+jobs:
+  quality:
+    name: Code quality checks, dependency graph and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          registry-url: https://npm.pkg.github.com/
+          scope: '@smartive-education'
+      - name: Install dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Run ESLint
+        run: npm run lint
+      - name: Run Prettier
+        run: npm run format:check
+      - name: Run Dependency Graph
+        run: npm run dep-graph:validate
+      - name: Run Build
+        run: npm run build
