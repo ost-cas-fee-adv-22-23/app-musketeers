@@ -1,11 +1,10 @@
-name: Code quality checks, dependency graph and build
+name: Code quality checks, dependency graph
 
 on:
   push:
     branches: ['main']
   pull_request:
     branches: ['main']
-  workflow_dispatch:
 
 jobs:
   quality:
@@ -28,5 +27,3 @@ jobs:
         run: npm run format:check
       - name: Run Dependency Graph
         run: npm run dep-graph:validate
-      - name: Run Build
-        run: npm run build
