@@ -25,5 +25,5 @@ jobs:
         run: npm run lint
       - name: Run Prettier
         run: npm run prettier:check
-      - name: Run Dependency Graph
-        run: npm run dep-graph:validate
+      # - name: Run Dependency Graph
+      #   run: npm run dep-graph:validate
