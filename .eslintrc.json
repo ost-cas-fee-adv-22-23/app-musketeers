@@ -1,7 +1,7 @@
 {
   "root": true,
   "jest": true,
-  "extends": ["next/core-web-vitals", "@smartive/eslint-config/react"],
+  "extends": ["next/core-web-vitals", "@smartive/eslint-config/react", "plugins:testing-library/react"],
   "plugins": ["testing-library"],
   "overrides": [
     {
