@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import PageHome from '../pages/index';
-import intersectionObserverMock from '../__mocks__/intersectionObserverMock';
+import '../__mocks__/intersectionObserverMock';
 
 describe('Home', () => {
   it('renders a heading', () => {
