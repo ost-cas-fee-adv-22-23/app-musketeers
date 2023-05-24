@@ -14,14 +14,16 @@ export async function qwackerRequest(endpoint: string, jwtToken: string, options
   const response = await fetch(url, {
     headers,
     ...options,
+  }).catch((error) => {
+    console.error('Error during qwackerRequest', error);
   });
 
-  if (!response.ok) {
+  if (!response?.ok) {
     const message = 'Something went wrong. Please try later again..';
     console.error(message);
   }
 
-  if (response.status !== 200) {
+  if (response?.status !== 200) {
     return;
   }
 
