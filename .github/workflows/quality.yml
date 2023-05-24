@@ -1,4 +1,4 @@
-name: Code quality checks, dependency graph
+name: Code quality checks
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   quality:
-    name: Code quality checks, dependency graph and build
+    name: Code quality checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
