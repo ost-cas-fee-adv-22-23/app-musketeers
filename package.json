@@ -11,8 +11,8 @@
     "test:ci": "jest --ci",
     "test:e2e": "playwright test",
     "prettier:check": "prettier --check './**/*.{ts,tsx}' --config ./.prettierrc",
-    "dep-graph:validate": "npx depcruise './**/*.{ts, tsx}' --config .dependency-cruiser.js",
-    "dep-graph:create-svg": "npx depcruise './**/*.{ts, tsx}' --config .dependency-cruiser.js --output-type dot | dot -T svg > dependency-graph.svg"
+    "dep-graph:validate": "npx depcruise './**/*.{ts, tsx}' --exclude \"^node_modules\" --config .dependency-cruiser.js",
+    "dep-graph:create-svg": "npx depcruise './**/*.{ts, tsx}' --exclude \"^node_modules\" --config .dependency-cruiser.js --output-type dot | dot -T svg > dependency-graph.svg"
   },
   "dependencies": {
     "@smartive-education/design-system-component-library-musketeers": "^1.37.0",
