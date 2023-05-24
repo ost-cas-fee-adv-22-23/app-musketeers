@@ -27,6 +27,7 @@ const getTimestampFromId = (id: string) => {
 };
 
 export const getFormattedTimestamp = (id: string): string => {
+  if (!id) return '';
   const date = new Date(getTimestampFromId(id));
   const dateAgeHumanized = humanizeDuration(new Date().getTime() - date.getTime(), {
     language: 'de',
