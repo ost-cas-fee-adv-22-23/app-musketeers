@@ -26,6 +26,7 @@ jobs:
           context: .
           push: true
           tags: gcr.io/cas-fee-advanced-mumble/image:latest
+          secrets: 'github_token=${{ secrets.NPM_TOKEN }}'
   deploy:
     name: Deploy Mumble on Google Cloud Platform
     runs-on: ubuntu-latest
