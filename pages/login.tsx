@@ -12,7 +12,7 @@ function Login() {
       </Head>
 
       <LoginRegistrationContainer>
-        <h2 className={'heading-2 text-slate-900 mb-m'}>Anmelden</h2>
+        <h2 className={'heading-2 text-slate-900 mb-m'}>Melde Dich an</h2>
         <Button
           label="Let's mumble"
           onClick={() => signIn('zitadel', { callbackUrl: '/' })}
