@@ -24,7 +24,4 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN --mount=type=secret,id=npm,target=/root/.npmrc npm ci
 
-EXPOSE 3000
-ENV PORT 3000
-
-CMD npm start
+CMD npm run start -- -p 8080
