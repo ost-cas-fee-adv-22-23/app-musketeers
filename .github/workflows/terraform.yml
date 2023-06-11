@@ -30,6 +30,7 @@ jobs:
   deploy:
     name: Deploy Mumble on Google Cloud Platform
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: actions/checkout@v3
 
