@@ -5,7 +5,8 @@ WORKDIR /app
 
 # TODO: As we use docker build secrets here for the npm token, a multi step build is probably not necessary..
 COPY ./package.json ./package-lock.json ./
-RUN npm ci
+RUN --mount=type=secret,id=github_token \
+  cat /run/secrets/github_token npm ci
 
 COPY . .
 RUN npm run build
@@ -22,6 +23,7 @@ COPY --from=build /app/.next ./.next
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN npm ci
+RUN --mount=type=secret,id=github_token \
+  cat /run/secrets/github_token npm ci
 
 CMD npm run start -- -p 8080
