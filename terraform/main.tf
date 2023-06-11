@@ -1,10 +1,10 @@
 locals {
-  name       = "cas-demo"
+  name       = "cas-mumble"
   gcp_region = "europe-west6"
 }
 
 provider "google" {
-  project = "cas-test-demo-run"
+  project = "cas-fee-advanced-mumble"
   region  = local.gcp_region
 }
 
@@ -13,6 +13,6 @@ data "google_project" "project" {
 
 terraform {
   backend "gcs" {
-    bucket = "cas-test-demo-run-tf-state"
+    bucket = "cas-fee-advanced-mumble-tf-state"
   }
 }
