@@ -32,6 +32,9 @@ variable "commit_hash" {
   description = "value of the commit hash of the Docker image to deploy"
 }
 
+resource "random_uuid" "random_nextauth_secret" {
+}
+
 resource "google_cloud_run_service" "cas-fee-advanced-mumble" {
   name                       = local.name
   location                   = local.gcp_region
@@ -52,6 +55,32 @@ resource "google_cloud_run_service" "cas-fee-advanced-mumble" {
           name           = "http1"
           container_port = 8080
         }
+
+        env {
+          name  = "NEXT_PUBLIC_API_BASE_URL"
+          value = "https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app"
+        }
+
+        env {
+          name  = "ZITADEL_CLIENT_ID"
+          value = "181236603920908545@cas_fee_adv_qwacker_prod"
+        }
+
+        env {
+          name  = "ZITADEL_ISSUER"
+          value = "https://cas-fee-advanced-ocvdad.zitadel.cloud"
+        }
+
+        env {
+          name  = "NEXTAUTH_SECRET"
+          value = "${random_uuid.random_nextauth_secret.result}"
+        }
+
+        env {
+          name  = "NEXTAUTH_URL"
+          value = "https://cas-mumble-jku2yeh7fa-oa.a.run.app/"
+        }
+
       }
 
       service_account_name = google_service_account.cloud-runner.email

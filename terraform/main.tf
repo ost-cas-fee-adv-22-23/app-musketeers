@@ -8,6 +8,9 @@ provider "google" {
   region  = local.gcp_region
 }
 
+provider "random" {
+}
+
 data "google_project" "project" {
 }
 
