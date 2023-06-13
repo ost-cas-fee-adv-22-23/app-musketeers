@@ -14,8 +14,7 @@ RUN npm run build
 FROM node:18-alpine
 WORKDIR /app
 
-# TODO: .env.production is not really used, this will be replaced by env variable from Cloud Run
-COPY --from=build /app/package.json /app/package-lock.json /app/.env.production /app/next.config.js ./
+COPY --from=build /app/package.json /app/package-lock.json /app/next.config.js ./
 COPY --from=build /app/public ./public
 COPY --from=build /app/.next ./.next
 
