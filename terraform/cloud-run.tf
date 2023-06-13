@@ -27,6 +27,11 @@ output "cloud-runner-email" {
   value = google_service_account.cloud-runner.email
 }
 
+variable "commit_hash" {
+  type = string
+  description = "value of the commit hash of the Docker image to deploy"
+}
+
 resource "google_cloud_run_service" "cas-fee-advanced-mumble" {
   name                       = local.name
   location                   = local.gcp_region
@@ -35,7 +40,7 @@ resource "google_cloud_run_service" "cas-fee-advanced-mumble" {
   template {
     spec {
       containers {
-        image = "europe-west6-docker.pkg.dev/cas-fee-advanced-mumble/mumble/image"
+        image = "europe-west6-docker.pkg.dev/cas-fee-advanced-mumble/mumble/image:${var.commit_hash}"
 
         resources {
           limits = {
