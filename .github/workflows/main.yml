@@ -10,22 +10,22 @@ concurrency:
 
 jobs:
   trigger-quality:
-    name: Run Quality Checks
+    name: Quality Checks
     uses: ./.github/workflows/quality.yml
     secrets: inherit
 
-  trigger-jest:
-    name: Run Jest Tests
-    uses: ./.github/workflows/jest.yml
+  trigger-unit-integration:
+    name: 'Unit/Integration Tests'
+    uses: ./.github/workflows/unit-integration.yml
     secrets: inherit
 
-  trigger-playwright:
-    name: Run Playwright Tests
-    uses: ./.github/workflows/playwright.yml
+  trigger-e2e:
+    name: E2E Tests
+    uses: ./.github/workflows/e2e.yml
     secrets: inherit
 
-  trigger-terraform:
-    name: Deploy To Google Cloud Run Via Terraform
-    needs: [trigger-quality, trigger-jest, trigger-playwright]
-    uses: ./.github/workflows/terraform.yml
+  trigger-deploy:
+    name: Deploy
+    needs: [trigger-quality, trigger-unit-integration, trigger-e2e]
+    uses: ./.github/workflows/deploy.yml
     secrets: inherit

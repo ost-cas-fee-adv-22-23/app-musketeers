@@ -5,7 +5,6 @@ on:
 
 jobs:
   quality:
-    name: Code quality checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,6 +21,3 @@ jobs:
         run: npm run lint
       - name: Run Prettier
         run: npm run prettier:check
-      # TODO: We didn't have time to really setup dependency-cruiser
-      # - name: Run Dependency Graph
-      #   run: npm run dep-graph:validate
