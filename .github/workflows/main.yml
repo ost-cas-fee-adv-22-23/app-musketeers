@@ -18,3 +18,14 @@ jobs:
     name: Run Jest Tests
     uses: ./.github/workflows/jest.yml
     secrets: inherit
+
+  trigger-playwright:
+    name: Run Playwright Tests
+    uses: ./.github/workflows/playwright.yml
+    secrets: inherit
+
+  trigger-terraform:
+    name: Deploy To Google Cloud Run Via Terraform
+    needs: [trigger-quality, trigger-jest, trigger-playwright]
+    uses: ./.github/workflows/terraform.yml
+    secrets: inherit
