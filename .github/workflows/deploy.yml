@@ -1,4 +1,4 @@
-name: Release And Deploy Via Terraform to GCP
+name: Build And Deploy
 
 on:
   workflow_call:
@@ -29,7 +29,7 @@ jobs:
           secrets: |
             "npmrc=${{ secrets.NPM_RC }}"
   deploy:
-    name: Deploy Mumble on Google Cloud Platform
+    name: Deploy To GCP
     runs-on: ubuntu-latest
     needs: build
     steps:
