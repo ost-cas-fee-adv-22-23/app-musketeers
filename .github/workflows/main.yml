@@ -1,4 +1,4 @@
-name: Main Workflow - Ttrigger Jobs On Push To Main
+name: Main Workflow - Trigger Jobs On Push To Main
 
 on:
   push:
