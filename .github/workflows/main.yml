@@ -1,0 +1,20 @@
+name: Main Workflow - Ttrigger Jobs On Push To Main
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: 'prd'
+
+jobs:
+  trigger-quality:
+    name: Run Quality Checks
+    uses: ./.github/workflows/quality.yml
+    secrets: inherit
+
+  trigger-jest:
+    name: Run Jest Tests
+    uses: ./.github/workflows/jest.yml
+    secrets: inherit

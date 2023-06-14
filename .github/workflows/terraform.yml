@@ -1,9 +1,7 @@
-name: Release and Deploy via Terraform
+name: Release And Deploy Via Terraform to GCP
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
 
 jobs:
   build:
