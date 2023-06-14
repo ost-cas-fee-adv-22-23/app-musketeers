@@ -5,6 +5,7 @@ on:
 
 jobs:
   test:
+    name: Run E2E Tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
