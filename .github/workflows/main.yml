@@ -1,0 +1,15 @@
+name: Main Workflow - Ttrigger Jobs On Push To Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-quality:
+    name: Run Quality Checks
+    uses: ./.github/workflows/quality.yml
+
+  trigger-jest:
+    name: Run Jest Tests
+    uses: ./.github/workflows/jest.yml
