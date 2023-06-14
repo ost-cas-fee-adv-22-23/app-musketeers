@@ -1,10 +1,7 @@
-name: Code quality checks
+name: Code Quality Checks
 
 on:
-  push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+  workflow_call:
 
 jobs:
   quality:

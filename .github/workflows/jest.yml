@@ -1,10 +1,7 @@
-name: Jest tests
+name: Jest Tests
 
 on:
-  push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
+  workflow_call:
 
 jobs:
   testing-with-jest:
