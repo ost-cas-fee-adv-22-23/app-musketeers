@@ -19,6 +19,7 @@ function Login() {
           size={ButtonSize.M}
           type={ButtonType.GRADIENT}
           isFullWidth
+          e2e={'button-login'}
         >
           <Mumble />
         </Button>

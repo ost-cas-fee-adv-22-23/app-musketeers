@@ -50,3 +50,5 @@ next-env.d.ts
 /playwright-report/
 /playwright/.cache/
 .env.production
+
+playwright/.auth

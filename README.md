@@ -106,3 +106,29 @@ Except from the Auth custom hooks, there is not much shared client state. Theref
 We decided that for our application scope the native Fetch API will be enough to handle our request cases. Therefore, we are not using any request library.
 
 The problem with SWR was, that we wanted to use our existing service architecture. And the useSwrInfinite hook as example, provides currentPage for the getKey method only, and is not passing any infos about the paging to the fetcher function.
+
+### E2E Setup
+In order to run E2E Playwright tests you need to run following commands. 
+
+If project installation not done then firstly run
+```bash
+npm install
+```
+If project installation is done, we need to install playwrights browser engines which are defined in playwright.config.ts. This command will download all engines needed in order to run the UI mode.
+```bash
+npx playwright install
+```
+
+### E2E Running
+**Headless mode**
+
+Runs E2E tests without browser poping up. Results of the tests and test logs will be shown in the terminal.
+```bash
+npx playwright test
+```
+**UI mode**
+
+Run your tests with UI Mode for a better developer experience with time travel debugging, watch mode and more.
+```bash
+npx playwright test --ui
+```

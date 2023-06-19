@@ -107,6 +107,7 @@ function MumbleAdd(props: MumbleAddProps) {
         value={text}
         hasError={hasError}
         errorMessage={hasError ? 'Bitte gib einen Text ein!' : ''}
+        e2e={'input-mumble'}
       />
 
       <span className={'text-right w-full block'}>
@@ -154,6 +155,7 @@ function MumbleAdd(props: MumbleAddProps) {
           size={ButtonSize.M}
           isFullWidth={true}
           showBorder={false}
+          e2e={'button-create-mumble'}
         >
           <Send />
         </Button>
