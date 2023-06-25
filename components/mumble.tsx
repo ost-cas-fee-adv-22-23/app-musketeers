@@ -54,7 +54,7 @@ type MumbleFooterProps = {
 
 function Mumble({ mumbleData, avatarUrl, isInline, children, onDeleteCallback }: MumbleProps) {
   return (
-    <div className="relative">
+    <div className="relative" data-testid="mumble">
       <MumbleHeader
         isInline={isInline}
         displayName={`${mumbleData.creatorData.firstName} ${mumbleData.creatorData.lastName}`}
@@ -82,7 +82,7 @@ function MumbleHeaderLinks({ userName, timeStamp, creator }: MumbleHeaderLinksPr
           event.stopPropagation();
           router.push(`/profile/${creator}`);
         }}
-        testid="mumble-username"
+        testid={'mumble-username'}
       >
         <Profile />
       </IconLink>

@@ -36,7 +36,7 @@ describe('Mumble', () => {
 
     const userName = screen.getByTestId('mumble-username');
     expect(userName).toBeInTheDocument();
-    expect(userName).toHaveTextContent('Test Text');
+    expect(userName).toHaveTextContent('test');
 
     const text = screen.getByTestId('mumble-text');
     expect(text).toBeInTheDocument();
@@ -72,6 +72,10 @@ describe('Mumble', () => {
     const displayName = screen.getByTestId('display-name-inline');
     expect(displayName).toBeInTheDocument();
     expect(displayName).toHaveTextContent('Hans Muster');
+
+    const userName = screen.getByTestId('mumble-username');
+    expect(userName).toBeInTheDocument();
+    expect(userName).toHaveTextContent('test');
 
     const text = screen.getByTestId('mumble-text');
     expect(text).toBeInTheDocument();
