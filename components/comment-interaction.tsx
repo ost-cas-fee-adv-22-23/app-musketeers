@@ -15,7 +15,12 @@ function CommentInteraction(props: CommentInteractionProps) {
   const comments = props.initialCount;
 
   return (
-    <Interaction type={InteractionType.VIOLET} active={comments > 0} onClick={props.onClick}>
+    <Interaction
+      type={InteractionType.VIOLET}
+      active={comments > 0}
+      onClick={props.onClick}
+      testid={'button-mumble-comment'}
+    >
       {comments > 0 ? <ReplyFilled /> : <Reply />}
       {comments > 0 ? `${comments} Comments` : 'Comment'}
     </Interaction>

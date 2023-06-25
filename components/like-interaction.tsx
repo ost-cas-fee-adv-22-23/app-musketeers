@@ -85,7 +85,7 @@ function LikeInteraction({ initialCount, likedByUser, postId }: LikeInteractionP
   };
 
   return (
-    <Interaction type={InteractionType.PINK} active={state.likes > 0} onClick={likeHandler}>
+    <Interaction type={InteractionType.PINK} active={state.likes > 0} onClick={likeHandler} testid={'button-mumble-like'}>
       {state.liked ? <HeartFilled /> : <Heart />}
       {state.likes > 0 ? `${state.likes} Likes` : 'Like'}
     </Interaction>

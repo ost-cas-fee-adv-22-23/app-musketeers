@@ -9,7 +9,7 @@ const PASSWORD: string = process.env.ZITADEL_PASSWORD || '';
 
 setup('authenticate', async ({ page }) => {
   await page.goto('/');
-  await page.click('button[data-e2e="button-login"]');
+  await page.click('button[data-testId="button-login"]');
   await page.waitForEvent('domcontentloaded'); // Wait for the DOM content to be loaded
 
   await page.waitForSelector('#loginName');
