@@ -54,7 +54,7 @@ type MumbleFooterProps = {
 
 function Mumble({ mumbleData, avatarUrl, isInline, children, onDeleteCallback }: MumbleProps) {
   return (
-    <div className="relative" data-testid="mumble">
+    <div className="relative" data-testid={mumbleData.id}>
       <MumbleHeader
         isInline={isInline}
         displayName={`${mumbleData.creatorData.firstName} ${mumbleData.creatorData.lastName}`}

@@ -8,8 +8,8 @@
     "jest": true,
     "es2021": true
   },
-  "extends": ["next/core-web-vitals", "@smartive/eslint-config/react", "plugin:testing-library/react"],
-  "plugins": ["testing-library"],
+  "extends": ["next/core-web-vitals", "@smartive/eslint-config/react"],
+  "plugins": ["testing-library", "playwright"],
   "overrides": [
     {
       "files": ["pages/**/*.tsx", "components/**/*.tsx"],
@@ -18,8 +18,12 @@
       }
     },
     {
-      "files": ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
+      "files": ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(test).[jt]s?(x)"],
       "extends": ["plugin:testing-library/react"]
+    },
+    {
+      "files": ["**/__e2e__/*.ts", "**/?(*.)+(spec).ts"],
+      "extends": ["plugin:playwright/recommended"]
     }
   ]
 }

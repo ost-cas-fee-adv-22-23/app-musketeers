@@ -36,7 +36,7 @@ function DeleteInteraction({ postId, label, onDeleteCallback }: DeleteInteractio
   };
 
   return (
-    <Interaction type={InteractionType.PINK} onClick={handleDelete}>
+    <Interaction type={InteractionType.PINK} onClick={handleDelete} testid={'button-mumble-delete'}>
       <CancelSvg />
       {label}
     </Interaction>
