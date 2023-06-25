@@ -1,11 +1,11 @@
-name: Playwright Tests
+name: E2E Tests
+
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_call:
+
 jobs:
   test:
+    name: Run Playwright Tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -15,13 +15,13 @@ jobs:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
           scope: '@smartive-education'
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: Run Playwright tests
+      - name: Run Playwright Tests
         run: npx playwright test
       - uses: actions/upload-artifact@v3
         if: always()

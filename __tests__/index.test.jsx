@@ -3,7 +3,7 @@ import PageHome from '../pages/index';
 import '../__mocks__/intersectionObserverMock';
 
 describe('Home', () => {
-  it('renders a heading', () => {
+  it('Renders a heading', () => {
     render(<PageHome />);
 
     const heading = screen.getByTestId('heading');

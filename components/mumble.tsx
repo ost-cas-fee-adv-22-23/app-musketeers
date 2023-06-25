@@ -54,7 +54,7 @@ type MumbleFooterProps = {
 
 function Mumble({ mumbleData, avatarUrl, isInline, children, onDeleteCallback }: MumbleProps) {
   return (
-    <div className="relative">
+    <div className="relative" data-testid="mumble">
       <MumbleHeader
         isInline={isInline}
         displayName={`${mumbleData.creatorData.firstName} ${mumbleData.creatorData.lastName}`}
@@ -82,6 +82,7 @@ function MumbleHeaderLinks({ userName, timeStamp, creator }: MumbleHeaderLinksPr
           event.stopPropagation();
           router.push(`/profile/${creator}`);
         }}
+        testid={'mumble-username'}
       >
         <Profile />
       </IconLink>
@@ -104,7 +105,7 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
   return isInline ? (
     <div className={'flex items-center mb-s'}>
       <Avatar
-        alt="Display Name @displayName"
+        alt={userName}
         showBorder
         size={AvatarSize.S}
         imageElementType={Image}
@@ -113,7 +114,9 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
         onClick={gotoProfile}
       />
       <div className={'flex flex-col ml-xs'}>
-        <div className="label-m text-slate-900 mb-xxs">{displayName}</div>
+        <div className="label-m text-slate-900 mb-xxs" data-testid="display-name-inline">
+          {displayName}
+        </div>
         <div className="flex gap-s">
           <MumbleHeaderLinks userName={userName} timeStamp={timeStamp} creator={creator} />
         </div>
@@ -123,7 +126,7 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
     <>
       <div className="absolute -top-s -left-[80px] hidden sm:block">
         <Avatar
-          alt="Display Name @displayName"
+          alt={userName}
           showBorder
           size={AvatarSize.M}
           imageElementType={Image}
@@ -132,7 +135,9 @@ function MumbleHeader({ isInline, displayName, userName, avatarUrl, timeStamp, c
           onClick={gotoProfile}
         />
       </div>
-      <div className="label-l text-slate-900 mb-xxs">{displayName}</div>
+      <div className="label-l text-slate-900 mb-xxs" data-testid="display-name">
+        {displayName}
+      </div>
       <div className="flex gap-s">
         <MumbleHeaderLinks userName={userName} timeStamp={timeStamp} creator={creator} />
       </div>
@@ -146,7 +151,9 @@ function MumbleContent({ text, mediaUrl }: MumbleContentProps) {
   return (
     <div className="paragraph-s text-slate-900 grid gap-m">
       <div className={'pt-m'}>
-        <div className={'break-all'}>{text}</div>
+        <div className={'break-all'} data-testid="mumble-text">
+          {text}
+        </div>
         <div className="block md:flex md:gap-xs">
           {parseHashtags(text).map((hashtag: string) => (
             <Hashtag

@@ -1,0 +1,32 @@
+name: Main Workflow - Trigger Jobs On Push To Main
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: 'prd'
+  cancel-in-progress: true
+
+jobs:
+  trigger-quality:
+    name: Quality Checks
+    uses: ./.github/workflows/quality.yml
+    secrets: inherit
+
+  trigger-unit-integration:
+    name: 'Unit/Integration Tests'
+    uses: ./.github/workflows/unit-integration.yml
+    secrets: inherit
+
+  trigger-e2e:
+    name: E2E Tests
+    uses: ./.github/workflows/e2e.yml
+    secrets: inherit
+
+  trigger-deploy:
+    name: Deploy
+    needs: [trigger-quality, trigger-unit-integration, trigger-e2e]
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit

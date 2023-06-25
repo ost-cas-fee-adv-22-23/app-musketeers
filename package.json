@@ -10,14 +10,12 @@
     "test": "jest --watch",
     "test:ci": "jest --ci",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
     "prettier:check": "prettier --check './**/*.{ts,tsx}' --config ./.prettierrc",
     "dep-graph:validate": "npx depcruise './**/*.{ts, tsx}' --exclude \"^node_modules\" --config .dependency-cruiser.js",
     "dep-graph:create-svg": "npx depcruise './**/*.{ts, tsx}' --exclude \"^node_modules\" --config .dependency-cruiser.js --output-type dot | dot -T svg > dependency-graph.svg"
   },
   "dependencies": {
-    "@smartive-education/design-system-component-library-musketeers": "^1.38.0",
-    "dotenv": "^16.3.1",
+    "@smartive-education/design-system-component-library-musketeers": "^1.39.0",
     "humanize-duration": "^3.28.0",
     "next": "13.0.2",
     "next-auth": "^4.16.4",
