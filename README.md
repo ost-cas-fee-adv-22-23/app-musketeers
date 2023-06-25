@@ -1,6 +1,6 @@
 # Musketeer's Mumble App
 
-People say this app could easily replace twitter. You know.. people say. 
+People say this app could easily replace twitter. You know.. people say.
 
 ## Musketeer's Production URL
 
@@ -59,16 +59,19 @@ npm install
 ### Development Commands
 
 #### Running local dev server
+
 ```bash
 npm run dev
 ```
 
 #### Building the project
+
 ```bash
 npm run build
 ```
 
 #### Running local build
+
 ```bash
 npm run start
 ```
@@ -76,22 +79,27 @@ npm run start
 ## Development guidelines
 
 ### Conventions
+
 #### Ticketing
+
 We created feature tickets in order to keep track what we are working on
 
 https://trello.com/b/BK3h5ADR/mumble
 
 #### Variable Naming
+
 We used following variable naming convention
 
 https://github.com/kettanaito/naming-cheatsheet
 
 #### Branch Naming
+
 We used following branch naming convention
 
 https://deepsource.com/blog/git-branch-naming-conventions/
 
 ### Rendering Strategies
+
 All our pages are follwing the SSR strategie combiend with CSR. (Except Login and NotFound Page which are by default Static, no Logic needed)
 We went for this strategie because of these criterias.
 
@@ -99,10 +107,21 @@ We went for this strategie because of these criterias.
 - App contains a lot of dynamic components which are changing a lot
 - Performance is good enough with SSR
 
-### State Manangement 
+### State Manangement
+
 Except from the Auth custom hooks, there is not much shared client state. Therefore, we decided to use plain state hooks like **useState**, **useReducer** and **React Context - Provider**.
 
 ### REST
+
 We decided that for our application scope the native Fetch API will be enough to handle our request cases. Therefore, we are not using any request library.
 
 The problem with SWR was, that we wanted to use our existing service architecture. And the useSwrInfinite hook as example, provides currentPage for the getKey method only, and is not passing any infos about the paging to the fetcher function.
+
+### Docker
+
+To build Mumble as a Docker image locally, you need a local .npmrc file with the credentials for the Smartive Github Organisation credentials.
+$docker build -t app-musketeers . --secret id=npm,src=.npmrc
+
+### Terraform
+
+Configuration is included and will build the Docker Image for GCP automatically, on every merge to the main branch.

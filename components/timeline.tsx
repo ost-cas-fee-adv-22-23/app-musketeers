@@ -27,7 +27,9 @@ function Timeline(props: TimeLineProps) {
           </div>
         ))
       ) : (
-        <div className={'text-center text-violet-400'}>Currently there are no posts available</div>
+        <div className={'text-center text-violet-400'} data-testid="timeline-no-data">
+          Currently there are no posts available
+        </div>
       )}
     </>
   );
