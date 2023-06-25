@@ -1,8 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { getRandomMumbleText } from './custom.commands';
-
-const API_BASE = 'https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app';
-const API_POSTS = '/posts';
+import { E2E_API_POSTS, E2E_API_BASE, getRandomMumbleText } from './custom.commands';
 
 test.describe('Create, Like, Comment and Delete a new Mumble', () => {
   test('New Mumble - Happy Flow', async ({ page }) => {
@@ -23,7 +20,7 @@ test.describe('Create, Like, Comment and Delete a new Mumble', () => {
     await page.getByTestId('button-create-mumble').click();
 
     await page.waitForResponse(async (response) => {
-      if (response.url() === API_BASE + API_POSTS) {
+      if (response.url() === E2E_API_BASE + E2E_API_POSTS) {
         const data = await response.json();
         newlyCreatedMumbleId = data.id;
 
@@ -62,7 +59,7 @@ test.describe('Create, Like, Comment and Delete a new Mumble', () => {
     await page.getByTestId('button-create-mumble').click();
 
     await page.waitForResponse(async (response) => {
-      if (response.url() === API_BASE + API_POSTS + '/' + newlyCreatedMumbleId) {
+      if (response.url() === E2E_API_BASE + E2E_API_POSTS + '/' + newlyCreatedMumbleId) {
         const data = await response.json();
         newlyCreatedCommentId = data.id;
 
@@ -81,7 +78,7 @@ test.describe('Create, Like, Comment and Delete a new Mumble', () => {
     await deleteButton.click();
 
     await page.waitForResponse(async (response) => {
-      return response.url() === API_BASE + API_POSTS + '/' + newlyCreatedMumbleId;
+      return response.url() === E2E_API_BASE + E2E_API_POSTS + '/' + newlyCreatedMumbleId;
     });
 
     await page.waitForURL('**');

@@ -105,11 +105,16 @@ export default function ProfilePage({
 
         <div className={'mb-l'}>
           <div>
-            <h1 className="heading-3 text-slate-900">
+            <h1 className="heading-3 text-slate-900" data-testid={'profile-page-title'}>
               {user?.firstName} {user?.lastName}
             </h1>
             <div className="flex gap-s mb-xs">
-              <IconLink type={IconLinkType.VIOLET} label={user?.userName} onClick={() => undefined}>
+              <IconLink
+                type={IconLinkType.VIOLET}
+                label={user?.userName}
+                onClick={() => undefined}
+                testid={'profile-page-username'}
+              >
                 <Profile />
               </IconLink>
               <IconLink type={IconLinkType.DEFAULT} label={'City'} onClick={() => undefined}>
@@ -136,6 +141,7 @@ export default function ProfilePage({
                   }}
                   label={'Deine Mumbels'}
                   active={activeTab === ProfileTabType.MUMBLES}
+                  testid={'profile-page-mumbles'}
                 ></TabsItem>
                 <TabsItem
                   onClick={() => {
@@ -144,6 +150,7 @@ export default function ProfilePage({
                   }}
                   label={'Deine Likes'}
                   active={activeTab === ProfileTabType.LIKES}
+                  testid={'profile-page-likes'}
                 ></TabsItem>
               </Tabs>
             </div>
