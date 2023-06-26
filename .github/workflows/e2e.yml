@@ -21,6 +21,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: 'Generate ENV File for E2E tests'
+        run: |
+          touch .env
+          echo "${{ secrets.E2E_ENV }}" > .env
       - name: Run Playwright Tests
         run: npx playwright test
       - uses: actions/upload-artifact@v3
