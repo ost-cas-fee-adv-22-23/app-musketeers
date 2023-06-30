@@ -126,29 +126,44 @@ $docker build -t app-musketeers . --secret id=npm,src=.npmrc
 
 Configuration is included and will build the Docker Image for GCP automatically, on every merge to the main branch.
 
+### Unit and Integration Tests
+
+To let run the Jest / Tesing Library based Unit and Integration tests, run
+
+```bash
+npm run test
+```
 
 ### E2E Setup
-In order to run E2E Playwright tests you need to run following commands. 
+
+In order to run E2E Playwright tests you need to run following commands.
 
 If project installation not done then firstly run
+
 ```bash
 npm install
 ```
+
 If project installation is done, we need to install playwrights browser engines which are defined in playwright.config.ts. This command will download all engines needed in order to run the UI mode.
+
 ```bash
 npx playwright install
 ```
 
 ### E2E Running
+
 **Headless mode**
 
 Runs E2E tests without browser poping up. Results of the tests and test logs will be shown in the terminal.
+
 ```bash
 npx playwright test
 ```
+
 **UI mode**
 
 Run your tests with UI Mode for a better developer experience with time travel debugging, watch mode and more.
+
 ```bash
 npx playwright test --ui
 ```
