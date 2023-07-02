@@ -37,8 +37,11 @@ test.describe('Hashtag Mumble Search', () => {
     const heading = page.getByTestId('heading');
     await expect(heading).toBeVisible();
 
-    const searchedResult = page.getByTestId('hashtag-result');
-    await expect(searchedResult).toHaveText(mumbleText);
+    const searchedResultText = page.getByTestId('hashtag-result');
+    await expect(searchedResultText).toHaveText(mumbleText);
+
+    const searchResults = await page.getByTestId('mumble').all();
+    expect(searchResults).toHaveLength(1);
 
     // DELETE NEWLY CREATED HASHTAG MUMBLE
     await page.getByTestId('button-mumble-delete').click();
