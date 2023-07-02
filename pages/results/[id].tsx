@@ -22,10 +22,12 @@ export default function ResultsPage({ posts }: Props): InferGetServerSidePropsTy
         <title>{'Search Results'}</title>
       </Head>
       <Container>
-        <h1 className="heading-2 text-violet-600 mb-xs">Suchresultate</h1>
+        <h1 className="heading-2 text-violet-600 mb-xs" data-testid={'heading'}>
+          Suchresultate
+        </h1>
         <h2 className="heading-4 text-slate-500">Mumbles mit dem Hashtag:</h2>
         <div className="mb-m">
-          <Hashtag size={HashtagSize.L} onClick={(event) => event} label={hashtag} />
+          <Hashtag testid={'hashtag-result'} size={HashtagSize.L} onClick={(event) => event} label={hashtag} />
         </div>
         <Timeline posts={posts} />
       </Container>
