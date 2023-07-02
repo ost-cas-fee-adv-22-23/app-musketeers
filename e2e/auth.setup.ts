@@ -26,6 +26,12 @@ setup('authenticate', async ({ page }) => {
   await page.waitForSelector('#submit-button');
   await page.click('#submit-button');
 
+  // CHECKS FOR 2 FACTOR REQUESTS
+  const twoFactorAuthElement = await page.getByText('Skip').all();
+  if (twoFactorAuthElement.length) {
+    await page.getByText('Skip').click();
+  }
+
   await page.waitForURL('http://localhost:3000');
 
   await page.context().storageState({ path: authFile });
