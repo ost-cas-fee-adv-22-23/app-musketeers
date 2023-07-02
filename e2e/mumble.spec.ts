@@ -86,4 +86,17 @@ test.describe('Create, Like, Comment and Delete a new Mumble', () => {
     const title = page.getByTestId('heading');
     await expect(title).toBeDefined();
   });
+
+  test('New Mumble - No Text', async ({ page }) => {
+    await page.goto('/');
+
+    // CREATE A NEW MUMBLE WITHOUT TEXT
+    await page.waitForSelector('textarea[data-testId="input-mumble"]');
+    await page.getByTestId('input-mumble').fill('');
+    await page.getByTestId('button-create-mumble').click();
+
+    const errorMessageElement = page.getByText('Bitte gib einen Text ein!');
+
+    await expect(errorMessageElement).toBeVisible();
+  });
 });

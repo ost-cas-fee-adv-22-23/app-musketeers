@@ -160,6 +160,7 @@ function MumbleContent({ text, mediaUrl }: MumbleContentProps) {
               key={hashtag}
               size={HashtagSize.M}
               label={hashtag}
+              testid={text}
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
